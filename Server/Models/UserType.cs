@@ -3,15 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models
 {
-    [Table("movie_tag")]
-    public class MovieTag
+    public class UserType
     {
         [Key]
-        [Column("id_movie_tag")]
-        public int IdMovieTag { get; set; }
+        [Column("id_user_type")]
+        public int IdUserType { get; set; }
 
         [Column("name")]
-        [StringLength(255)]
+        [StringLength(100)]
         public string Name { get; set; }
     }
 }

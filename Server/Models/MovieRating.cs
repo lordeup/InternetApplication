@@ -1,19 +1,30 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace Server.Models
 {
     [Table("movie_rating")]
-    public partial class MovieRating
+    public class MovieRating
     {
         [Key]
-        [Column("id")]
-        public int Id { get; set; }
+        [Column("id_movie_rating")]
+        public int IdMovieRating { get; set; }
+        
+        [Key]
+        [Column("id_user")]
+        public int IdUser { get; set; }
+
+        [Required]
+        [Column("id_movie")]
+        public int IdMovie { get; set; }
 
         [Column("rating")]
         public float Rating { get; set; }
+        
+        [ForeignKey(nameof(IdMovie))]
+        public virtual Movie Movie { get; set; }
+        
+        [ForeignKey(nameof(IdUser))]
+        public virtual User User { get; set; }
     }
 }

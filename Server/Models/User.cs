@@ -1,17 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace Server.Models
 {
     [Table("user")]
-    public partial class User
+    public class User
     {
         [Key]
-        [Column("id")]
-        public int Id { get; set; }
+        [Column("id_user")]
+        public int IdUser { get; set; }
+        
+        [Required]
+        [Column("id_user_type")]
+        public int IdUserType { get; set; }
 
         [Column("name")]
         [StringLength(255)]
@@ -34,5 +35,8 @@ namespace Server.Models
         [Column("picture_url")]
         [StringLength(255)]
         public string PictureUrl { get; set; }
+        
+        [ForeignKey(nameof(IdUserType))]
+        public virtual UserType UserType { get; set; }
     }
 }
