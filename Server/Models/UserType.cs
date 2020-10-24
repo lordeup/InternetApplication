@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models
 {
+    [Table("user_type")]
     public class UserType
     {
         [Key]
