@@ -14,7 +14,7 @@ namespace Server.Migrations
                     id_movie = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(maxLength: 255, nullable: true),
-                    description = table.Column<string>(nullable: true),
+                    description = table.Column<string>(maxLength: 1024, nullable: true),
                     picture_url = table.Column<string>(maxLength: 255, nullable: true)
                 },
                 constraints: table =>
@@ -52,13 +52,14 @@ namespace Server.Migrations
                 name: "movie_x_movie_tag",
                 columns: table => new
                 {
-                    id_movie = table.Column<int>(nullable: false),
-                    id_movie_tag = table.Column<int>(nullable: false),
                     id_movie_x_movie_tag = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id_movie = table.Column<int>(nullable: false),
+                    id_movie_tag = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_movie_x_movie_tag", x => new { x.id_movie, x.id_movie_tag });
+                    table.PrimaryKey("PK_movie_x_movie_tag", x => x.id_movie_x_movie_tag);
                     table.ForeignKey(
                         name: "FK_movie_x_movie_tag_movie_id_movie",
                         column: x => x.id_movie,
@@ -77,8 +78,9 @@ namespace Server.Migrations
                 name: "user",
                 columns: table => new
                 {
+                    id_user = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     id_user_type = table.Column<int>(nullable: false),
-                    id_user = table.Column<int>(nullable: false),
                     name = table.Column<string>(maxLength: 255, nullable: true),
                     surname = table.Column<string>(maxLength: 255, nullable: true),
                     login = table.Column<string>(maxLength: 255, nullable: false),
@@ -87,7 +89,7 @@ namespace Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_user", x => x.id_user_type);
+                    table.PrimaryKey("PK_user", x => x.id_user);
                     table.ForeignKey(
                         name: "FK_user_user_type_id_user_type",
                         column: x => x.id_user_type,
@@ -100,14 +102,15 @@ namespace Server.Migrations
                 name: "movie_rating",
                 columns: table => new
                 {
+                    id_movie_rating = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     id_user = table.Column<int>(nullable: false),
                     id_movie = table.Column<int>(nullable: false),
-                    id_movie_rating = table.Column<int>(nullable: false),
                     rating = table.Column<float>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_movie_rating", x => new { x.id_movie, x.id_user });
+                    table.PrimaryKey("PK_movie_rating", x => x.id_movie_rating);
                     table.ForeignKey(
                         name: "FK_movie_rating_movie_id_movie",
                         column: x => x.id_movie,
@@ -118,7 +121,7 @@ namespace Server.Migrations
                         name: "FK_movie_rating_user_id_user",
                         column: x => x.id_user,
                         principalTable: "user",
-                        principalColumn: "id_user_type",
+                        principalColumn: "id_user",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -126,15 +129,16 @@ namespace Server.Migrations
                 name: "review",
                 columns: table => new
                 {
+                    id_review = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     id_user = table.Column<int>(nullable: false),
                     id_movie = table.Column<int>(nullable: false),
-                    id_review = table.Column<int>(nullable: false),
-                    text = table.Column<string>(nullable: true),
+                    text = table.Column<string>(maxLength: 1024, nullable: true),
                     date = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_review", x => new { x.id_movie, x.id_user });
+                    table.PrimaryKey("PK_review", x => x.id_review);
                     table.ForeignKey(
                         name: "FK_review_movie_id_movie",
                         column: x => x.id_movie,
@@ -145,9 +149,14 @@ namespace Server.Migrations
                         name: "FK_review_user_id_user",
                         column: x => x.id_user,
                         principalTable: "user",
-                        principalColumn: "id_user_type",
+                        principalColumn: "id_user",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_movie_rating_id_movie",
+                table: "movie_rating",
+                column: "id_movie");
 
             migrationBuilder.CreateIndex(
                 name: "IX_movie_rating_id_user",
@@ -155,14 +164,29 @@ namespace Server.Migrations
                 column: "id_user");
 
             migrationBuilder.CreateIndex(
+                name: "IX_movie_x_movie_tag_id_movie",
+                table: "movie_x_movie_tag",
+                column: "id_movie");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_movie_x_movie_tag_id_movie_tag",
                 table: "movie_x_movie_tag",
                 column: "id_movie_tag");
 
             migrationBuilder.CreateIndex(
+                name: "IX_review_id_movie",
+                table: "review",
+                column: "id_movie");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_review_id_user",
                 table: "review",
                 column: "id_user");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_id_user_type",
+                table: "user",
+                column: "id_user_type");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

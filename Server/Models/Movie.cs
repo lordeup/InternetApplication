@@ -15,6 +15,7 @@ namespace Server.Models
         public string Name { get; set; }
         
         [Column("description")]
+        [StringLength(1024)]
         public string Description { get; set; }
 
         [Column("picture_url")]

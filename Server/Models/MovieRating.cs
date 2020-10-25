@@ -10,7 +10,7 @@ namespace Server.Models
         [Column("id_movie_rating")]
         public int IdMovieRating { get; set; }
         
-        [Key]
+        [Required]
         [Column("id_user")]
         public int IdUser { get; set; }
 

@@ -17,10 +17,10 @@ namespace Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MovieRating>().HasKey(e => new { e.IdMovie, e.IdUser });
-            modelBuilder.Entity<MovieHasMovieTag>().HasKey(e => new { e.IdMovie, e.IdMovieTag });
-            modelBuilder.Entity<Review>().HasKey(e => new { e.IdMovie, e.IdUser });
-            modelBuilder.Entity<User>().HasKey(e => new { e.IdUserType });
+            modelBuilder.Entity<MovieRating>().HasKey(e => new { e.IdMovieRating });
+            modelBuilder.Entity<MovieHasMovieTag>().HasKey(e => new { e.IdMovieXMovieTag });
+            modelBuilder.Entity<Review>().HasKey(e => new { e.IdReview });
+            modelBuilder.Entity<User>().HasKey(e => new { e.IdUser });
         }
 
         public DbSet<UserType> UserTypes { get; set; }

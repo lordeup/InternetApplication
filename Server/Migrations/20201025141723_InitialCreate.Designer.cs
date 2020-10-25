@@ -10,7 +10,7 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20201024165008_InitialCreate")]
+    [Migration("20201025141723_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +31,8 @@ namespace Server.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnName("description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(1024)")
+                        .HasMaxLength(1024);
 
                     b.Property<string>("Name")
                         .HasColumnName("name")
@@ -50,6 +51,12 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.MovieHasMovieTag", b =>
                 {
+                    b.Property<int>("IdMovieXMovieTag")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id_movie_x_movie_tag")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<int>("IdMovie")
                         .HasColumnName("id_movie")
                         .HasColumnType("int");
@@ -58,11 +65,9 @@ namespace Server.Migrations
                         .HasColumnName("id_movie_tag")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdMovieXMovieTag")
-                        .HasColumnName("id_movie_x_movie_tag")
-                        .HasColumnType("int");
+                    b.HasKey("IdMovieXMovieTag");
 
-                    b.HasKey("IdMovie", "IdMovieTag");
+                    b.HasIndex("IdMovie");
 
                     b.HasIndex("IdMovieTag");
 
@@ -71,6 +76,12 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.MovieRating", b =>
                 {
+                    b.Property<int>("IdMovieRating")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id_movie_rating")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<int>("IdMovie")
                         .HasColumnName("id_movie")
                         .HasColumnType("int");
@@ -79,15 +90,13 @@ namespace Server.Migrations
                         .HasColumnName("id_user")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdMovieRating")
-                        .HasColumnName("id_movie_rating")
-                        .HasColumnType("int");
-
                     b.Property<float>("Rating")
                         .HasColumnName("rating")
                         .HasColumnType("real");
 
-                    b.HasKey("IdMovie", "IdUser");
+                    b.HasKey("IdMovieRating");
+
+                    b.HasIndex("IdMovie");
 
                     b.HasIndex("IdUser");
 
@@ -114,6 +123,18 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.Review", b =>
                 {
+                    b.Property<int>("IdReview")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id_review")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("date")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("IdMovie")
                         .HasColumnName("id_movie")
                         .HasColumnType("int");
@@ -122,19 +143,14 @@ namespace Server.Migrations
                         .HasColumnName("id_user")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnName("date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdReview")
-                        .HasColumnName("id_review")
-                        .HasColumnType("int");
-
                     b.Property<string>("Text")
                         .HasColumnName("text")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(1024)")
+                        .HasMaxLength(1024);
 
-                    b.HasKey("IdMovie", "IdUser");
+                    b.HasKey("IdReview");
+
+                    b.HasIndex("IdMovie");
 
                     b.HasIndex("IdUser");
 
@@ -143,12 +159,14 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.User", b =>
                 {
+                    b.Property<int>("IdUser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id_user")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<int>("IdUserType")
                         .HasColumnName("id_user_type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUser")
-                        .HasColumnName("id_user")
                         .HasColumnType("int");
 
                     b.Property<string>("Login")
@@ -178,7 +196,9 @@ namespace Server.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.HasKey("IdUserType");
+                    b.HasKey("IdUser");
+
+                    b.HasIndex("IdUserType");
 
                     b.ToTable("user");
                 });

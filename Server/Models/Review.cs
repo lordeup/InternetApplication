@@ -20,9 +20,11 @@ namespace Server.Models
         public int IdMovie { get; set; }
 
         [Column("text")]
+        [StringLength(1024)]
         public string Text { get; set; }
 
         [Column("date")]
+        [Timestamp]
         public DateTime Date { get; set; }
 
         [ForeignKey(nameof(IdUser))]
