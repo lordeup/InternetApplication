@@ -153,6 +153,31 @@ namespace Server.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "user_type",
+                columns: new[] { "name" },
+                values: new object[,]
+                {
+                    { "Admin" },
+                    { "User" },
+                }
+            );
+            
+            migrationBuilder.InsertData(
+                table: "movie_tag",
+                columns: new[] { "name" },
+                values: new object[,]
+                {
+                    { "Детектив" },
+                    { "Триллер" },
+                    { "Боевик" },
+                    { "Ужасы" },
+                    { "Фантастика" },
+                    { "Комедия" },
+                    { "Мелодрама" },
+                }
+            );
+
             migrationBuilder.CreateIndex(
                 name: "IX_movie_rating_id_movie",
                 table: "movie_rating",

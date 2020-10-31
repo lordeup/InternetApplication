@@ -8,11 +8,11 @@ using Server.Models;
 
 namespace Server.Auth
 {
-    public class JwtGenerator
+    public class TokenGenerator
     {
         private readonly IOptions<AuthOptions> _authOptions;
 
-        public JwtGenerator(IOptions<AuthOptions> authOptions)
+        public TokenGenerator(IOptions<AuthOptions> authOptions)
         {
             _authOptions = authOptions;
         }

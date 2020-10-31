@@ -57,7 +57,7 @@ namespace Server
             services.AddTransient<IMovieTagRepository, MovieTagRepository>();
             services.AddTransient<IReviewRepository, ReviewRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<JwtGenerator, JwtGenerator>();
+            services.AddTransient<TokenGenerator, TokenGenerator>();
             services.AddTransient<IPasswordHasher<User>, PasswordHasher<User>>();
 
             services.AddControllers().AddNewtonsoftJson(options =>

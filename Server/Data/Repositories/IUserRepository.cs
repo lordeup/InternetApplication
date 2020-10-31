@@ -4,7 +4,7 @@ using Server.ViewModels;
 
 namespace Server.Data.Repositories
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IUserRepository : IRepository<User, UserViewModel>
     {
         Task<User> LoginUser(LoginUserViewModel viewModel);
         Task<User> RegisterUser(RegisterUserViewModel viewModel);

@@ -30,7 +30,7 @@ namespace Server.Data.Repositories.Implementation
             throw new NotImplementedException();
         }
 
-        public Task<MovieRating> Update(MovieRating entity)
+        public Task<bool> Update(int id, MovieRating entity)
         {
             throw new NotImplementedException();
         }

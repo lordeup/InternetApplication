@@ -2,7 +2,7 @@
 
 namespace Server.Data.Repositories
 {
-    public interface IMovieRatingRepository : IRepository<MovieRating>
+    public interface IMovieRatingRepository : IRepository<MovieRating, MovieRating>
     {
     }
 }

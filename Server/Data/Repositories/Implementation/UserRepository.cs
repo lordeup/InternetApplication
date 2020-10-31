@@ -30,14 +30,30 @@ namespace Server.Data.Repositories.Implementation
             return await _context.Users.FindAsync(id);
         }
 
-        public Task<User> Add(User entity)
+        public Task<User> Add(UserViewModel viewModel)
         {
             throw new NotImplementedException();
         }
 
-        public Task<User> Update(User entity)
+        public async Task<bool> Update(int id, UserViewModel viewModel)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Users.FindAsync(id);
+            if (entity == null)
+            {
+                throw new Exception();
+            }
+
+            // IsUserExists(viewModel.Login)
+
+            entity.Login = viewModel.Login;
+            entity.Password = HashPassword(entity, viewModel.Password);
+            entity.Name = viewModel.Name;
+            entity.Surname = viewModel.Surname;
+            entity.PictureUrl = viewModel.PictureUrl;
+
+            _context.Users.Update(entity);
+
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> Delete(int id)
@@ -55,35 +71,45 @@ namespace Server.Data.Repositories.Implementation
 
         public async Task<User> LoginUser(LoginUserViewModel viewModel)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == viewModel.Login);
-            if (user == null)
+            var entity = await _context.Users.FirstOrDefaultAsync(u => u.Login == viewModel.Login);
+            if (entity == null)
             {
                 return null;
             }
-            
-            var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, viewModel.Password);
-            return verificationResult == PasswordVerificationResult.Success ? user : null;
+
+            var verificationResult = _passwordHasher.VerifyHashedPassword(entity, entity.Password, viewModel.Password);
+            return verificationResult == PasswordVerificationResult.Success ? entity : null;
         }
 
         public async Task<User> RegisterUser(RegisterUserViewModel viewModel)
         {
-            if (_context.Users.Any(item => item.Login == viewModel.Login))
+            if (IsUserExists(viewModel.Login))
             {
                 return null;
             }
-            
+
             // TODO поменять IdUserType на автоматическое определение
             var user = new User
             {
                 Login = viewModel.Login,
                 Name = viewModel.Name,
                 Surname = viewModel.Surname,
-                IdUserType = 1,
+                IdUserType = 2,
             };
-            user.Password = _passwordHasher.HashPassword(user, viewModel.Password);
-            
+            user.Password = HashPassword(user, viewModel.Password);
+
             await _context.Users.AddAsync(user);
             return await _context.SaveChangesAsync() > 0 ? user : null;
+        }
+
+        private string HashPassword(User user, string password)
+        {
+            return _passwordHasher.HashPassword(user, password);
+        }
+
+        private bool IsUserExists(string login)
+        {
+            return _context.Users.Any(e => e.Login == login);
         }
     }
 }

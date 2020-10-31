@@ -11,12 +11,12 @@ namespace Server.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        private readonly JwtGenerator _jwtGenerator;
+        private readonly TokenGenerator _tokenGenerator;
 
-        public AuthController(IUserRepository userRepository, JwtGenerator jwtGenerator)
+        public AuthController(IUserRepository userRepository, TokenGenerator tokenGenerator)
         {
             _userRepository = userRepository;
-            _jwtGenerator = jwtGenerator;
+            _tokenGenerator = tokenGenerator;
         }
 
         [Route("login")]
@@ -29,7 +29,7 @@ namespace Server.Controllers
                 return BadRequest();
             }
 
-            var token = _jwtGenerator.GenerateJwt(user);
+            var token = _tokenGenerator.GenerateJwt(user);
 
             return new AuthAccessViewModel
             {
@@ -45,10 +45,10 @@ namespace Server.Controllers
             var user = await _userRepository.RegisterUser(request);
             if (user == null)
             {
-                return Unauthorized();
+                return BadRequest();
             }
 
-            var token = _jwtGenerator.GenerateJwt(user);
+            var token = _tokenGenerator.GenerateJwt(user);
 
             return new AuthAccessViewModel
             {
