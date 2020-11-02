@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Data.Repositories;
@@ -14,50 +16,55 @@ namespace Server.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUserRepository userRepository)
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         // GET: api/Users
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserViewModel>>> GetUsers()
         {
-            return await _userRepository.GetAll();
+            var entities = await _userRepository.GetAll();
+            return entities.Select(user => _mapper.Map<UserViewModel>(user)).ToList();
         }
 
         // GET: api/Users/:id
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserViewModel>> GetUser(int id)
         {
-            var user = await _userRepository.Get(id);
+            var entity = await _userRepository.Get(id);
 
-            if (user == null)
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return _mapper.Map<UserViewModel>(entity);
         }
 
         // PATCH: api/Users/:id
         [HttpPatch("{id}")]
         [Authorize]
-        public async Task<IActionResult> PatchUser(int id, UserViewModel request)
+        public async Task<IActionResult> PatchUser(int id, UserViewModel viewModel)
         {
+            var entity = _mapper.Map<User>(viewModel);
+
             try
             {
-                if (await _userRepository.Update(id, request))
+                if (await _userRepository.Update(id, entity))
                 {
                     return NoContent();
                 }
             }
             catch (Exception)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             return BadRequest();

@@ -30,28 +30,29 @@ namespace Server.Data.Repositories.Implementation
             return await _context.Users.FindAsync(id);
         }
 
-        public Task<User> Add(UserViewModel viewModel)
+        public Task<User> Add(User entity)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<bool> Update(int id, UserViewModel viewModel)
+        public async Task<bool> Update(int id, User entity)
         {
-            var entity = await _context.Users.FindAsync(id);
-            if (entity == null)
+            var user = await _context.Users.FindAsync(id);
+            if (user == null || !IsEquals(user.Login, entity.Login) && IsUserExists(entity.Login))
             {
                 throw new Exception();
             }
 
-            // IsUserExists(viewModel.Login)
+            user.IdUserType = entity.IdUserType;
+            user.Login = entity.Login;
+            user.Password = IsEquals(user.Password, entity.Password)
+                ? entity.Password
+                : HashPassword(entity, entity.Password);
+            user.Name = entity.Name;
+            user.Surname = entity.Surname;
+            user.PictureUrl = entity.PictureUrl;
 
-            entity.Login = viewModel.Login;
-            entity.Password = HashPassword(entity, viewModel.Password);
-            entity.Name = viewModel.Name;
-            entity.Surname = viewModel.Surname;
-            entity.PictureUrl = viewModel.PictureUrl;
-
-            _context.Users.Update(entity);
+            _context.Users.Update(user);
 
             return await _context.SaveChangesAsync() > 0;
         }
@@ -88,13 +89,14 @@ namespace Server.Data.Repositories.Implementation
                 return null;
             }
 
-            // TODO поменять IdUserType на автоматическое определение
+            var userType = await _context.UserTypes.FirstOrDefaultAsync(e => e.Name == "User");
+
             var user = new User
             {
                 Login = viewModel.Login,
                 Name = viewModel.Name,
                 Surname = viewModel.Surname,
-                IdUserType = 2,
+                IdUserType = userType.IdUserType,
             };
             user.Password = HashPassword(user, viewModel.Password);
 
@@ -110,6 +112,11 @@ namespace Server.Data.Repositories.Implementation
         private bool IsUserExists(string login)
         {
             return _context.Users.Any(e => e.Login == login);
+        }
+
+        private static bool IsEquals(string lhs, string rhs)
+        {
+            return lhs.Equals(rhs);
         }
     }
 }

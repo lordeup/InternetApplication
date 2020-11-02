@@ -17,7 +17,7 @@ namespace Server.Auth
             _authOptions = authOptions;
         }
 
-        public string GenerateJwt(User user)
+        public string GenerateToken(User user)
         {
             var authParams = _authOptions.Value;
             var credentials =

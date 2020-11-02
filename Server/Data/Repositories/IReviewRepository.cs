@@ -2,7 +2,7 @@
 
 namespace Server.Data.Repositories
 {
-    public interface IReviewRepository : IRepository<Review, Review>
+    public interface IReviewRepository : IRepository<Review>
     {
     }
 }

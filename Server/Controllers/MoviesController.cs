@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Server.Data;
+using Server.Data.Repositories;
 using Server.Models;
+using Server.ViewModels;
 
 namespace Server.Controllers
 {
@@ -14,97 +14,90 @@ namespace Server.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private readonly ApplicationContext _context;
+        private readonly IMovieRepository _movieRepository;
+        private readonly IMapper _mapper;
 
-        public MoviesController(ApplicationContext context)
+        public MoviesController(IMovieRepository movieRepository, IMapper mapper)
         {
-            _context = context;
+            _movieRepository = movieRepository;
+            _mapper = mapper;
         }
 
         // GET: api/Movies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<MovieViewModel>>> GetMovies()
         {
-            return await _context.Movies.ToListAsync();
+            var entities = await _movieRepository.GetAll();
+            return entities.Select(user => _mapper.Map<MovieViewModel>(user)).ToList();
         }
 
-        // GET: api/Movies/5
+        // GET: api/Movies/:id
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<MovieViewModel>> GetMovie(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
+            var entity = await _movieRepository.Get(id);
 
-            if (movie == null)
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return movie;
+            return _mapper.Map<MovieViewModel>(entity);
         }
 
-        // PUT: api/Movies/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(int id, Movie movie)
+        // PATCH: api/Movies/:id
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchMovie(int id, MovieViewModel viewModel)
         {
-            if (id != movie.IdMovie)
+            var entity = _mapper.Map<Movie>(viewModel);
+
+            try
+            {
+                if (await _movieRepository.Update(id, entity))
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            return BadRequest();
+        }
+
+        // POST: api/Movies
+        [HttpPost]
+        public async Task<ActionResult<MovieViewModel>> PostMovie(MovieViewModel viewModel)
+        {
+            var entity = _mapper.Map<Movie>(viewModel);
+            var model = await _movieRepository.Add(entity);
+
+            if (model == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(movie).State = EntityState.Modified;
+            return _mapper.Map<MovieViewModel>(model);
+        }
 
+        // DELETE: api/Movies/:id
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMovie(int id)
+        {
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieExists(id))
+                if (await _movieRepository.Delete(id))
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    return NoContent();
                 }
             }
-
-            return NoContent();
-        }
-
-        // POST: api/Movies
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
-        {
-            _context.Movies.Add(movie);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetMovie", new { id = movie.IdMovie }, movie);
-        }
-
-        // DELETE: api/Movies/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Movie>> DeleteMovie(int id)
-        {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
+            catch (Exception)
             {
                 return NotFound();
             }
 
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
-
-            return movie;
-        }
-
-        private bool MovieExists(int id)
-        {
-            return _context.Movies.Any(e => e.IdMovie == id);
+            return BadRequest();
         }
     }
 }

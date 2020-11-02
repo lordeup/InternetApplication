@@ -21,15 +21,15 @@ namespace Server.Controllers
 
         [Route("login")]
         [HttpPost]
-        public async Task<ActionResult<AuthAccessViewModel>> Login(LoginUserViewModel request)
+        public async Task<ActionResult<AuthAccessViewModel>> Login(LoginUserViewModel viewModel)
         {
-            var user = await _userRepository.LoginUser(request);
+            var user = await _userRepository.LoginUser(viewModel);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            var token = _tokenGenerator.GenerateJwt(user);
+            var token = _tokenGenerator.GenerateToken(user);
 
             return new AuthAccessViewModel
             {
@@ -40,15 +40,15 @@ namespace Server.Controllers
 
         [Route("register")]
         [HttpPost]
-        public async Task<ActionResult<AuthAccessViewModel>> Register(RegisterUserViewModel request)
+        public async Task<ActionResult<AuthAccessViewModel>> Register(RegisterUserViewModel viewModel)
         {
-            var user = await _userRepository.RegisterUser(request);
+            var user = await _userRepository.RegisterUser(viewModel);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            var token = _tokenGenerator.GenerateJwt(user);
+            var token = _tokenGenerator.GenerateToken(user);
 
             return new AuthAccessViewModel
             {

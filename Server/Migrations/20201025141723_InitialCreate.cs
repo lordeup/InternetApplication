@@ -177,6 +177,15 @@ namespace Server.Migrations
                     { "Мелодрама" },
                 }
             );
+            
+            migrationBuilder.InsertData(
+                table: "user",
+                columns: new[] { "id_user_type", "name", "login", "password" },
+                values: new object[,]
+                {
+                    { "1", "Andrey", "1", "AQAAAAEAACcQAAAAELbXf1gvR9n5gQoOpdXLeOny31uG2TwHuOxgKyjvevEGEfTy2OD+AlZll8vH2yKNZw==" },
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_movie_rating_id_movie",

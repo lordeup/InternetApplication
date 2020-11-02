@@ -2,7 +2,7 @@
 
 namespace Server.Data.Repositories
 {
-    public interface IMovieRepository : IRepository<Movie, Movie>
+    public interface IMovieRepository : IRepository<Movie>
     {
     }
 }

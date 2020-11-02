@@ -15,29 +15,52 @@ namespace Server.Data.Repositories.Implementation
             _context = context;
         }
 
-        public Task<List<Movie>> GetAll()
+        public async Task<List<Movie>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.Movies.ToListAsync();
         }
 
-        public Task<Movie> Get(int id)
+        public async Task<Movie> Get(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Movies.FindAsync(id);
         }
 
-        public Task<Movie> Add(Movie entity)
+        public async Task<Movie> Add(Movie entity)
         {
-            throw new NotImplementedException();
+            await _context.Movies.AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            return entity;
         }
 
-        public Task<bool> Update(int id, Movie entity)
+        public async Task<bool> Update(int id, Movie entity)
         {
-            throw new NotImplementedException();
+            var movie = await _context.Movies.FindAsync(id);
+            if (movie == null)
+            {
+                throw new Exception();
+            }
+
+            movie.Name = entity.Name;
+            movie.Description = entity.Description;
+            movie.PictureUrl = entity.PictureUrl;
+
+            _context.Movies.Update(movie);
+
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Movies.FindAsync(id);
+            if (entity == null)
+            {
+                throw new Exception();
+            }
+
+            _context.Movies.Remove(entity);
+
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
