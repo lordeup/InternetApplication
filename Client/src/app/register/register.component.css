@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.mat-card {
+  max-width: 500px;
+}
+
+::ng-deep .mat-card-header-text {
+  margin: 0 !important;
+}
+
+.form-element {
+  padding: 8px 0 16px 0;
+  width: 100%;
+}
+
+.button {
+  width: 100%;
+}
