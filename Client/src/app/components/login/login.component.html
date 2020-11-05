@@ -1,13 +1,13 @@
 <div class="container">
   <mat-card class="mat-card">
     <mat-card-header>
-      <mat-card-title>Log in</mat-card-title>
+      <mat-card-title>Авторизация</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="formGroup">
         <mat-form-field class="form-element">
           <label>
-            <input matInput name="login" formControlName="login" placeholder="Login"/>
+            <input matInput name="login" formControlName="login" placeholder="Логин"/>
           </label>
           <mat-error *ngIf="!formGroup.controls['login'].valid && formGroup.controls['login'].touched">
             {{ getErrorLogin() }}
@@ -16,7 +16,7 @@
 
         <mat-form-field class="form-element">
           <label>
-            <input matInput name="password" formControlName="password" placeholder="Password" type="password"/>
+            <input matInput name="password" formControlName="password" placeholder="Пароль" type="password"/>
           </label>
           <mat-error *ngIf="!formGroup.controls['password'].valid && formGroup.controls['password'].touched">
             {{ getErrorPassword() }}
@@ -25,10 +25,10 @@
       </form>
 
       <button mat-raised-button color="primary" (click)="onSubmit()" class="button" [disabled]="!formGroup.valid">
-        Submit
+        Войти
       </button>
     </mat-card-content>
   </mat-card>
 
-  <a routerLink="/register" class="link">Registration</a>
+  <a [routerLink]="['/register']" class="link">Зарегестрируйтесь</a>
 </div>

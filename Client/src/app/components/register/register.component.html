@@ -1,13 +1,13 @@
 <div class="container">
   <mat-card class="mat-card">
     <mat-card-header>
-      <mat-card-title>Registration</mat-card-title>
+      <mat-card-title>Регистрация</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="formGroup">
         <mat-form-field class="form-element">
           <label>
-            <input matInput name="login" formControlName="login" placeholder="Login"/>
+            <input matInput name="login" formControlName="login" placeholder="Логин"/>
           </label>
           <mat-error *ngIf="!formGroup.controls['login'].valid && formGroup.controls['login'].touched">
             {{ getErrorLogin() }}
@@ -16,7 +16,7 @@
 
         <mat-form-field class="form-element">
           <label>
-            <input matInput name="password" formControlName="password" placeholder="Password" type="password"/>
+            <input matInput name="password" formControlName="password" placeholder="Пароль" type="password"/>
           </label>
           <mat-error *ngIf="!formGroup.controls['password'].valid && formGroup.controls['password'].touched">
             {{ getErrorPassword() }}
@@ -25,20 +25,22 @@
 
         <mat-form-field class="form-element">
           <label>
-            <input matInput name="name" formControlName="name" placeholder="Name"/>
+            <input matInput name="name" formControlName="name" placeholder="Имя"/>
           </label>
         </mat-form-field>
 
         <mat-form-field class="form-element">
           <label>
-            <input matInput name="surname" formControlName="surname" placeholder="Surname"/>
+            <input matInput name="surname" formControlName="surname" placeholder="Фамилия"/>
           </label>
         </mat-form-field>
       </form>
 
       <button mat-raised-button color="primary" (click)="onSubmit()" class="button" [disabled]="!formGroup.valid">
-        Submit
+        Зарегистрироваться
       </button>
     </mat-card-content>
   </mat-card>
+
+  <a [routerLink]="['/login']" class="link">Авторизируйтесь</a>
 </div>
