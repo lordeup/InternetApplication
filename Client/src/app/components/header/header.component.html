@@ -2,9 +2,9 @@
 <!--  <button mat-icon-button>-->
 <!--    <mat-icon>menu</mat-icon>-->
 <!--  </button>-->
-  <span [routerLink]="['/']" class="title">Фильмы</span>
+  <span (click)="onClickHomePage()" class="title">Фильмы</span>
   <div class="spacer"></div>
-  <button mat-icon-button (click)="onClick()">
-    <mat-icon>{{isAuthorized ? 'logout' : 'login'}}</mat-icon>
+  <button mat-icon-button (click)="isAuthenticated ? onClickLogout() : onClickLoginPage()">
+    <mat-icon>{{isAuthenticated ? 'logout' : 'login'}}</mat-icon>
   </button>
 </mat-toolbar>

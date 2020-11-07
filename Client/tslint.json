@@ -66,7 +66,9 @@
     ],
     "quotemark": [
       true,
-      "single"
+      "double",
+      "avoid-escape",
+      "jsx-double"
     ],
     "semicolon": {
       "options": [
@@ -115,10 +117,12 @@
       "options": [
         "check-branch",
         "check-decl",
-        "check-operator",
+        "check-module",
         "check-separator",
+        "check-rest-spread",
         "check-type",
-        "check-typecast"
+        "check-type-operator",
+        "check-preblock"
       ]
     },
     "component-class-suffix": true,

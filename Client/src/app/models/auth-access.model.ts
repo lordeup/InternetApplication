@@ -1,4 +1,4 @@
 ﻿export class AuthAccess {
   accessToken: string;
-  idUser: number;
+  idUser: string;
 }

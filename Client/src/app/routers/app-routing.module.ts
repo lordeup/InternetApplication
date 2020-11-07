@@ -1,0 +1,37 @@
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { UserComponent } from "src/app/components/user/user.component";
+import { HomeComponent } from "src/app/components/home/home.component";
+import { LoginComponent } from "src/app/components/login/login.component";
+import { RegisterComponent } from "src/app/components/register/register.component";
+import { PathRouting } from "./path-routing.module";
+
+const routes: Routes = [
+  {
+    path: PathRouting.Home,
+    component: HomeComponent,
+  },
+  {
+    path: PathRouting.Login,
+    component: LoginComponent,
+  },
+  {
+    path: PathRouting.Register,
+    component: RegisterComponent,
+  },
+  {
+    path: PathRouting.User,
+    component: UserComponent,
+  },
+  {
+    path: "**",
+    redirectTo: "",
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {
+}

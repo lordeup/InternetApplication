@@ -1,21 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { AppRoutingService } from "../../routers/app-routing.service";
+import { AuthService } from "../../services/auth.service";
+import { Observable } from "rxjs";
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  selector: "app-header",
+  templateUrl: "./header.component.html",
+  styleUrls: ["./header.component.css"]
 })
 export class HeaderComponent implements OnInit {
-  isAuthorized: boolean;
+  isAuthenticated: boolean;
+  authorized$: Observable<boolean>;
 
-  constructor(private router: Router) { }
-
-  ngOnInit(): void {
-    this.isAuthorized = false;
+  constructor(
+    private appRoutingService: AppRoutingService,
+    private authService: AuthService) {
   }
 
-  onClick(): void {
-    this.router.navigateByUrl('/login');
+  ngOnInit(): void {
+    this.authorized$ = this.authService.authorized$;
+    this.isAuthenticated = this.authService.isAuthenticated();
+  }
+
+  onClickHomePage(): void {
+    this.appRoutingService.goToHomePage();
+  }
+
+  onClickLoginPage(): void {
+    this.appRoutingService.goToLoginPage();
+  }
+
+  onClickLogout(): void {
+    this.authService.logoutUser();
+    this.appRoutingService.goToHomePage();
   }
 }

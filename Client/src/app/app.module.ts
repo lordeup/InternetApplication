@@ -1,17 +1,26 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { RegisterComponent } from './components/register/register.component';
-import { LoginComponent } from './components/login/login.component';
-import { UserComponent } from './components/user/user.component';
-import { HeaderComponent } from './components/header/header.component';
-import { HomeComponent } from './components/home/home.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppMaterialModule } from "./app-material.module";
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+import { JwtModule } from "@auth0/angular-jwt";
 import { ReactiveFormsModule } from "@angular/forms";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { HttpClientModule } from "@angular/common/http";
+
+import { environment } from "../environments/environment";
+import { AppMaterialModule } from "./app-material.module";
+import { AppRoutingModule } from "src/app/routers/app-routing.module";
+import { API_URL } from "./app-injection-tokens";
+import { KeyLocalStorage } from "./key-local-storage";
+
+import { AppComponent } from "./app.component";
+import { RegisterComponent } from "./components/register/register.component";
+import { LoginComponent } from "./components/login/login.component";
+import { UserComponent } from "./components/user/user.component";
+import { HeaderComponent } from "./components/header/header.component";
+import { HomeComponent } from "./components/home/home.component";
+
+export function tokenGetter(): string {
+  return localStorage.getItem(KeyLocalStorage.AccessToken);
+}
 
 @NgModule({
   declarations: [
@@ -29,8 +38,21 @@ import { ReactiveFormsModule } from "@angular/forms";
     BrowserAnimationsModule,
     ReactiveFormsModule,
     AppMaterialModule,
+
+    JwtModule.forRoot({
+      config: {
+        tokenGetter,
+        allowedDomains: environment.jwtAllowedDomains
+      }
+    })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: API_URL,
+      useValue: environment.apiUrl
+    },
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
