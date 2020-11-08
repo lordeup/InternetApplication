@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Server.Data.Exceptions;
 using Server.Models;
 
 namespace Server.Data.Repositories.Implementation
@@ -22,13 +25,24 @@ namespace Server.Data.Repositories.Implementation
 
         public async Task<Movie> Get(int id)
         {
-            return await _context.Movies.FindAsync(id);
+            var entity = await _context.Movies.FindAsync(id);
+            if (entity == null)
+            {
+                throw new MovieNotFoundException();
+            }
+
+            return entity;
         }
 
         public async Task<Movie> Add(Movie entity)
         {
             await _context.Movies.AddAsync(entity);
             await _context.SaveChangesAsync();
+
+            if (entity == null)
+            {
+                throw new InvalidDataException("Movie not created");
+            }
 
             return entity;
         }
@@ -38,7 +52,7 @@ namespace Server.Data.Repositories.Implementation
             var movie = await _context.Movies.FindAsync(id);
             if (movie == null)
             {
-                throw new Exception();
+                throw new MovieNotFoundException();
             }
 
             movie.Name = entity.Name;
@@ -55,7 +69,7 @@ namespace Server.Data.Repositories.Implementation
             var entity = await _context.Movies.FindAsync(id);
             if (entity == null)
             {
-                throw new Exception();
+                throw new MovieNotFoundException();
             }
 
             _context.Movies.Remove(entity);

@@ -1,16 +1,18 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { PathRouting } from "./path-routing.module";
+import { Id } from "../models/id";
 
 @Injectable({
   providedIn: "root"
 })
 export class AppRoutingService {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
 
   goToHomePage(): void {
-    this.router.navigateByUrl("/");
+    this.router.navigateByUrl(PathRouting.Home);
   }
 
   goToLoginPage(): void {
@@ -19,5 +21,21 @@ export class AppRoutingService {
 
   goToRegisterPage(): void {
     this.router.navigateByUrl(PathRouting.Register);
+  }
+
+  goToUserPage(): void {
+    this.router.navigateByUrl(PathRouting.User);
+  }
+
+  goToUserEditPage(): void {
+    this.router.navigateByUrl(PathRouting.UserEdit);
+  }
+
+  goToUsersPage(): void {
+    this.router.navigateByUrl(PathRouting.Users);
+  }
+
+  goToMoviePage(id: Id): void {
+    this.router.navigateByUrl(`${PathRouting.Movie}/${id}`);
   }
 }

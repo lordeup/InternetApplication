@@ -41,7 +41,8 @@ export class AuthService {
   }
 
   loginUser(data: LoginUser): Observable<AuthAccess> {
-    return this.http.post<AuthAccess>(this.apiUrl + ApiRouting.Login, data).pipe(
+    const url = this.apiUrl + ApiRouting.Login;
+    return this.http.post<AuthAccess>(url, data).pipe(
       tap((authAccess) => {
           AuthService.setAuthDataToLocalStorage(authAccess);
           this.authorizedSubject$.next(true);
@@ -51,7 +52,8 @@ export class AuthService {
   }
 
   registerUser(data: RegisterUser): Observable<AuthAccess> {
-    return this.http.post<AuthAccess>(this.apiUrl + ApiRouting.Register, data).pipe(
+    const url = this.apiUrl + ApiRouting.Register;
+    return this.http.post<AuthAccess>(url, data).pipe(
       tap((authAccess) => {
           AuthService.setAuthDataToLocalStorage(authAccess);
           this.authorizedSubject$.next(true);
@@ -60,12 +62,16 @@ export class AuthService {
     );
   }
 
-  getToken(): string {
+  getTokenFromLocalStorage(): string {
     return localStorage.getItem(KeyLocalStorage.AccessToken);
   }
 
+  getIdUserFromLocalStorage(): string {
+    return localStorage.getItem(KeyLocalStorage.IdUser);
+  }
+
   isAuthenticated(): boolean {
-    return !this.jwtHelperService.isTokenExpired(this.getToken());
+    return !this.jwtHelperService.isTokenExpired(this.getTokenFromLocalStorage());
   }
 
   logoutUser(): void {

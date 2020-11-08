@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Server.Data.Exceptions;
 using Server.Data.Repositories;
 using Server.Models;
 using Server.ViewModels;
@@ -29,8 +31,15 @@ namespace Server.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<UserViewModel>>> GetUsers()
         {
-            var entities = await _userRepository.GetAll();
-            return entities.Select(user => _mapper.Map<UserViewModel>(user)).ToList();
+            try
+            {
+                var entities = await _userRepository.GetAll();
+                return entities.Select(user => _mapper.Map<UserViewModel>(user)).ToList();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
         // GET: api/Users/:id
@@ -38,14 +47,19 @@ namespace Server.Controllers
         [Authorize]
         public async Task<ActionResult<UserViewModel>> GetUser(int id)
         {
-            var entity = await _userRepository.Get(id);
-
-            if (entity == null)
+            try
             {
-                return NotFound();
+                var entity = await _userRepository.Get(id);
+                return _mapper.Map<UserViewModel>(entity);
             }
-
-            return _mapper.Map<UserViewModel>(entity);
+            catch (UserNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
         // PATCH: api/Users/:id
@@ -53,21 +67,24 @@ namespace Server.Controllers
         [Authorize]
         public async Task<IActionResult> PatchUser(int id, UserViewModel viewModel)
         {
-            var entity = _mapper.Map<User>(viewModel);
-
             try
             {
-                if (await _userRepository.Update(id, entity))
-                {
-                    return NoContent();
-                }
+                var entity = _mapper.Map<User>(viewModel);
+                await _userRepository.Update(id, entity);
+                return NoContent();
             }
-            catch (Exception)
+            catch (UserNotFoundException e)
             {
-                return BadRequest();
+                return NotFound(new {message = e.Message});
             }
-
-            return BadRequest();
+            catch (UserExistsException e)
+            {
+                return BadRequest(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
         // DELETE: api/Users/:id
@@ -77,17 +94,17 @@ namespace Server.Controllers
         {
             try
             {
-                if (await _userRepository.Delete(id))
-                {
-                    return NoContent();
-                }
+                await _userRepository.Delete(id);
+                return NoContent();
             }
-            catch (Exception)
+            catch (UserNotFoundException e)
             {
-                return NotFound();
+                return NotFound(new {message = e.Message});
             }
-
-            return BadRequest();
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
     }
 }

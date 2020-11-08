@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Security.Authentication;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Server.Auth;
+using Server.Data.Exceptions;
 using Server.Data.Repositories;
 using Server.ViewModels;
 
@@ -23,38 +27,54 @@ namespace Server.Controllers
         [HttpPost]
         public async Task<ActionResult<AuthAccessViewModel>> Login(LoginUserViewModel viewModel)
         {
-            var user = await _userRepository.LoginUser(viewModel);
-            if (user == null)
+            try
             {
-                return BadRequest();
+                var user = await _userRepository.LoginUser(viewModel);
+                var token = _tokenGenerator.GenerateToken(user);
+
+                return new AuthAccessViewModel
+                {
+                    AccessToken = token,
+                    IdUser = user.IdUser,
+                };
             }
-
-            var token = _tokenGenerator.GenerateToken(user);
-
-            return new AuthAccessViewModel
+            catch (UserNotFoundException e)
             {
-                AccessToken = token,
-                IdUser = user.IdUser,
-            };
+                return NotFound(new {message = e.Message});
+            }
+            catch (InvalidCredentialException e)
+            {
+                return Unauthorized(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
         [Route("register")]
         [HttpPost]
         public async Task<ActionResult<AuthAccessViewModel>> Register(RegisterUserViewModel viewModel)
         {
-            var user = await _userRepository.RegisterUser(viewModel);
-            if (user == null)
+            try
             {
-                return BadRequest();
+                var user = await _userRepository.RegisterUser(viewModel);
+                var token = _tokenGenerator.GenerateToken(user);
+
+                return new AuthAccessViewModel
+                {
+                    AccessToken = token,
+                    IdUser = user.IdUser,
+                };
             }
-
-            var token = _tokenGenerator.GenerateToken(user);
-
-            return new AuthAccessViewModel
+            catch (UserExistsException e)
             {
-                AccessToken = token,
-                IdUser = user.IdUser,
-            };
+                return BadRequest(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
     }
 }

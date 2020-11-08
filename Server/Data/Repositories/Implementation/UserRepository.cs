@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using System.Security.Authentication;
+using Server.Data.Exceptions;
 using Server.Models;
 using Server.ViewModels;
 
@@ -27,7 +29,13 @@ namespace Server.Data.Repositories.Implementation
 
         public async Task<User> Get(int id)
         {
-            return await _context.Users.FindAsync(id);
+            var entity = await _context.Users.FindAsync(id);
+            if (entity == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            return entity;
         }
 
         public Task<User> Add(User entity)
@@ -38,9 +46,14 @@ namespace Server.Data.Repositories.Implementation
         public async Task<bool> Update(int id, User entity)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null || !IsEquals(user.Login, entity.Login) && IsUserExists(entity.Login))
+            if (user == null)
             {
-                throw new Exception();
+                throw new UserNotFoundException();
+            }
+
+            if (!IsEquals(user.Login, entity.Login) && IsUserExists(entity.Login))
+            {
+                throw new UserExistsException();
             }
 
             user.IdUserType = entity.IdUserType;
@@ -62,7 +75,7 @@ namespace Server.Data.Repositories.Implementation
             var entity = await _context.Users.FindAsync(id);
             if (entity == null)
             {
-                throw new Exception();
+                throw new UserNotFoundException();
             }
 
             _context.Users.Remove(entity);
@@ -75,18 +88,23 @@ namespace Server.Data.Repositories.Implementation
             var entity = await _context.Users.FirstOrDefaultAsync(u => u.Login == viewModel.Login);
             if (entity == null)
             {
-                return null;
+                throw new UserNotFoundException();
             }
 
             var verificationResult = _passwordHasher.VerifyHashedPassword(entity, entity.Password, viewModel.Password);
-            return verificationResult == PasswordVerificationResult.Success ? entity : null;
+            if (verificationResult == PasswordVerificationResult.Failed)
+            {
+                throw new InvalidCredentialException("Invalid password");
+            }
+
+            return entity;
         }
 
         public async Task<User> RegisterUser(RegisterUserViewModel viewModel)
         {
             if (IsUserExists(viewModel.Login))
             {
-                return null;
+                throw new UserExistsException();
             }
 
             var userType = await _context.UserTypes.FirstOrDefaultAsync(e => e.Name == "User");
@@ -101,7 +119,9 @@ namespace Server.Data.Repositories.Implementation
             user.Password = HashPassword(user, viewModel.Password);
 
             await _context.Users.AddAsync(user);
-            return await _context.SaveChangesAsync() > 0 ? user : null;
+            await _context.SaveChangesAsync();
+
+            return user;
         }
 
         private string HashPassword(User user, string password)

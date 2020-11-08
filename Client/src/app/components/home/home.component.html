@@ -1,1 +1,15 @@
-<p>home works!</p>
+<mat-grid-list cols="4">
+  <mat-grid-tile *ngFor="let movie of movies">
+    <mat-card class="mat-card" (click)="onClickMovie(movie.idMovie)">
+      <img mat-card-image src="https://cutt.ly/1gKTqzl" alt="Photo" class="mat-card-image">
+      <mat-card-content>
+        <p>
+          {{ movie.name }}
+        </p>
+        <p>
+          {{ movie.description }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>

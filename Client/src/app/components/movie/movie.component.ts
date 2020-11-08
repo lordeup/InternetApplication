@@ -5,12 +5,12 @@ import { Movie } from "../../models/movie.model";
 import { Id } from "../../models/id";
 
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.css"]
+  selector: "app-movie",
+  templateUrl: "./movie.component.html",
+  styleUrls: ["./movie.component.css"]
 })
-export class HomeComponent implements OnInit {
-  movies: Movie[] = [];
+export class MovieComponent implements OnInit {
+  movie: Movie;
 
   constructor(
     private movieService: MovieService,
@@ -18,20 +18,12 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getMovies();
   }
 
-  onClickMovie(id: Id): void {
-    this.appRoutingService.goToMoviePage(id);
-  }
-
-  getMovies(): void {
-    this.movieService.getMovies().subscribe(response => {
-      console.log("movies", response);
-      this.movies = response;
+  deleteMovie(id: Id): void {
+    this.movieService.deleteMovie(id).subscribe(response => {
     }, error => {
       alert(error.error?.message || error.message);
     });
   }
-
 }

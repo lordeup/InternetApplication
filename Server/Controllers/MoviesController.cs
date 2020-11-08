@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Server.Data.Exceptions;
 using Server.Data.Repositories;
 using Server.Models;
 using Server.ViewModels;
@@ -27,58 +30,74 @@ namespace Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieViewModel>>> GetMovies()
         {
-            var entities = await _movieRepository.GetAll();
-            return entities.Select(user => _mapper.Map<MovieViewModel>(user)).ToList();
+            try
+            {
+                var entities = await _movieRepository.GetAll();
+                return entities.Select(user => _mapper.Map<MovieViewModel>(user)).ToList();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
         // GET: api/Movies/:id
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieViewModel>> GetMovie(int id)
         {
-            var entity = await _movieRepository.Get(id);
-
-            if (entity == null)
+            try
             {
-                return NotFound();
+                var entity = await _movieRepository.Get(id);
+                return _mapper.Map<MovieViewModel>(entity);
             }
-
-            return _mapper.Map<MovieViewModel>(entity);
+            catch (MovieNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
         // PATCH: api/Movies/:id
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchMovie(int id, MovieViewModel viewModel)
         {
-            var entity = _mapper.Map<Movie>(viewModel);
-
             try
             {
-                if (await _movieRepository.Update(id, entity))
-                {
-                    return NoContent();
-                }
+                var entity = _mapper.Map<Movie>(viewModel);
+                await _movieRepository.Update(id, entity);
+                return NoContent();
             }
-            catch (Exception)
+            catch (MovieNotFoundException e)
             {
-                return NotFound();
+                return NotFound(new {message = e.Message});
             }
-
-            return BadRequest();
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
         // POST: api/Movies
         [HttpPost]
         public async Task<ActionResult<MovieViewModel>> PostMovie(MovieViewModel viewModel)
         {
-            var entity = _mapper.Map<Movie>(viewModel);
-            var model = await _movieRepository.Add(entity);
-
-            if (model == null)
+            try
             {
-                return BadRequest();
+                var entity = _mapper.Map<Movie>(viewModel);
+                var model = await _movieRepository.Add(entity);
+                return _mapper.Map<MovieViewModel>(model);
             }
-
-            return _mapper.Map<MovieViewModel>(model);
+            catch (InvalidDataException e)
+            {
+                return BadRequest(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
         // DELETE: api/Movies/:id
@@ -87,17 +106,17 @@ namespace Server.Controllers
         {
             try
             {
-                if (await _movieRepository.Delete(id))
-                {
-                    return NoContent();
-                }
+                await _movieRepository.Delete(id);
+                return NoContent();
             }
-            catch (Exception)
+            catch (MovieNotFoundException e)
             {
-                return NotFound();
+                return NotFound(new {message = e.Message});
             }
-
-            return BadRequest();
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
     }
 }

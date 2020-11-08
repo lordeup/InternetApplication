@@ -3,4 +3,7 @@ export enum PathRouting {
   Login = "login",
   Register = "register",
   User = "user",
+  UserEdit = "user-edit",
+  Users = "users",
+  Movie = "movie",
 }

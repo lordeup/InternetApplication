@@ -1,1 +1,14 @@
-<p>user works!</p>
+<script src="user.component.ts"></script>
+<div class="container">
+  <mat-card class="mat-card">
+    <mat-card-content>
+      <div class="user-first-row">
+        <p>{{user?.name + " " + user?.surname}}</p>
+        <button mat-stroked-button (click)="onClickUserEdit()">
+          Редактировать
+        </button>
+      </div>
+      <p>{{user?.login}}</p>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,4 +1,6 @@
-﻿export class AuthAccess {
+import { Id } from "./id";
+
+export class AuthAccess {
   accessToken: string;
-  idUser: string;
+  idUser: Id;
 }

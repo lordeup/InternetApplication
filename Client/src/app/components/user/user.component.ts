@@ -1,4 +1,8 @@
 import { Component, OnInit } from "@angular/core";
+import { AppRoutingService } from "../../routers/app-routing.service";
+import { UserService } from "../../services/user.service";
+import { AuthService } from "../../services/auth.service";
+import { User } from "../../models/user.model";
 
 @Component({
   selector: "app-user",
@@ -6,10 +10,32 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./user.component.css"]
 })
 export class UserComponent implements OnInit {
+  user: User;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(
+    private userService: UserService,
+    private authService: AuthService,
+    private appRoutingService: AppRoutingService) {
   }
 
+  ngOnInit(): void {
+    this.getCurrentUser();
+  }
+
+  onClickUserEdit(): void {
+    this.appRoutingService.goToUserEditPage();
+  }
+
+  getCurrentUser(): void {
+    if (this.authService.isAuthenticated()) {
+      const id = this.authService.getIdUserFromLocalStorage();
+
+      this.userService.getUser(id).subscribe(response => {
+        this.user = response;
+        console.log("user", response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    }
+  }
 }

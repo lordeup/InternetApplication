@@ -17,6 +17,9 @@ import { LoginComponent } from "./components/login/login.component";
 import { UserComponent } from "./components/user/user.component";
 import { HeaderComponent } from "./components/header/header.component";
 import { HomeComponent } from "./components/home/home.component";
+import { MovieComponent } from "./components/movie/movie.component";
+import { UsersComponent } from "./components/users/users.component";
+import { UserEditComponent } from "./components/user-edit/user-edit.component";
 
 export function tokenGetter(): string {
   return localStorage.getItem(KeyLocalStorage.AccessToken);
@@ -30,6 +33,9 @@ export function tokenGetter(): string {
     UserComponent,
     HeaderComponent,
     HomeComponent,
+    MovieComponent,
+    UsersComponent,
+    UserEditComponent,
   ],
   imports: [
     BrowserModule,

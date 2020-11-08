@@ -1,9 +1,12 @@
 <mat-toolbar color="primary">
-<!--  <button mat-icon-button>-->
-<!--    <mat-icon>menu</mat-icon>-->
-<!--  </button>-->
+  <!--  <button mat-icon-button>-->
+  <!--    <mat-icon>menu</mat-icon>-->
+  <!--  </button>-->
   <span (click)="onClickHomePage()" class="title">Фильмы</span>
   <div class="spacer"></div>
+  <button mat-icon-button *ngIf="authorized$ | async" (click)="onClickUserProfile()">
+    <mat-icon>account_circle</mat-icon>
+  </button>
   <button mat-icon-button (click)="isAuthenticated ? onClickLogout() : onClickLoginPage()">
     <mat-icon>{{isAuthenticated ? 'logout' : 'login'}}</mat-icon>
   </button>

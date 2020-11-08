@@ -30,6 +30,10 @@ export class HeaderComponent implements OnInit {
     this.appRoutingService.goToLoginPage();
   }
 
+  onClickUserProfile(): void {
+    this.appRoutingService.goToUserPage();
+  }
+
   onClickLogout(): void {
     this.authService.logoutUser();
     this.appRoutingService.goToHomePage();

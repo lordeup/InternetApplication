@@ -44,10 +44,10 @@ export class RegisterComponent implements OnInit {
     const value = this.formGroup.value;
     const data = new RegisterUser().deserialize(value);
 
-    this.authService.registerUser(data).subscribe(next => {
-      this.appRoutingService.goToHomePage();
+    this.authService.registerUser(data).subscribe(response => {
+      this.appRoutingService.goToUserPage();
     }, error => {
-      alert(error.message);
+      alert(error.error?.message || error.message);
     });
   }
 }

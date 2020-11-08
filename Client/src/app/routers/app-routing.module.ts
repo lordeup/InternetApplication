@@ -5,6 +5,9 @@ import { HomeComponent } from "src/app/components/home/home.component";
 import { LoginComponent } from "src/app/components/login/login.component";
 import { RegisterComponent } from "src/app/components/register/register.component";
 import { PathRouting } from "./path-routing.module";
+import { UsersComponent } from "../components/users/users.component";
+import { MovieComponent } from "../components/movie/movie.component";
+import { UserEditComponent } from "../components/user-edit/user-edit.component";
 
 const routes: Routes = [
   {
@@ -22,6 +25,18 @@ const routes: Routes = [
   {
     path: PathRouting.User,
     component: UserComponent,
+  },
+  {
+    path: PathRouting.UserEdit,
+    component: UserEditComponent,
+  },
+  {
+    path: PathRouting.Users,
+    component: UsersComponent,
+  },
+  {
+    path: `${PathRouting.Movie}/:id`,
+    component: MovieComponent,
   },
   {
     path: "**",
