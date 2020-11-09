@@ -9,17 +9,15 @@ import { Observable } from "rxjs";
   styleUrls: ["./header.component.css"]
 })
 export class HeaderComponent implements OnInit {
-  isAuthenticated: boolean;
   authorized$: Observable<boolean>;
 
   constructor(
-    private appRoutingService: AppRoutingService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private appRoutingService: AppRoutingService) {
   }
 
   ngOnInit(): void {
-    this.authorized$ = this.authService.authorized$;
-    this.isAuthenticated = this.authService.isAuthenticated();
+    this.authorized$ = this.authService.getAuthorized();
   }
 
   onClickHomePage(): void {

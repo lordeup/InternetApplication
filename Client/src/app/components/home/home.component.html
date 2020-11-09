@@ -1,15 +1,17 @@
-<mat-grid-list cols="4">
+<mat-grid-list [appGridCols]="{xs: 1, sm: 2, md: 3, lg: 4, xl: 5}" rowHeight="500px" gutterSize="40px" class="mat-grid-list">
   <mat-grid-tile *ngFor="let movie of movies">
-    <mat-card class="mat-card" (click)="onClickMovie(movie.idMovie)">
-      <img mat-card-image src="https://cutt.ly/1gKTqzl" alt="Photo" class="mat-card-image">
-      <mat-card-content>
-        <p>
-          {{ movie.name }}
-        </p>
-        <p>
-          {{ movie.description }}
-        </p>
-      </mat-card-content>
-    </mat-card>
+    <div (click)="onClickMovie(movie.idMovie)" class="item-paper">
+      <img mat-card-image src="https://cutt.ly/1gKTqzl" alt="Photo" class="image">
+      <div class="content">
+        <div class="content-text">
+          <p class="text title">
+            {{ movie.name }}
+          </p>
+          <p class="text description">
+            {{ movie.description }}
+          </p>
+        </div>
+      </div>
+    </div>
   </mat-grid-tile>
 </mat-grid-list>

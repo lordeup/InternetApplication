@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  margin-top: 40px;
+}
+
+.mat-card {
+  max-width: 940px;
+  width: 100%;
+}
+
+.form-element {
+  padding: 8px 0 16px 0;
+  width: 100%;
+}
+
+.button {
+  width: 100%;
+}

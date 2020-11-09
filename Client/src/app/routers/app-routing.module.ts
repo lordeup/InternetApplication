@@ -8,6 +8,7 @@ import { PathRouting } from "./path-routing.module";
 import { UsersComponent } from "../components/users/users.component";
 import { MovieComponent } from "../components/movie/movie.component";
 import { UserEditComponent } from "../components/user-edit/user-edit.component";
+import { AuthGuardService } from "../services/auth-guard.service";
 
 const routes: Routes = [
   {
@@ -25,14 +26,17 @@ const routes: Routes = [
   {
     path: PathRouting.User,
     component: UserComponent,
+    canActivate: [AuthGuardService],
   },
   {
     path: PathRouting.UserEdit,
     component: UserEditComponent,
+    canActivate: [AuthGuardService],
   },
   {
     path: PathRouting.Users,
     component: UsersComponent,
+    canActivate: [AuthGuardService],
   },
   {
     path: `${PathRouting.Movie}/:id`,

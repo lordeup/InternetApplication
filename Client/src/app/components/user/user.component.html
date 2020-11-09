@@ -1,14 +1,28 @@
-<script src="user.component.ts"></script>
 <div class="container">
-  <mat-card class="mat-card">
+  <mat-card class="mat-card first">
     <mat-card-content>
       <div class="user-first-row">
-        <p>{{user?.name + " " + user?.surname}}</p>
+        <div class="item-info">
+          <h3 class="capture">Имя: &nbsp;</h3>
+          <h3>{{user?.name}}</h3>
+        </div>
         <button mat-stroked-button (click)="onClickUserEdit()">
           Редактировать
         </button>
       </div>
-      <p>{{user?.login}}</p>
+      <div>
+        <div class="item-info">
+          <h3 class="capture">Фамилия: &nbsp;</h3>
+          <h3>{{user?.surname}}</h3>
+        </div>
+        <div class="item-info">
+          <h3 class="capture">Логин: &nbsp;</h3>
+          <h3>{{user?.login}}</h3>
+        </div>
+      </div>
     </mat-card-content>
+  </mat-card>
+  <mat-card class="mat-card second">
+    <h3>Оценённые фильмы</h3>
   </mat-card>
 </div>

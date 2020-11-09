@@ -20,6 +20,7 @@ import { HomeComponent } from "./components/home/home.component";
 import { MovieComponent } from "./components/movie/movie.component";
 import { UsersComponent } from "./components/users/users.component";
 import { UserEditComponent } from "./components/user-edit/user-edit.component";
+import { GridColsDirective } from "./components/grid-cols-directive";
 
 export function tokenGetter(): string {
   return localStorage.getItem(KeyLocalStorage.AccessToken);
@@ -36,6 +37,7 @@ export function tokenGetter(): string {
     MovieComponent,
     UsersComponent,
     UserEditComponent,
+    GridColsDirective,
   ],
   imports: [
     BrowserModule,

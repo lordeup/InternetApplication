@@ -14,11 +14,6 @@ import { KeyLocalStorage } from "../key-local-storage";
   providedIn: "root"
 })
 export class AuthService {
-  private authorizedSubject$ = new BehaviorSubject<boolean>(false);
-
-  get authorized$(): Observable<boolean> {
-    return this.authorizedSubject$.asObservable();
-  }
 
   constructor(
     private http: HttpClient,
@@ -26,9 +21,10 @@ export class AuthService {
     private jwtHelperService: JwtHelperService,
   ) {
     if (this.isAuthenticated()) {
-      this.authorizedSubject$.next(true);
+      this.setAuthorized(true);
     }
   }
+  private authorizedSubject$ = new BehaviorSubject<boolean>(false);
 
   private static setAuthDataToLocalStorage(authAccess: AuthAccess): void {
     localStorage.setItem(KeyLocalStorage.AccessToken, authAccess.accessToken);
@@ -40,12 +36,20 @@ export class AuthService {
     localStorage.removeItem(KeyLocalStorage.IdUser);
   }
 
+  getAuthorized(): Observable<boolean> {
+    return this.authorizedSubject$.asObservable();
+  }
+
+  private setAuthorized(value: boolean): void {
+    this.authorizedSubject$.next(value);
+  }
+
   loginUser(data: LoginUser): Observable<AuthAccess> {
     const url = this.apiUrl + ApiRouting.Login;
     return this.http.post<AuthAccess>(url, data).pipe(
       tap((authAccess) => {
           AuthService.setAuthDataToLocalStorage(authAccess);
-          this.authorizedSubject$.next(true);
+          this.setAuthorized(true);
         }
       )
     );
@@ -56,7 +60,7 @@ export class AuthService {
     return this.http.post<AuthAccess>(url, data).pipe(
       tap((authAccess) => {
           AuthService.setAuthDataToLocalStorage(authAccess);
-          this.authorizedSubject$.next(true);
+          this.setAuthorized(true);
         }
       )
     );
@@ -76,6 +80,6 @@ export class AuthService {
 
   logoutUser(): void {
     AuthService.clearAuthDataToLocalStorage();
-    this.authorizedSubject$.next(false);
+    this.setAuthorized(false);
   }
 }
