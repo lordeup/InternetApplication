@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Server.Data.Exceptions;
 using Server.Models;
 
 namespace Server.Data.Repositories.Implementation
@@ -15,29 +16,61 @@ namespace Server.Data.Repositories.Implementation
             _context = context;
         }
 
-        public Task<List<Review>> GetAll()
+        public async Task<List<Review>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.Reviews.ToListAsync();
         }
 
-        public Task<Review> Get(int id)
+        public async Task<Review> Get(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Reviews.FindAsync(id);
+            if (entity == null)
+            {
+                throw new ReviewNotFoundException();
+            }
+
+            return entity;
         }
 
-        public Task<Review> Add(Review entity)
+        public async Task<Review> Add(Review entity)
         {
-            throw new NotImplementedException();
+            await _context.Reviews.AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            if (entity == null)
+            {
+                throw new InvalidDataException("Review not created");
+            }
+
+            return entity;
         }
 
-        public Task<bool> Update(int id, Review entity)
+        public async Task<bool> Update(int id, Review entity)
         {
-            throw new NotImplementedException();
+            var review = await _context.Reviews.FindAsync(id);
+            if (review == null)
+            {
+                throw new ReviewNotFoundException();
+            }
+
+            review.Text = entity.Text;
+
+            _context.Reviews.Update(review);
+
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Reviews.FindAsync(id);
+            if (entity == null)
+            {
+                throw new ReviewNotFoundException();
+            }
+
+            _context.Reviews.Remove(entity);
+
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

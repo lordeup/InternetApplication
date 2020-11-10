@@ -33,7 +33,7 @@ namespace Server.Controllers
             try
             {
                 var entities = await _movieRepository.GetAll();
-                return entities.Select(user => _mapper.Map<MovieViewModel>(user)).ToList();
+                return entities.Select(movie => _mapper.Map<MovieViewModel>(movie)).ToList();
             }
             catch (Exception e)
             {

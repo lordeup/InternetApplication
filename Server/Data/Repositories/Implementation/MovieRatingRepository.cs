@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Server.Data.Exceptions;
 using Server.Models;
 
 namespace Server.Data.Repositories.Implementation
@@ -15,29 +17,77 @@ namespace Server.Data.Repositories.Implementation
             _context = context;
         }
 
-        public Task<List<MovieRating>> GetAll()
+        public async Task<List<MovieRating>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.MovieRatings.ToListAsync();
         }
 
-        public Task<MovieRating> Get(int id)
+        public async Task<MovieRating> Get(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.MovieRatings.FindAsync(id);
+            if (entity == null)
+            {
+                throw new MovieRatingNotFoundException();
+            }
+
+            return entity;
         }
 
-        public Task<MovieRating> Add(MovieRating entity)
+        public async Task<List<MovieRating>> GetMovieRatingsByIdUser(int idUser)
         {
-            throw new NotImplementedException();
+            return await _context.MovieRatings.Where(rating => rating.IdUser == idUser).ToListAsync();
         }
 
-        public Task<bool> Update(int id, MovieRating entity)
+        public async Task<List<MovieRating>> GetMovieRatingsByIdMovie(int idMovie)
         {
-            throw new NotImplementedException();
+            return await _context.MovieRatings.Where(rating => rating.IdMovie == idMovie).ToListAsync();
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<float> GetRatingByIdMovie(int idMovie)
         {
-            throw new NotImplementedException();
+            var ratingsByIdMovie = await GetMovieRatingsByIdMovie(idMovie);
+            return ratingsByIdMovie.Average(rating => rating.Rating);
+        }
+
+        public async Task<MovieRating> Add(MovieRating entity)
+        {
+            await _context.MovieRatings.AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            if (entity == null)
+            {
+                throw new InvalidDataException("Movie rating not created");
+            }
+
+            return entity;
+        }
+
+        public async Task<bool> Update(int id, MovieRating entity)
+        {
+            var movieRating = await _context.MovieRatings.FindAsync(id);
+            if (movieRating == null)
+            {
+                throw new MovieRatingNotFoundException();
+            }
+
+            movieRating.Rating = entity.Rating;
+
+            _context.MovieRatings.Update(movieRating);
+
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> Delete(int id)
+        {
+            var entity = await _context.MovieRatings.FindAsync(id);
+            if (entity == null)
+            {
+                throw new MovieRatingNotFoundException();
+            }
+
+            _context.MovieRatings.Remove(entity);
+
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

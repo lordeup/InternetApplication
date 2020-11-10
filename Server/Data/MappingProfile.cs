@@ -11,8 +11,20 @@ namespace Server.Data
             CreateMap<User, UserViewModel>();
             CreateMap<UserViewModel, User>();
 
+            CreateMap<UserType, UserTypeViewModel>();
+            CreateMap<UserTypeViewModel, UserType>();
+
             CreateMap<Movie, MovieViewModel>();
             CreateMap<MovieViewModel, Movie>();
+
+            CreateMap<MovieRating, MovieRatingViewModel>();
+            CreateMap<MovieRatingViewModel, MovieRating>();
+
+            CreateMap<MovieTag, MovieTagViewModel>();
+            CreateMap<MovieTagViewModel, MovieTag>();
+
+            CreateMap<Review, ReviewViewModel>();
+            CreateMap<ReviewViewModel, Review>();
         }
     }
 }

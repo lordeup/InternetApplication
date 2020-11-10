@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Server.Data;
+using Server.Data.Exceptions;
+using Server.Data.Repositories;
 using Server.Models;
+using Server.ViewModels;
 
 namespace Server.Controllers
 {
@@ -14,97 +17,106 @@ namespace Server.Controllers
     [ApiController]
     public class MovieTagsController : ControllerBase
     {
-        private readonly ApplicationContext _context;
+        private readonly IMovieTagRepository _movieTagRepository;
+        private readonly IMapper _mapper;
 
-        public MovieTagsController(ApplicationContext context)
+        public MovieTagsController(IMovieTagRepository movieTagRepository, IMapper mapper)
         {
-            _context = context;
+            _movieTagRepository = movieTagRepository;
+            _mapper = mapper;
         }
 
         // GET: api/MovieTags
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovieTag>>> GetMovieTags()
+        public async Task<ActionResult<IEnumerable<MovieTagViewModel>>> GetMovieTags()
         {
-            return await _context.MovieTags.ToListAsync();
-        }
-
-        // GET: api/MovieTags/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MovieTag>> GetMovieTag(int id)
-        {
-            var movieTag = await _context.MovieTags.FindAsync(id);
-
-            if (movieTag == null)
-            {
-                return NotFound();
-            }
-
-            return movieTag;
-        }
-
-        // PUT: api/MovieTags/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovieTag(int id, MovieTag movieTag)
-        {
-            if (id != movieTag.IdMovieTag)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(movieTag).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var entities = await _movieTagRepository.GetAll();
+                return entities.Select(movieTag => _mapper.Map<MovieTagViewModel>(movieTag)).ToList();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                if (!MovieTagExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
             }
+        }
 
-            return NoContent();
+        // GET: api/MovieTags/:id
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MovieTagViewModel>> GetMovieTag(int id)
+        {
+            try
+            {
+                var entity = await _movieTagRepository.Get(id);
+                return _mapper.Map<MovieTagViewModel>(entity);
+            }
+            catch (MovieTagNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
+        }
+
+        // PATCH: api/MovieTags/:id
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchMovieTag(int id, MovieTagViewModel viewModel)
+        {
+            try
+            {
+                var entity = _mapper.Map<MovieTag>(viewModel);
+                await _movieTagRepository.Update(id, entity);
+                return NoContent();
+            }
+            catch (MovieTagNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
         // POST: api/MovieTags
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<MovieTag>> PostMovieTag(MovieTag movieTag)
+        public async Task<ActionResult<MovieTagViewModel>> PostMovieTag(MovieTagViewModel viewModel)
         {
-            _context.MovieTags.Add(movieTag);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetMovieTag", new { id = movieTag.IdMovieTag }, movieTag);
-        }
-
-        // DELETE: api/MovieTags/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<MovieTag>> DeleteMovieTag(int id)
-        {
-            var movieTag = await _context.MovieTags.FindAsync(id);
-            if (movieTag == null)
+            try
             {
-                return NotFound();
+                var entity = _mapper.Map<MovieTag>(viewModel);
+                var model = await _movieTagRepository.Add(entity);
+                return _mapper.Map<MovieTagViewModel>(model);
             }
-
-            _context.MovieTags.Remove(movieTag);
-            await _context.SaveChangesAsync();
-
-            return movieTag;
+            catch (InvalidDataException e)
+            {
+                return BadRequest(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
-        private bool MovieTagExists(int id)
+        // DELETE: api/MovieTags/:id
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMovieTag(int id)
         {
-            return _context.MovieTags.Any(e => e.IdMovieTag == id);
+            try
+            {
+                await _movieTagRepository.Delete(id);
+                return NoContent();
+            }
+            catch (MovieTagNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
     }
 }

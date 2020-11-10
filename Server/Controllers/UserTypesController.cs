@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Server.Data;
+using Server.Data.Exceptions;
+using Server.Data.Repositories;
 using Server.Models;
+using Server.ViewModels;
 
 namespace Server.Controllers
 {
@@ -14,97 +17,106 @@ namespace Server.Controllers
     [ApiController]
     public class UserTypesController : ControllerBase
     {
-        private readonly ApplicationContext _context;
+        private readonly IUserTypeRepository _userTypeRepository;
+        private readonly IMapper _mapper;
 
-        public UserTypesController(ApplicationContext context)
+        public UserTypesController(IUserTypeRepository userTypeRepository, IMapper mapper)
         {
-            _context = context;
+            _userTypeRepository = userTypeRepository;
+            _mapper = mapper;
         }
 
         // GET: api/UserTypes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserType>>> GetUserTypes()
+        public async Task<ActionResult<IEnumerable<UserTypeViewModel>>> GetUserTypes()
         {
-            return await _context.UserTypes.ToListAsync();
-        }
-
-        // GET: api/UserTypes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserType>> GetUserType(int id)
-        {
-            var userType = await _context.UserTypes.FindAsync(id);
-
-            if (userType == null)
-            {
-                return NotFound();
-            }
-
-            return userType;
-        }
-
-        // PUT: api/UserTypes/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUserType(int id, UserType userType)
-        {
-            if (id != userType.IdUserType)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(userType).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var entities = await _userTypeRepository.GetAll();
+                return entities.Select(userType => _mapper.Map<UserTypeViewModel>(userType)).ToList();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                if (!UserTypeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
             }
+        }
 
-            return NoContent();
+        // GET: api/UserTypes/:id
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserTypeViewModel>> GetUserType(int id)
+        {
+            try
+            {
+                var entity = await _userTypeRepository.Get(id);
+                return _mapper.Map<UserTypeViewModel>(entity);
+            }
+            catch (UserTypeNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
+        }
+
+        // PATCH: api/UserTypes/:id
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchUserType(int id, UserTypeViewModel viewModel)
+        {
+            try
+            {
+                var entity = _mapper.Map<UserType>(viewModel);
+                await _userTypeRepository.Update(id, entity);
+                return NoContent();
+            }
+            catch (UserTypeNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
         // POST: api/UserTypes
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<UserType>> PostUserType(UserType userType)
+        public async Task<ActionResult<UserTypeViewModel>> PostUserType(UserTypeViewModel viewModel)
         {
-            _context.UserTypes.Add(userType);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUserType", new { id = userType.IdUserType }, userType);
-        }
-
-        // DELETE: api/UserTypes/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<UserType>> DeleteUserType(int id)
-        {
-            var userType = await _context.UserTypes.FindAsync(id);
-            if (userType == null)
+            try
             {
-                return NotFound();
+                var entity = _mapper.Map<UserType>(viewModel);
+                var model = await _userTypeRepository.Add(entity);
+                return _mapper.Map<UserTypeViewModel>(model);
             }
-
-            _context.UserTypes.Remove(userType);
-            await _context.SaveChangesAsync();
-
-            return userType;
+            catch (InvalidDataException e)
+            {
+                return BadRequest(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
 
-        private bool UserTypeExists(int id)
+        // DELETE: api/UserTypes/:id
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUserType(int id)
         {
-            return _context.UserTypes.Any(e => e.IdUserType == id);
+            try
+            {
+                await _userTypeRepository.Delete(id);
+                return NoContent();
+            }
+            catch (UserTypeNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
         }
     }
 }

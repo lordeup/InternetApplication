@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Server.Data.Exceptions;
 using Server.Models;
 
 namespace Server.Data.Repositories.Implementation
@@ -15,29 +16,61 @@ namespace Server.Data.Repositories.Implementation
             _context = context;
         }
 
-        public Task<List<MovieTag>> GetAll()
+        public async Task<List<MovieTag>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.MovieTags.ToListAsync();
         }
 
-        public Task<MovieTag> Get(int id)
+        public async Task<MovieTag> Get(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.MovieTags.FindAsync(id);
+            if (entity == null)
+            {
+                throw new MovieTagNotFoundException();
+            }
+
+            return entity;
         }
 
-        public Task<MovieTag> Add(MovieTag entity)
+        public async Task<MovieTag> Add(MovieTag entity)
         {
-            throw new NotImplementedException();
+            await _context.MovieTags.AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            if (entity == null)
+            {
+                throw new InvalidDataException("Movie tag not created");
+            }
+
+            return entity;
         }
 
-        public Task<bool> Update(int id, MovieTag entity)
+        public async Task<bool> Update(int id, MovieTag entity)
         {
-            throw new NotImplementedException();
+            var movieTag = await _context.MovieTags.FindAsync(id);
+            if (movieTag == null)
+            {
+                throw new MovieTagNotFoundException();
+            }
+
+            movieTag.Name = entity.Name;
+
+            _context.MovieTags.Update(movieTag);
+
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.MovieTags.FindAsync(id);
+            if (entity == null)
+            {
+                throw new MovieTagNotFoundException();
+            }
+
+            _context.MovieTags.Remove(entity);
+
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

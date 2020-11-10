@@ -23,6 +23,7 @@ namespace Server.Controllers
             _tokenGenerator = tokenGenerator;
         }
 
+        // POST: api/Auth/login
         [Route("login")]
         [HttpPost]
         public async Task<ActionResult<AuthAccessViewModel>> Login(LoginUserViewModel viewModel)
@@ -52,6 +53,7 @@ namespace Server.Controllers
             }
         }
 
+        // POST: api/Auth/register
         [Route("register")]
         [HttpPost]
         public async Task<ActionResult<AuthAccessViewModel>> Register(RegisterUserViewModel viewModel)
