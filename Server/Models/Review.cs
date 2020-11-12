@@ -24,7 +24,7 @@ namespace Server.Models
         public string Text { get; set; }
 
         [Column("date")]
-        [Timestamp]
+        [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }
 
         [ForeignKey(nameof(IdUser))]

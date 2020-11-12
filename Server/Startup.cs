@@ -56,6 +56,7 @@ namespace Server
             services.AddTransient<IMovieRatingRepository, MovieRatingRepository>();
             services.AddTransient<IMovieRepository, MovieRepository>();
             services.AddTransient<IMovieTagRepository, MovieTagRepository>();
+            services.AddTransient<IMovieHasMovieTagRepository, MovieHasMovieTagRepository>();
             services.AddTransient<IReviewRepository, ReviewRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserTypeRepository, UserTypeRepository>();

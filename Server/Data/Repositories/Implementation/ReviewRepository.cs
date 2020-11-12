@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Data.Exceptions;
@@ -32,8 +34,19 @@ namespace Server.Data.Repositories.Implementation
             return entity;
         }
 
+        public async Task<List<Review>> GetReviewsByIdUser(int idUser)
+        {
+            return await _context.Reviews.Where(review => review.IdUser == idUser).ToListAsync();
+        }
+
+        public async Task<List<Review>> GetReviewsByIdMovie(int idMovie)
+        {
+            return await _context.Reviews.Where(review => review.IdMovie == idMovie).ToListAsync();
+        }
+
         public async Task<Review> Add(Review entity)
         {
+            entity.Date = DateTime.Now;
             await _context.Reviews.AddAsync(entity);
             await _context.SaveChangesAsync();
 

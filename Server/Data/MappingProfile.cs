@@ -23,6 +23,9 @@ namespace Server.Data
             CreateMap<MovieTag, MovieTagViewModel>();
             CreateMap<MovieTagViewModel, MovieTag>();
 
+            CreateMap<MovieHasMovieTag, MovieHasMovieTagViewModel>();
+            CreateMap<MovieHasMovieTagViewModel, MovieHasMovieTag>();
+
             CreateMap<Review, ReviewViewModel>();
             CreateMap<ReviewViewModel, Review>();
         }

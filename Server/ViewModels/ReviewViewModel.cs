@@ -16,6 +16,7 @@ namespace Server.ViewModels
         [Required]
         public string Text { get; set; }
 
+        // [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime Date { get; set; }
     }
 }

@@ -61,6 +61,36 @@ namespace Server.Controllers
             }
         }
 
+        // GET: api/Reviews/user/:id
+        [HttpGet("user/{id}")]
+        public async Task<ActionResult<IEnumerable<ReviewViewModel>>> GetReviewsByIdUser(int id)
+        {
+            try
+            {
+                var entities = await _reviewRepository.GetReviewsByIdUser(id);
+                return entities.Select(review => _mapper.Map<ReviewViewModel>(review)).ToList();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
+        }
+
+        // GET: api/Reviews/movie/:id
+        [HttpGet("movie/{id}")]
+        public async Task<ActionResult<IEnumerable<ReviewViewModel>>> GetReviewsByIdMovie(int id)
+        {
+            try
+            {
+                var entities = await _reviewRepository.GetReviewsByIdMovie(id);
+                return entities.Select(review => _mapper.Map<ReviewViewModel>(review)).ToList();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
+        }
+
         // PATCH: api/Reviews/:id
         [HttpPatch("{id}")]
         [Authorize]
