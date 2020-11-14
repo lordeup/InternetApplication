@@ -4,6 +4,8 @@ export enum PathRouting {
   Register = "register",
   User = "user",
   UserEdit = "user-edit",
-  Users = "users",
   Movie = "movie",
+  AdministrationUsers = "administration-users",
+  AdministrationMovies = "administration-movies",
+  AdministrationMovieTags = "administration-movie-tags",
 }

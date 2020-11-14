@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { AppRoutingService } from "../../routers/app-routing.service";
 import { UserService } from "../../services/user.service";
 import { AuthService } from "../../services/auth.service";
-import { User } from "../../models/user.model";
+import { UserModel } from "../../models/user.model";
 
 @Component({
   selector: "app-user",
@@ -10,7 +10,7 @@ import { User } from "../../models/user.model";
   styleUrls: ["./user.component.css"]
 })
 export class UserComponent implements OnInit {
-  user: User;
+  user: UserModel;
 
   constructor(
     private userService: UserService,

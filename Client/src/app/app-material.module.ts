@@ -6,6 +6,10 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatCardModule } from "@angular/material/card";
 import { MatGridListModule } from "@angular/material/grid-list";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatListModule } from "@angular/material/list";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatMenuModule } from "@angular/material/menu";
 
 const components = [
   MatFormFieldModule,
@@ -15,6 +19,10 @@ const components = [
   MatToolbarModule,
   MatCardModule,
   MatGridListModule,
+  MatSidenavModule,
+  MatListModule,
+  MatDialogModule,
+  MatMenuModule,
 ];
 
 @NgModule({

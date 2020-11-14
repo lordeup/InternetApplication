@@ -1,8 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { MovieService } from "../../services/movie.service";
 import { AppRoutingService } from "../../routers/app-routing.service";
-import { Movie } from "../../models/movie.model";
-import { Id } from "../../models/id";
+import { MovieModel } from "../../models/movie.model";
 
 @Component({
   selector: "app-movie",
@@ -10,7 +9,7 @@ import { Id } from "../../models/id";
   styleUrls: ["./movie.component.css"]
 })
 export class MovieComponent implements OnInit {
-  movie: Movie;
+  movie: MovieModel;
 
   constructor(
     private movieService: MovieService,
@@ -18,12 +17,5 @@ export class MovieComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  deleteMovie(id: Id): void {
-    this.movieService.deleteMovie(id).subscribe(response => {
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
   }
 }

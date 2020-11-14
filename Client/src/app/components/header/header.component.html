@@ -1,22 +1,43 @@
-<mat-toolbar color="primary">
-  <!--  <button mat-icon-button>-->
-  <!--    <mat-icon>menu</mat-icon>-->
-  <!--  </button>-->
-  <span (click)="onClickHomePage()" class="title">Фильмы</span>
-  <div class="spacer"></div>
+<mat-sidenav-container class="sidenav-container" autosize>
+  <mat-sidenav #sidenav [autoFocus]="false">
+    <mat-nav-list>
+      <a *ngFor="let menu of menus" mat-list-item (click)="sidenav.close()"
+         [routerLink]="[menu.route]"
+      >
+        <mat-icon matlisticon class="icon"> {{ menu.icon }} </mat-icon>
+        {{menu.title}}
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
 
-  <div *ngIf="authorized$ | async; else elseBlock">
-    <button mat-icon-button (click)="onClickUserProfile()">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-    <button mat-icon-button (click)="onClickLogout()">
-      <mat-icon>logout</mat-icon>
-    </button>
-  </div>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button *ngIf="authorized$ | async" mat-icon-button class="menu-button" (click)="sidenav.open()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span (click)="onClickHomePage()" class="title">Кинопоиск</span>
+      <div class="spacer"></div>
 
-  <ng-template #elseBlock>
-    <button mat-icon-button (click)="onClickLoginPage()">
-      <mat-icon>login</mat-icon>
-    </button>
-  </ng-template>
-</mat-toolbar>
+      <div *ngIf="authorized$ | async; else elseBlock">
+        <button mat-icon-button (click)="onClickUserProfile()">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onClickLogout()">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+
+      <ng-template #elseBlock>
+        <button mat-icon-button (click)="onClickLoginPage()">
+          <mat-icon>login</mat-icon>
+        </button>
+      </ng-template>
+    </mat-toolbar>
+
+    <mat-sidenav-content class="main-container">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

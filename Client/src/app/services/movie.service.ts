@@ -4,7 +4,7 @@ import { API_URL } from "../app-injection-tokens";
 import { ApiRouting } from "../routers/api-routing.module";
 import { Id } from "../models/id";
 import { Observable } from "rxjs";
-import { Movie } from "../models/movie.model";
+import { MovieModel } from "../models/movie.model";
 
 @Injectable({
   providedIn: "root"
@@ -19,22 +19,26 @@ export class MovieService {
 
   private baseUrlMovie = this.apiUrl + ApiRouting.Movie;
 
-  getMovie(id: Id): Observable<Movie> {
-    const url = `${this.baseUrlMovie}/${id}`;
-    return this.http.get<Movie>(url);
+  getMovies(): Observable<MovieModel[]> {
+    return this.http.get<MovieModel[]>(this.baseUrlMovie);
   }
 
-  getMovies(): Observable<Movie[]> {
-    return this.http.get<Movie[]>(this.baseUrlMovie);
+  getMovie(id: Id): Observable<MovieModel> {
+    const url = `${this.baseUrlMovie}/${id}`;
+    return this.http.get<MovieModel>(url);
+  }
+
+  updateMovie(data: MovieModel): Observable<boolean> {
+    const url = `${this.baseUrlMovie}/${data.idMovie}`;
+    return this.http.patch<boolean>(url, data);
+  }
+
+  addMovie(data: MovieModel): Observable<MovieModel> {
+    return this.http.post<MovieModel>(this.baseUrlMovie, data);
   }
 
   deleteMovie(id: Id): Observable<boolean> {
     const url = `${this.baseUrlMovie}/${id}`;
     return this.http.delete<boolean>(url);
-  }
-
-  updateMovie(data: Movie): Observable<Movie> {
-    const url = `${this.baseUrlMovie}/${data.idMovie}`;
-    return this.http.patch<Movie>(url, data);
   }
 }

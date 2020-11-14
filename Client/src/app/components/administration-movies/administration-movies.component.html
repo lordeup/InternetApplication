@@ -1,0 +1,26 @@
+<div class="movies-container">
+  <button
+    mat-stroked-button
+    class="add-button"
+    (click)="addItem()"
+  >
+    Добавить фильм
+  </button>
+  <mat-nav-list>
+    <mat-list-item *ngFor="let item of movies" (click)="selectItem(item)">
+      <p mat-line> {{ item?.name }} </p>
+      <button
+        mat-icon-button
+        #menuTrigger="matMenuTrigger"
+        [matMenuTriggerFor]="menu"
+        (click)="menuTrigger.openMenu()"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </mat-list-item>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="editItem()">Редактировать</button>
+      <button mat-menu-item (click)="deleteItem()">Удалить</button>
+    </mat-menu>
+  </mat-nav-list>
+</div>

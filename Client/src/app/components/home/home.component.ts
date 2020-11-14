@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { MovieService } from "../../services/movie.service";
 import { AppRoutingService } from "../../routers/app-routing.service";
-import { Movie } from "../../models/movie.model";
+import { MovieModel } from "../../models/movie.model";
 import { Id } from "../../models/id";
 
 @Component({
@@ -10,7 +10,7 @@ import { Id } from "../../models/id";
   styleUrls: ["./home.component.css"]
 })
 export class HomeComponent implements OnInit {
-  movies: Movie[] = [];
+  movies: MovieModel[] = [];
 
   constructor(
     private movieService: MovieService,
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
 
   getMovies(): void {
     this.movieService.getMovies().subscribe(response => {
-      console.log("movies", response);
+      console.log("getMovies", response);
       this.movies = response;
     }, error => {
       alert(error.error?.message || error.message);

@@ -1,6 +1,6 @@
 import { Id } from "./id";
 
-export class AuthAccess {
+export class AuthAccessModel {
   accessToken: string;
   idUser: Id;
 }

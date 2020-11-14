@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { REQUIRED_TITLE_ERROR } from "src/app/const";
 import { AuthService } from "src/app/services/auth.service";
-import { LoginUser } from "../../models/login-user.model";
+import { LoginUserModel } from "../../models/login-user.model";
 import { AppRoutingService } from "../../routers/app-routing.service";
 
 @Component({
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     const value = this.formGroup.value;
-    const data = new LoginUser().deserialize(value);
+    const data = new LoginUserModel().deserialize(value);
 
     this.authService.loginUser(data).subscribe(response => {
       this.appRoutingService.goToUserPage();

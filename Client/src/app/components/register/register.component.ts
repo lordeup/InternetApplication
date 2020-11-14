@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { REQUIRED_TITLE_ERROR } from "src/app/const";
 import { AuthService } from "src/app/services/auth.service";
-import { RegisterUser } from "../../models/register-user.model";
+import { RegisterUserModel } from "../../models/register-user.model";
 import { AppRoutingService } from "../../routers/app-routing.service";
 
 @Component({
@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(): void {
     const value = this.formGroup.value;
-    const data = new RegisterUser().deserialize(value);
+    const data = new RegisterUserModel().deserialize(value);
 
     this.authService.registerUser(data).subscribe(response => {
       this.appRoutingService.goToUserPage();

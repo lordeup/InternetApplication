@@ -18,9 +18,14 @@ import { UserComponent } from "./components/user/user.component";
 import { HeaderComponent } from "./components/header/header.component";
 import { HomeComponent } from "./components/home/home.component";
 import { MovieComponent } from "./components/movie/movie.component";
-import { UsersComponent } from "./components/users/users.component";
 import { UserEditComponent } from "./components/user-edit/user-edit.component";
-import { GridColsDirective } from "./components/grid-cols-directive";
+import { GridColsDirective } from "./directives/grid-cols-directive";
+import { AdministrationMovieTagsComponent } from "./components/administration-movie-tags/administration-movie-tags.component";
+import { AdministrationUsersComponent } from "./components/administration-users/administration-users.component";
+import { AdministrationMoviesComponent } from "./components/administration-movies/administration-movies.component";
+import { DialogMovieTagComponent } from "./components/dialog-movie-tag/dialog-movie-tag.component";
+import { DialogDeleteConfirmationComponent } from "./components/dialog-delete-confirmation/dialog-delete-confirmation.component";
+import { DialogMovieComponent } from "./components/dialog-movie/dialog-movie.component";
 
 export function tokenGetter(): string {
   return localStorage.getItem(KeyLocalStorage.AccessToken);
@@ -29,15 +34,20 @@ export function tokenGetter(): string {
 @NgModule({
   declarations: [
     AppComponent,
+    GridColsDirective,
     RegisterComponent,
     LoginComponent,
     UserComponent,
     HeaderComponent,
     HomeComponent,
     MovieComponent,
-    UsersComponent,
     UserEditComponent,
-    GridColsDirective,
+    AdministrationMovieTagsComponent,
+    AdministrationUsersComponent,
+    AdministrationMoviesComponent,
+    DialogMovieTagComponent,
+    DialogDeleteConfirmationComponent,
+    DialogMovieComponent,
   ],
   imports: [
     BrowserModule,

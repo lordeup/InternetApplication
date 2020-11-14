@@ -10,3 +10,19 @@
 .mat-toolbar-row, .mat-toolbar-single-row {
   padding: 0 24px;
 }
+
+.main-container {
+  height: calc(100% - 64px);
+}
+
+.mat-sidenav-container {
+  position: fixed;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  min-width: 100%;
+}
+
+.icon {
+  margin-right: 8px;
+}

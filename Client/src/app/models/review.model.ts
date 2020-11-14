@@ -1,11 +1,12 @@
 import { Deserializable } from "./deserializable.model";
 import { Id } from "./id";
 
-export class MovieModel implements Deserializable {
+export class ReviewModel implements Deserializable {
+  idReview: Id;
+  idUser: Id;
   idMovie: Id;
-  name: string;
-  description: string;
-  pictureUrl: string;
+  text: string;
+  date: string;
 
   deserialize(input: any): this {
     return Object.assign(this, input);

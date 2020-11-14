@@ -1,0 +1,7 @@
+.dialog-container {
+  width: 600px;
+}
+
+.dialog-actions {
+  justify-content: flex-end;
+}

@@ -1,0 +1,18 @@
+<div class="users-container">
+  <mat-nav-list>
+    <mat-list-item *ngFor="let item of users" (click)="selectItem(item)">
+      <p mat-line> {{item?.login}} {{item?.name}} </p>
+      <button
+        mat-icon-button
+        #menuTrigger="matMenuTrigger"
+        [matMenuTriggerFor]="menu"
+        (click)="menuTrigger.openMenu()"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </mat-list-item>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="deleteItem()">Удалить</button>
+    </mat-menu>
+  </mat-nav-list>
+</div>

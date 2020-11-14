@@ -2,9 +2,9 @@ import { Inject, Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { AuthAccess } from "../models/auth-access.model";
-import { RegisterUser } from "../models/register-user.model";
-import { LoginUser } from "../models/login-user.model";
+import { AuthAccessModel } from "../models/auth-access.model";
+import { RegisterUserModel } from "../models/register-user.model";
+import { LoginUserModel } from "../models/login-user.model";
 import { ApiRouting } from "../routers/api-routing.module";
 import { tap } from "rxjs/operators";
 import { API_URL } from "../app-injection-tokens";
@@ -26,7 +26,7 @@ export class AuthService {
   }
   private authorizedSubject$ = new BehaviorSubject<boolean>(false);
 
-  private static setAuthDataToLocalStorage(authAccess: AuthAccess): void {
+  private static setAuthDataToLocalStorage(authAccess: AuthAccessModel): void {
     localStorage.setItem(KeyLocalStorage.AccessToken, authAccess.accessToken);
     localStorage.setItem(KeyLocalStorage.IdUser, authAccess.idUser);
   }
@@ -44,9 +44,9 @@ export class AuthService {
     this.authorizedSubject$.next(value);
   }
 
-  loginUser(data: LoginUser): Observable<AuthAccess> {
+  loginUser(data: LoginUserModel): Observable<AuthAccessModel> {
     const url = this.apiUrl + ApiRouting.Login;
-    return this.http.post<AuthAccess>(url, data).pipe(
+    return this.http.post<AuthAccessModel>(url, data).pipe(
       tap((authAccess) => {
           AuthService.setAuthDataToLocalStorage(authAccess);
           this.setAuthorized(true);
@@ -55,9 +55,9 @@ export class AuthService {
     );
   }
 
-  registerUser(data: RegisterUser): Observable<AuthAccess> {
+  registerUser(data: RegisterUserModel): Observable<AuthAccessModel> {
     const url = this.apiUrl + ApiRouting.Register;
-    return this.http.post<AuthAccess>(url, data).pipe(
+    return this.http.post<AuthAccessModel>(url, data).pipe(
       tap((authAccess) => {
           AuthService.setAuthDataToLocalStorage(authAccess);
           this.setAuthorized(true);

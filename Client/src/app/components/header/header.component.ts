@@ -2,6 +2,31 @@ import { Component, OnInit } from "@angular/core";
 import { AppRoutingService } from "../../routers/app-routing.service";
 import { AuthService } from "../../services/auth.service";
 import { Observable } from "rxjs";
+import { PathRouting } from "../../routers/path-routing.module";
+
+interface IAdministrationMenu {
+  title: string;
+  route: string;
+  icon: string;
+}
+
+const ADMINISTRATION_MENUS: IAdministrationMenu[] = [
+  {
+    title: "Пользователи",
+    route: PathRouting.AdministrationUsers,
+    icon: "person",
+  },
+  {
+    title: "Фильмы",
+    route: PathRouting.AdministrationMovies,
+    icon: "movie",
+  },
+  {
+    title: "Жанры фильмов",
+    route: PathRouting.AdministrationMovieTags,
+    icon: "assignment",
+  },
+];
 
 @Component({
   selector: "app-header",
@@ -10,6 +35,7 @@ import { Observable } from "rxjs";
 })
 export class HeaderComponent implements OnInit {
   authorized$: Observable<boolean>;
+  menus: IAdministrationMenu[] = [];
 
   constructor(
     private authService: AuthService,
@@ -18,6 +44,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.authorized$ = this.authService.getAuthorized();
+    this.menus = ADMINISTRATION_MENUS;
   }
 
   onClickHomePage(): void {

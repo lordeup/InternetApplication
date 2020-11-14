@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { API_URL } from "../app-injection-tokens";
 import { Observable } from "rxjs";
-import { User } from "../models/user.model";
+import { UserModel } from "../models/user.model";
 import { ApiRouting } from "../routers/api-routing.module";
 import { Id } from "../models/id";
 
@@ -19,22 +19,22 @@ export class UserService {
 
   private baseUrlUser = this.apiUrl + ApiRouting.User;
 
-  getUser(id: Id): Observable<User> {
-    const url = `${this.baseUrlUser}/${id}`;
-    return this.http.get<User>(url);
+  getUsers(): Observable<UserModel[]> {
+    return this.http.get<UserModel[]>(this.baseUrlUser);
   }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrlUser);
+  getUser(id: Id): Observable<UserModel> {
+    const url = `${this.baseUrlUser}/${id}`;
+    return this.http.get<UserModel>(url);
+  }
+
+  updateUser(data: UserModel): Observable<boolean> {
+    const url = `${this.baseUrlUser}/${data.idUser}`;
+    return this.http.patch<boolean>(url, data);
   }
 
   deleteUser(id: Id): Observable<boolean> {
     const url = `${this.baseUrlUser}/${id}`;
     return this.http.delete<boolean>(url);
-  }
-
-  updateUser(data: User): Observable<User> {
-    const url = `${this.baseUrlUser}/${data.idUser}`;
-    return this.http.patch<User>(url, data);
   }
 }

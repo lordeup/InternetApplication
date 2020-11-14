@@ -1,6 +1,6 @@
 ﻿import { Deserializable } from "./deserializable.model";
 
-export class RegisterUser implements Deserializable {
+export class RegisterUserModel implements Deserializable {
   login: string;
   password: string;
   name: string;

@@ -31,10 +31,6 @@ export class AppRoutingService {
     this.router.navigateByUrl(PathRouting.UserEdit);
   }
 
-  goToUsersPage(): void {
-    this.router.navigateByUrl(PathRouting.Users);
-  }
-
   goToMoviePage(id: Id): void {
     this.router.navigateByUrl(`${PathRouting.Movie}/${id}`);
   }

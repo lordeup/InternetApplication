@@ -1,7 +1,7 @@
 import { Deserializable } from "./deserializable.model";
 import { Id } from "./id";
 
-export class User implements Deserializable {
+export class UserModel implements Deserializable {
   idUser: Id;
   idUserType: Id;
   login: string;

@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { UserService } from "../../services/user.service";
 import { AuthService } from "../../services/auth.service";
 import { AppRoutingService } from "../../routers/app-routing.service";
-import { User } from "../../models/user.model";
+import { UserModel } from "../../models/user.model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { REQUIRED_TITLE_ERROR } from "../../const";
 
@@ -12,7 +12,7 @@ import { REQUIRED_TITLE_ERROR } from "../../const";
   styleUrls: ["./user-edit.component.css"]
 })
 export class UserEditComponent implements OnInit {
-  user: User;
+  user: UserModel;
   formGroup: FormGroup;
 
   constructor(
@@ -53,7 +53,7 @@ export class UserEditComponent implements OnInit {
 
   onSubmit(): void {
     const value = this.formGroup.value;
-    const data = new User().deserialize(value);
+    const data = new UserModel().deserialize(value);
     console.log("data", data);
 
     // this.userService.updateUser(data).subscribe(response => {
@@ -61,7 +61,6 @@ export class UserEditComponent implements OnInit {
     // }, error => {
     //   alert(error.error?.message || error.message);
     // });
-
   }
 
 }
