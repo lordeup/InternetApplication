@@ -1,11 +1,14 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { DialogTitle } from "../../models/dialog-title";
 import { MovieModel } from "../../models/movie.model";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { REQUIRED_TITLE_ERROR } from "../../const";
+import { MovieTagModel } from "../../models/movie-tag.model";
 
 export interface IDialogMovieData {
   title: DialogTitle;
+  movieTags: MovieTagModel[];
   movie?: MovieModel;
 }
 
@@ -17,20 +20,36 @@ export interface IDialogMovieData {
 export class DialogMovieComponent implements OnInit {
   formGroup: FormGroup;
   title: string;
+  movieTags: MovieTagModel[];
 
   constructor(
     private dialogRef: MatDialogRef<DialogMovieComponent>,
     private formBuilder: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) private data: IDialogMovieData) {
+    @Inject(MAT_DIALOG_DATA) private dialogData: IDialogMovieData) {
   }
 
   ngOnInit(): void {
+    const {movie, movieTags, title} = this.dialogData;
     this.formGroup = this.formBuilder.group({
-      idMovie: this.data.movie?.idMovie,
-      name: this.data.movie?.name || "",
+      name: [movie?.name || "", Validators.required],
+      description: movie?.description || "",
+      // movieTags: movieTags,
     });
-    !this.formGroup.value.idMovie && this.formGroup.removeControl("idMovie");
-    this.title = this.data.title || "";
+    this.title = title || "";
+    this.movieTags = movieTags;
+  }
+
+  getErrorName(): string {
+    return this.formGroup.get("name").hasError("required") ? REQUIRED_TITLE_ERROR : "";
+  }
+
+  dataValidation(data: MovieModel): MovieModel {
+    const {movie} = this.dialogData;
+    if (!!movie?.idMovie) {
+      data.idMovie = movie?.idMovie;
+    }
+
+    return data;
   }
 
   onClose(): void {
@@ -39,6 +58,7 @@ export class DialogMovieComponent implements OnInit {
 
   onSubmit(): void {
     const data = new MovieModel().deserialize(this.formGroup.value);
+    this.dataValidation(data);
     this.dialogRef.close(data);
   }
 

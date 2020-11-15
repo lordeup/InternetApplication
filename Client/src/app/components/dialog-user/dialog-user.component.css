@@ -10,7 +10,3 @@
 .dialog-actions {
   justify-content: flex-end;
 }
-
-::ng-deep .mat-select-panel-wrap {
-  margin-left: 15px;
-}

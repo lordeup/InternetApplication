@@ -10,6 +10,9 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatMenuModule } from "@angular/material/menu";
+import { MatSelectModule } from "@angular/material/select";
+import { TextFieldModule } from "@angular/cdk/text-field";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 const components = [
   MatFormFieldModule,
@@ -23,6 +26,9 @@ const components = [
   MatListModule,
   MatDialogModule,
   MatMenuModule,
+  MatSelectModule,
+  TextFieldModule,
+  MatAutocompleteModule,
 ];
 
 @NgModule({

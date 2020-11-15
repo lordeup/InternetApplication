@@ -33,8 +33,7 @@ export class AdministrationMovieTagsComponent implements OnInit {
       title: DialogTitle.Add,
     };
     const dialogRef = this.dialog.open(DialogMovieTagComponent, {data});
-    dialogRef.afterClosed().subscribe(
-      response => {
+    dialogRef.afterClosed().subscribe(response => {
         !!response && this.addMovieTag(response);
       }
     );
@@ -46,8 +45,7 @@ export class AdministrationMovieTagsComponent implements OnInit {
       movieTag: this.selectedItem,
     };
     const dialogRef = this.dialog.open(DialogMovieTagComponent, {data});
-    dialogRef.afterClosed().subscribe(
-      response => {
+    dialogRef.afterClosed().subscribe(response => {
         !!response && this.updateMovieTag(response);
       }
     );
@@ -63,8 +61,7 @@ export class AdministrationMovieTagsComponent implements OnInit {
       text: `Вы уверены, что хотите удалить жанр фильма: ${this.selectedItem.name}`
     };
     const dialogRef = this.dialog.open(DialogDeleteConfirmationComponent, {data, autoFocus: false});
-    dialogRef.afterClosed().subscribe(
-      response => {
+    dialogRef.afterClosed().subscribe(response => {
         !!response && this.deleteMovieTag(this.selectedItem.idMovieTag);
       }
     );
@@ -79,7 +76,7 @@ export class AdministrationMovieTagsComponent implements OnInit {
   }
 
   updateMovieTag(data: MovieTagModel): void {
-    this.movieTagService.updateMovieTag(data).subscribe(response => {
+    this.movieTagService.updateMovieTag(data).subscribe(() => {
       this.getMovieTags();
     }, error => {
       alert(error.error?.message || error.message);
@@ -95,7 +92,7 @@ export class AdministrationMovieTagsComponent implements OnInit {
   }
 
   deleteMovieTag(id: Id): void {
-    this.movieTagService.deleteMovieTag(id).subscribe(response => {
+    this.movieTagService.deleteMovieTag(id).subscribe(() => {
       this.getMovieTags();
     }, error => {
       alert(error.error?.message || error.message);

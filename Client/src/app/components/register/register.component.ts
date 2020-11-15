@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
     const value = this.formGroup.value;
     const data = new RegisterUserModel().deserialize(value);
 
-    this.authService.registerUser(data).subscribe(response => {
+    this.authService.registerUser(data).subscribe(() => {
       this.appRoutingService.goToUserPage();
     }, error => {
       alert(error.error?.message || error.message);

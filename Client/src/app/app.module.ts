@@ -18,7 +18,6 @@ import { UserComponent } from "./components/user/user.component";
 import { HeaderComponent } from "./components/header/header.component";
 import { HomeComponent } from "./components/home/home.component";
 import { MovieComponent } from "./components/movie/movie.component";
-import { UserEditComponent } from "./components/user-edit/user-edit.component";
 import { GridColsDirective } from "./directives/grid-cols-directive";
 import { AdministrationMovieTagsComponent } from "./components/administration-movie-tags/administration-movie-tags.component";
 import { AdministrationUsersComponent } from "./components/administration-users/administration-users.component";
@@ -26,6 +25,7 @@ import { AdministrationMoviesComponent } from "./components/administration-movie
 import { DialogMovieTagComponent } from "./components/dialog-movie-tag/dialog-movie-tag.component";
 import { DialogDeleteConfirmationComponent } from "./components/dialog-delete-confirmation/dialog-delete-confirmation.component";
 import { DialogMovieComponent } from "./components/dialog-movie/dialog-movie.component";
+import { DialogUserComponent } from "./components/dialog-user/dialog-user.component";
 
 export function tokenGetter(): string {
   return localStorage.getItem(KeyLocalStorage.AccessToken);
@@ -41,13 +41,13 @@ export function tokenGetter(): string {
     HeaderComponent,
     HomeComponent,
     MovieComponent,
-    UserEditComponent,
     AdministrationMovieTagsComponent,
     AdministrationUsersComponent,
     AdministrationMoviesComponent,
     DialogMovieTagComponent,
     DialogDeleteConfirmationComponent,
     DialogMovieComponent,
+    DialogUserComponent,
   ],
   imports: [
     BrowserModule,

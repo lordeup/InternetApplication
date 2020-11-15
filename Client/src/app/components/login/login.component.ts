@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
     const value = this.formGroup.value;
     const data = new LoginUserModel().deserialize(value);
 
-    this.authService.loginUser(data).subscribe(response => {
+    this.authService.loginUser(data).subscribe(() => {
       this.appRoutingService.goToUserPage();
     }, error => {
       alert(error.error?.message || error.message);

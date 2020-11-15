@@ -6,7 +6,6 @@ import { LoginComponent } from "src/app/components/login/login.component";
 import { RegisterComponent } from "src/app/components/register/register.component";
 import { PathRouting } from "./path-routing.module";
 import { MovieComponent } from "../components/movie/movie.component";
-import { UserEditComponent } from "../components/user-edit/user-edit.component";
 import { AuthGuardService } from "../services/auth-guard.service";
 import { AdministrationMovieTagsComponent } from "../components/administration-movie-tags/administration-movie-tags.component";
 import { AdministrationUsersComponent } from "../components/administration-users/administration-users.component";
@@ -28,11 +27,6 @@ const routes: Routes = [
   {
     path: PathRouting.User,
     component: UserComponent,
-    canActivate: [AuthGuardService],
-  },
-  {
-    path: PathRouting.UserEdit,
-    component: UserEditComponent,
     canActivate: [AuthGuardService],
   },
   {

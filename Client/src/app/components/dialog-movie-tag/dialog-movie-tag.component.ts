@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MovieTagModel } from "../../models/movie-tag.model";
 import { DialogTitle } from "../../models/dialog-title";
+import { REQUIRED_TITLE_ERROR } from "../../const";
 
 export interface IDialogMovieTagData {
   title: DialogTitle;
@@ -21,16 +22,28 @@ export class DialogMovieTagComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<DialogMovieTagComponent>,
     private formBuilder: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) private data: IDialogMovieTagData) {
+    @Inject(MAT_DIALOG_DATA) private dialogData: IDialogMovieTagData) {
   }
 
   ngOnInit(): void {
+    const {movieTag, title} = this.dialogData;
     this.formGroup = this.formBuilder.group({
-      idMovieTag: this.data.movieTag?.idMovieTag,
-      name: this.data.movieTag?.name || "",
+      name: [movieTag?.name || "", Validators.required],
     });
-    !this.formGroup.value.idMovieTag && this.formGroup.removeControl("idMovieTag");
-    this.title = this.data.title || "";
+    this.title = title || "";
+  }
+
+  getErrorName(): string {
+    return this.formGroup.get("name").hasError("required") ? REQUIRED_TITLE_ERROR : "";
+  }
+
+  dataValidation(data: MovieTagModel): MovieTagModel {
+    const {movieTag} = this.dialogData;
+    if (!!movieTag?.idMovieTag) {
+      data.idMovieTag = movieTag?.idMovieTag;
+    }
+
+    return data;
   }
 
   onClose(): void {
@@ -39,7 +52,7 @@ export class DialogMovieTagComponent implements OnInit {
 
   onSubmit(): void {
     const data = new MovieTagModel().deserialize(this.formGroup.value);
+    this.dataValidation(data);
     this.dialogRef.close(data);
   }
-
 }

@@ -9,6 +9,8 @@ import {
   IDialogDeleteConfirmationData
 } from "../dialog-delete-confirmation/dialog-delete-confirmation.component";
 import { DialogTitle } from "../../models/dialog-title";
+import { DialogMovieComponent, IDialogMovieData } from "../dialog-movie/dialog-movie.component";
+import { DialogUserComponent, IDialogUserData } from "../dialog-user/dialog-user.component";
 
 @Component({
   selector: "app-administration-users",
@@ -32,14 +34,25 @@ export class AdministrationUsersComponent implements OnInit {
     this.selectedItem = item;
   }
 
+  editItem(): void {
+    const data: IDialogUserData = {
+      title: DialogTitle.Edit,
+      user: this.selectedItem,
+    };
+    const dialogRef = this.dialog.open(DialogUserComponent, {data, autoFocus: false});
+    dialogRef.afterClosed().subscribe(response => {
+        !!response && this.updateUser(response);
+      }
+    );
+  }
+
   deleteItem(): void {
     const data: IDialogDeleteConfirmationData = {
       title: DialogTitle.Delete,
       text: `Вы уверены, что хотите удалить пользователя с логином: ${this.selectedItem.login}`
     };
     const dialogRef = this.dialog.open(DialogDeleteConfirmationComponent, {data, autoFocus: false});
-    dialogRef.afterClosed().subscribe(
-      response => {
+    dialogRef.afterClosed().subscribe(response => {
         !!response && this.deleteUser(this.selectedItem.idUser);
       }
     );
@@ -53,8 +66,16 @@ export class AdministrationUsersComponent implements OnInit {
     });
   }
 
+  updateUser(data: UserModel): void {
+    this.userService.updateUser(data).subscribe(() => {
+      this.getUsers();
+    }, error => {
+      alert(error.error?.message || error.message);
+    });
+  }
+
   deleteUser(id: Id): void {
-    this.userService.deleteUser(id).subscribe(response => {
+    this.userService.deleteUser(id).subscribe(() => {
       this.getUsers();
     }, error => {
       alert(error.error?.message || error.message);
