@@ -27,8 +27,8 @@
       </mat-form-field>
 
       <mat-form-field class="form-element">
-        <mat-select multiple formControlName="movieTags" placeholder="Жанр">
-          <mat-option *ngFor="let item of movieTags" [value]="item">
+        <mat-select multiple formControlName="movieTags" placeholder="Жанр" [compareWith]="compareByValue">
+          <mat-option *ngFor="let item of allMovieTags" [value]="item">
             {{item.name}}
           </mat-option>
         </mat-select>

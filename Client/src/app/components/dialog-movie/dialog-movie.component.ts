@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { DialogTitle } from "../../models/dialog-title";
 import { MovieModel } from "../../models/movie.model";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { REQUIRED_TITLE_ERROR } from "../../const";
 import { MovieTagModel } from "../../models/movie-tag.model";
@@ -20,7 +20,7 @@ export interface IDialogMovieData {
 export class DialogMovieComponent implements OnInit {
   formGroup: FormGroup;
   title: string;
-  movieTags: MovieTagModel[];
+  allMovieTags: MovieTagModel[] = [];
 
   constructor(
     private dialogRef: MatDialogRef<DialogMovieComponent>,
@@ -33,10 +33,14 @@ export class DialogMovieComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       name: [movie?.name || "", Validators.required],
       description: movie?.description || "",
-      // movieTags: movieTags,
+      movieTags: new FormControl(movie?.movieTags || []),
     });
     this.title = title || "";
-    this.movieTags = movieTags;
+    this.allMovieTags = movieTags;
+  }
+
+  compareByValue(a: MovieTagModel, b: MovieTagModel) {
+    return a.idMovieTag === b.idMovieTag;
   }
 
   getErrorName(): string {

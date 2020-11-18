@@ -33,7 +33,18 @@ namespace Server.Controllers
             try
             {
                 var entities = await _movieRepository.GetAll();
-                return entities.Select(movie => _mapper.Map<MovieViewModel>(movie)).ToList();
+                var viewModels = new HashSet<MovieViewModel>();
+
+                foreach (var entity in entities)
+                {
+                    var movieTagViewModels = await GetMovieTagViewModelByIdMovie(entity.IdMovie);
+                    var movieViewModel = GetMapperMovieToMovieViewModel(entity);
+                    movieViewModel.MovieTags = movieTagViewModels;
+
+                    viewModels.Add(movieViewModel);
+                }
+
+                return viewModels;
             }
             catch (Exception e)
             {
@@ -48,7 +59,12 @@ namespace Server.Controllers
             try
             {
                 var entity = await _movieRepository.Get(id);
-                return _mapper.Map<MovieViewModel>(entity);
+                var movieTagViewModels = await GetMovieTagViewModelByIdMovie(id);
+
+                var movieViewModel = GetMapperMovieToMovieViewModel(entity);
+                movieViewModel.MovieTags = movieTagViewModels;
+
+                return movieViewModel;
             }
             catch (MovieNotFoundException e)
             {
@@ -66,8 +82,12 @@ namespace Server.Controllers
         {
             try
             {
-                var entity = _mapper.Map<Movie>(viewModel);
+                var entity = GetMapperMovieViewModelToMovie(viewModel);
                 await _movieRepository.Update(id, entity);
+
+                var movieTags = viewModel.MovieTags.Select(GetMapperMovieTagViewModelToMovieTag).ToList();
+                await _movieRepository.UpdateRelationsMovieHasMovieTags(id, movieTags);
+
                 return NoContent();
             }
             catch (MovieNotFoundException e)
@@ -86,9 +106,16 @@ namespace Server.Controllers
         {
             try
             {
-                var entity = _mapper.Map<Movie>(viewModel);
-                var model = await _movieRepository.Add(entity);
-                return _mapper.Map<MovieViewModel>(model);
+                var model = await _movieRepository.Add(GetMapperMovieViewModelToMovie(viewModel));
+
+                var movieTags = viewModel.MovieTags.Select(GetMapperMovieTagViewModelToMovieTag).ToList();
+                await _movieRepository.AddRelationsMovieHasMovieTags(model.IdMovie, movieTags);
+                var movieTagViewModels = await GetMovieTagViewModelByIdMovie(model.IdMovie);
+
+                var movieViewModel = GetMapperMovieToMovieViewModel(model);
+                movieViewModel.MovieTags = movieTagViewModels;
+
+                return movieViewModel;
             }
             catch (InvalidDataException e)
             {
@@ -117,6 +144,32 @@ namespace Server.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
             }
+        }
+
+        private async Task<ICollection<MovieTagViewModel>> GetMovieTagViewModelByIdMovie(int id)
+        {
+            var movieTags = await _movieRepository.GetMovieTagsByIdMovie(id);
+            return movieTags.Select(GetMapperMovieTagToMovieTagViewModel).ToList();
+        }
+
+        private MovieViewModel GetMapperMovieToMovieViewModel(Movie entity)
+        {
+            return _mapper.Map<MovieViewModel>(entity);
+        }
+
+        private Movie GetMapperMovieViewModelToMovie(MovieViewModel viewModel)
+        {
+            return _mapper.Map<Movie>(viewModel);
+        }
+
+        private MovieTagViewModel GetMapperMovieTagToMovieTagViewModel(MovieTag entity)
+        {
+            return _mapper.Map<MovieTagViewModel>(entity);
+        }
+
+        private MovieTag GetMapperMovieTagViewModelToMovieTag(MovieTagViewModel viewModel)
+        {
+            return _mapper.Map<MovieTag>(viewModel);
         }
     }
 }

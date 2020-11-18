@@ -46,7 +46,7 @@ namespace Server.Data.Repositories.Implementation
         public async Task<float> GetRatingByIdMovie(int idMovie)
         {
             var ratingsByIdMovie = await GetMovieRatingsByIdMovie(idMovie);
-            return ratingsByIdMovie.Average(rating => rating.Rating);
+            return ratingsByIdMovie.DefaultIfEmpty().Average(rating => rating?.Rating ?? 0);
         }
 
         public async Task<MovieRating> Add(MovieRating entity)

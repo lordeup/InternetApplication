@@ -39,6 +39,23 @@ namespace Server.Data.Repositories.Implementation
             return await _context.Reviews.Where(review => review.IdUser == idUser).ToListAsync();
         }
 
+        public async Task<List<Movie>> GetReviewMoviesByIdUser(int idUser)
+        {
+            var movies = await _context.Reviews
+                .Include(a => a.User)
+                .Where(review => review.IdUser == idUser)
+                .Select(movie => new Movie
+                {
+                    IdMovie = movie.Movie.IdMovie,
+                    Name = movie.Movie.Name,
+                    Description = movie.Movie.Description,
+                    PictureUrl = movie.Movie.PictureUrl
+                })
+                .ToListAsync();
+
+            return movies;
+        }
+
         public async Task<List<Review>> GetReviewsByIdMovie(int idMovie)
         {
             return await _context.Reviews.Where(review => review.IdMovie == idMovie).ToListAsync();

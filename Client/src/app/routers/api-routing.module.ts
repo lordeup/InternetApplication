@@ -6,6 +6,5 @@ export enum ApiRouting {
   Movie = "api/movies",
   MovieRating = "api/movieRatings",
   MovieTag = "api/movieTags",
-  MovieHasMovieTag = "api/movieHasMovieTags",
   Review = "api/reviews",
 }

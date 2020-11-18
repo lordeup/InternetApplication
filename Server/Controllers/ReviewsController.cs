@@ -91,6 +91,21 @@ namespace Server.Controllers
             }
         }
 
+        // GET: api/Reviews/movies/user/:id
+        [HttpGet("movies/user/{id}")]
+        public async Task<ActionResult<IEnumerable<MovieViewModel>>> GetReviewMoviesByIdUser(int id)
+        {
+            try
+            {
+                var entities = await _reviewRepository.GetReviewMoviesByIdUser(id);
+                return entities.Select(movie => _mapper.Map<MovieViewModel>(movie)).ToList();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
+        }
+
         // PATCH: api/Reviews/:id
         [HttpPatch("{id}")]
         [Authorize]

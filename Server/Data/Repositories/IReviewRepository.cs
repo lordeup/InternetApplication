@@ -8,6 +8,8 @@ namespace Server.Data.Repositories
     {
         Task<List<Review>> GetReviewsByIdUser(int idUser);
 
+        Task<List<Movie>> GetReviewMoviesByIdUser(int idUser);
+
         Task<List<Review>> GetReviewsByIdMovie(int idMovie);
     }
 }

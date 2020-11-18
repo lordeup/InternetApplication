@@ -11,7 +11,6 @@ import { DialogMovieComponent, IDialogMovieData } from "../dialog-movie/dialog-m
 import { MovieModel } from "../../models/movie.model";
 import { MovieTagService } from "../../services/movie-tag.service";
 import { MovieTagModel } from "../../models/movie-tag.model";
-import { MovieHasMovieTagService } from "../../services/movie-has-movie-tag.service";
 
 @Component({
   selector: "app-administration-movies",
@@ -26,7 +25,6 @@ export class AdministrationMoviesComponent implements OnInit {
   constructor(
     private movieService: MovieService,
     private movieTagService: MovieTagService,
-    private movieHasMovieTagService: MovieHasMovieTagService,
     private dialog: MatDialog) {
   }
 
@@ -78,7 +76,6 @@ export class AdministrationMoviesComponent implements OnInit {
 
   getMovies(): void {
     this.movieService.getMovies().subscribe(response => {
-      console.log("getMovies", response);
       this.movies = response;
     }, error => {
       alert(error.error?.message || error.message);
@@ -103,7 +100,7 @@ export class AdministrationMoviesComponent implements OnInit {
 
   deleteMovie(id: Id): void {
     this.movieService.deleteMovie(id).subscribe(() => {
-      this.getMovies();
+      this.movies = this.movies.filter(movie => movie.idMovie != id);
     }, error => {
       alert(error.error?.message || error.message);
     });

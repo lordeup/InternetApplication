@@ -5,6 +5,7 @@ import { ApiRouting } from "../routers/api-routing.module";
 import { Id } from "../models/id";
 import { Observable } from "rxjs";
 import { ReviewModel } from "../models/review.model";
+import { MovieModel } from "../models/movie.model";
 
 @Injectable({
   providedIn: "root"
@@ -31,6 +32,11 @@ export class ReviewService {
   getReviewsByIdUser(id: Id): Observable<ReviewModel[]> {
     const url = `${this.baseUrlReview}/user/${id}`;
     return this.http.get<ReviewModel[]>(url);
+  }
+
+  getReviewMoviesByIdUser(id: Id): Observable<MovieModel[]> {
+    const url = `${this.baseUrlReview}/movies/user/${id}`;
+    return this.http.get<MovieModel[]>(url);
   }
 
   getReviewsByIdMovie(id: Id): Observable<ReviewModel[]> {

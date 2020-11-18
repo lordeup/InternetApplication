@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Server.ViewModels
 {
@@ -12,5 +13,7 @@ namespace Server.ViewModels
         public string Description { get; set; }
 
         public string PictureUrl { get; set; }
+
+        public ICollection<MovieTagViewModel> MovieTags { get; set; } = new HashSet<MovieTagViewModel>();
     }
 }
