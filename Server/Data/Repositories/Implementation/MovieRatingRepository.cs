@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,20 +34,29 @@ namespace Server.Data.Repositories.Implementation
             return entity;
         }
 
-        public async Task<List<MovieRating>> GetMovieRatingsByIdUser(int idUser)
-        {
-            return await _context.MovieRatings.Where(rating => rating.IdUser == idUser).ToListAsync();
-        }
-
-        public async Task<List<MovieRating>> GetMovieRatingsByIdMovie(int idMovie)
+        private async Task<List<MovieRating>> GetMovieRatingsByIdMovie(int idMovie)
         {
             return await _context.MovieRatings.Where(rating => rating.IdMovie == idMovie).ToListAsync();
         }
 
-        public async Task<float> GetRatingByIdMovie(int idMovie)
+        public async Task<double> GetRatingByIdMovie(int idMovie)
         {
             var ratingsByIdMovie = await GetMovieRatingsByIdMovie(idMovie);
-            return ratingsByIdMovie.DefaultIfEmpty().Average(rating => rating?.Rating ?? 0);
+            var rating = ratingsByIdMovie.DefaultIfEmpty().Average(b => b?.Rating ?? 0);
+            return Math.Round(rating, 3, MidpointRounding.AwayFromZero);
+        }
+
+        public async Task<MovieRating> GetMovieRatingByIdUserAndIdMovie(int idUser, int idMovie)
+        {
+            var movieRating =
+                await _context.MovieRatings.FirstOrDefaultAsync(b => b.IdUser == idUser && b.IdMovie == idMovie);
+
+            if (movieRating == null)
+            {
+                throw new MovieRatingNotFoundException();
+            }
+
+            return movieRating;
         }
 
         public async Task<MovieRating> Add(MovieRating entity)

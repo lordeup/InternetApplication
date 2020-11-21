@@ -1,0 +1,23 @@
+<mat-card-content *ngIf="authorized$ | async">
+  <h2>Написать рецензию</h2>
+  <form [formGroup]="formGroup">
+    <mat-form-field class="form-element">
+      <label>
+        <textarea
+          matInput
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="5"
+          name="text"
+          formControlName="text"
+          placeholder="Текст"
+        >
+        </textarea>
+      </label>
+      <mat-error *ngIf="!formGroup.controls['text'].valid && formGroup.controls['text'].touched">
+        {{ getErrorText() }}
+      </mat-error>
+    </mat-form-field>
+  </form>
+  <button mat-flat-button (click)="onSubmit()" [disabled]="!formGroup.valid" color="primary">Опубликовать</button>
+</mat-card-content>

@@ -2,21 +2,14 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  height: 100%;
   margin: 40px 24px 24px;
 }
 
 .mat-card {
   max-width: 940px;
   width: 100%;
-}
-
-.capture {
-  color: #657295;
-}
-
-.first {
-  margin-bottom: 150px;
+  padding: 24px;
+  margin-bottom: 100px;
 }
 
 .user-first-row {
@@ -29,41 +22,6 @@
   flex-direction: row;
 }
 
-.item-paper {
-  display: flex;
-}
-
-.text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.title {
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.description {
-  font-size: 16px;
-  -webkit-line-clamp: 5;
-}
-
-.image {
-  max-height: 272px;
-  max-width: 40%;
-  margin: 0;
-}
-
-.image:first-child {
-  margin-top: 0;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  padding-right: 16px;
-  padding-left: 40px;
+.capture {
+  color: #657295;
 }

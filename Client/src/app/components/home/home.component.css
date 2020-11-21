@@ -4,7 +4,7 @@
 
 .item-paper {
   min-height: 500px;
-  background-color: powderblue;
+  background-color: #e2e1e0;
   display: flex;
   flex-direction: column;
   cursor: pointer;

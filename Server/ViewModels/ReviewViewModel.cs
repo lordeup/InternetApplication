@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Server.ViewModels
 {
@@ -16,7 +15,9 @@ namespace Server.ViewModels
         [Required]
         public string Text { get; set; }
 
-        // [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime Date { get; set; }
+
+        public string Date { get; set; }
+
+        public UserViewModel User { get; set; }
     }
 }

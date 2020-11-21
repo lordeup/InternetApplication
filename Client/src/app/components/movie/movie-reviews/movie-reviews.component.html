@@ -1,0 +1,12 @@
+<mat-card-content *ngIf="!!reviews.length" class="review-container">
+  <h2>Рецензиии пользователей</h2>
+  <div *ngFor="let item of reviews" class="review-card" (click)="selectItem(item)">
+    <div class="review-card-user-block">
+      <mat-icon>account_circle</mat-icon>
+      <p>{{item?.user?.login}}</p>
+    </div>
+    <p>{{item?.text}}</p>
+    <button mat-menu-item (click)="updateItem()">Редактировать</button>
+    <button mat-menu-item (click)="deleteItem()">Удалить</button>
+  </div>
+</mat-card-content>

@@ -1,0 +1,13 @@
+<div *ngIf="movieRatingCount >= 0" class="rating-container">
+  <h2>Рейтинг фильма</h2>
+
+  <div class="rating-content">
+    <app-star-rating
+      [rating]="movieRatingCount"
+      [starCount]="5"
+      (ratingUpdated)="onRatingChanged($event)"
+    >
+    </app-star-rating>
+    <h3 class="rating-number">{{movieRatingCount}}</h3>
+  </div>
+</div>

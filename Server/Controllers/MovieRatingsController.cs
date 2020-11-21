@@ -33,7 +33,7 @@ namespace Server.Controllers
             try
             {
                 var entities = await _movieRatingRepository.GetAll();
-                return entities.Select(movieRating => _mapper.Map<MovieRatingViewModel>(movieRating)).ToList();
+                return entities.Select(GetMapperMovieRatingToMovieRatingViewModel).ToList();
             }
             catch (Exception e)
             {
@@ -48,41 +48,11 @@ namespace Server.Controllers
             try
             {
                 var entity = await _movieRatingRepository.Get(id);
-                return _mapper.Map<MovieRatingViewModel>(entity);
+                return GetMapperMovieRatingToMovieRatingViewModel(entity);
             }
             catch (MovieRatingNotFoundException e)
             {
                 return NotFound(new {message = e.Message});
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
-            }
-        }
-
-        // GET: api/MovieRatings/user/:id
-        [HttpGet("user/{id}")]
-        public async Task<ActionResult<IEnumerable<MovieRatingViewModel>>> GetMovieRatingsByIdUser(int id)
-        {
-            try
-            {
-                var entities = await _movieRatingRepository.GetMovieRatingsByIdUser(id);
-                return entities.Select(movieRating => _mapper.Map<MovieRatingViewModel>(movieRating)).ToList();
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
-            }
-        }
-
-        // GET: api/MovieRatings/movie/:id
-        [HttpGet("movie/{id}")]
-        public async Task<ActionResult<IEnumerable<MovieRatingViewModel>>> GetMovieRatingsByIdMovie(int id)
-        {
-            try
-            {
-                var entities = await _movieRatingRepository.GetMovieRatingsByIdMovie(id);
-                return entities.Select(movieRating => _mapper.Map<MovieRatingViewModel>(movieRating)).ToList();
             }
             catch (Exception e)
             {
@@ -105,13 +75,32 @@ namespace Server.Controllers
             }
         }
 
+        // GET: api/MovieRatings/user/:idUser/movie/:idMovie
+        [HttpGet("user/{idUser}/movie/{idMovie}")]
+        public async Task<ActionResult<MovieRatingViewModel>> GetMovieRatingByIdUserAndIdMovie(int idUser, int idMovie)
+        {
+            try
+            {
+                var entity = await _movieRatingRepository.GetMovieRatingByIdUserAndIdMovie(idUser, idMovie);
+                return GetMapperMovieRatingToMovieRatingViewModel(entity);
+            }
+            catch (MovieRatingNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
+        }
+
         // PATCH: api/MovieRatings/:id
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchMovieRating(int id, MovieRatingViewModel viewModel)
         {
             try
             {
-                var entity = _mapper.Map<MovieRating>(viewModel);
+                var entity = GetMapperMovieRatingViewModelToMovieRating(viewModel);
                 await _movieRatingRepository.Update(id, entity);
                 return NoContent();
             }
@@ -131,9 +120,9 @@ namespace Server.Controllers
         {
             try
             {
-                var entity = _mapper.Map<MovieRating>(viewModel);
+                var entity = GetMapperMovieRatingViewModelToMovieRating(viewModel);
                 var model = await _movieRatingRepository.Add(entity);
-                return _mapper.Map<MovieRatingViewModel>(model);
+                return GetMapperMovieRatingToMovieRatingViewModel(model);
             }
             catch (InvalidDataException e)
             {
@@ -162,6 +151,16 @@ namespace Server.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
             }
+        }
+
+        private MovieRatingViewModel GetMapperMovieRatingToMovieRatingViewModel(MovieRating entity)
+        {
+            return _mapper.Map<MovieRatingViewModel>(entity);
+        }
+
+        private MovieRating GetMapperMovieRatingViewModelToMovieRating(MovieRatingViewModel viewModel)
+        {
+            return _mapper.Map<MovieRating>(viewModel);
         }
     }
 }

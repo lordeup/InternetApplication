@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Server.Auth;
 using Server.Data;
+using Server.Data.FileManager;
 using Server.Data.Repositories;
 using Server.Data.Repositories.Implementation;
 using Server.Models;
@@ -60,6 +61,7 @@ namespace Server
             services.AddTransient<IReviewRepository, ReviewRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserTypeRepository, UserTypeRepository>();
+            services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<TokenGenerator, TokenGenerator>();
             services.AddTransient<IPasswordHasher<User>, PasswordHasher<User>>();
 
@@ -87,6 +89,7 @@ namespace Server
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseCors();
             app.UseRouting();
 

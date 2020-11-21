@@ -1,0 +1,12 @@
+.dialog-container {
+  width: 600px;
+}
+
+.form-element {
+  padding: 8px 0 16px 0;
+  width: 100%;
+}
+
+.dialog-actions {
+  justify-content: flex-end;
+}

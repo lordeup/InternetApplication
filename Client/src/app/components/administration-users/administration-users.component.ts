@@ -2,14 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { UserService } from "../../services/user.service";
 import { Id } from "../../models/id";
 import { UserModel } from "../../models/user.model";
-import { MovieTagModel } from "../../models/movie-tag.model";
 import { MatDialog } from "@angular/material/dialog";
 import {
   DialogDeleteConfirmationComponent,
   IDialogDeleteConfirmationData
 } from "../dialog-delete-confirmation/dialog-delete-confirmation.component";
 import { DialogTitle } from "../../models/dialog-title";
-import { DialogMovieComponent, IDialogMovieData } from "../dialog-movie/dialog-movie.component";
 import { DialogUserComponent, IDialogUserData } from "../dialog-user/dialog-user.component";
 
 @Component({
@@ -18,8 +16,8 @@ import { DialogUserComponent, IDialogUserData } from "../dialog-user/dialog-user
   styleUrls: ["./administration-users.component.css"]
 })
 export class AdministrationUsersComponent implements OnInit {
-  users: UserModel[] = [];
-  selectedItem: UserModel;
+  public users: UserModel[] = [];
+  public selectedItem: UserModel;
 
   constructor(
     private userService: UserService,
@@ -34,7 +32,7 @@ export class AdministrationUsersComponent implements OnInit {
     this.selectedItem = item;
   }
 
-  editItem(): void {
+  updateItem(): void {
     const data: IDialogUserData = {
       title: DialogTitle.Edit,
       user: this.selectedItem,
@@ -76,7 +74,7 @@ export class AdministrationUsersComponent implements OnInit {
 
   deleteUser(id: Id): void {
     this.userService.deleteUser(id).subscribe(() => {
-      this.getUsers();
+      this.users = this.users.filter(user => user.idUser !== id);
     }, error => {
       alert(error.error?.message || error.message);
     });

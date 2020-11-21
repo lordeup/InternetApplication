@@ -26,6 +26,12 @@ import { DialogMovieTagComponent } from "./components/dialog-movie-tag/dialog-mo
 import { DialogDeleteConfirmationComponent } from "./components/dialog-delete-confirmation/dialog-delete-confirmation.component";
 import { DialogMovieComponent } from "./components/dialog-movie/dialog-movie.component";
 import { DialogUserComponent } from "./components/dialog-user/dialog-user.component";
+import { MovieRatingComponent } from "./components/movie/movie-rating/movie-rating.component";
+import { MovieAddReviewComponent } from "./components/movie/movie-add-review/movie-add-review.component";
+import { MovieReviewsComponent } from "./components/movie/movie-reviews/movie-reviews.component";
+import { DialogReviewComponent } from "./components/dialog-review/dialog-review.component";
+import { StarRatingComponent } from "./components/star-rating/star-rating.component";
+import { UserReviewMoviesComponent } from "./components/user/user-review-movies/user-review-movies.component";
 
 export function tokenGetter(): string {
   return localStorage.getItem(KeyLocalStorage.AccessToken);
@@ -48,6 +54,12 @@ export function tokenGetter(): string {
     DialogDeleteConfirmationComponent,
     DialogMovieComponent,
     DialogUserComponent,
+    MovieRatingComponent,
+    MovieAddReviewComponent,
+    MovieReviewsComponent,
+    DialogReviewComponent,
+    StarRatingComponent,
+    UserReviewMoviesComponent,
   ],
   imports: [
     BrowserModule,

@@ -10,7 +10,7 @@ import { Id } from "../../models/id";
   styleUrls: ["./home.component.css"]
 })
 export class HomeComponent implements OnInit {
-  movies: MovieModel[] = [];
+  public movies: MovieModel[] = [];
 
   constructor(
     private movieService: MovieService,
@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit {
 
   getMovies(): void {
     this.movieService.getMovies().subscribe(response => {
-      console.log("getMovies", response);
       this.movies = response;
     }, error => {
       alert(error.error?.message || error.message);

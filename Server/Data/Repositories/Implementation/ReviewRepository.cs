@@ -51,6 +51,7 @@ namespace Server.Data.Repositories.Implementation
                     Description = movie.Movie.Description,
                     PictureUrl = movie.Movie.PictureUrl
                 })
+                .Distinct()
                 .ToListAsync();
 
             return movies;

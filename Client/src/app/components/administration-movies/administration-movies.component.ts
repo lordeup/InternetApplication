@@ -18,9 +18,9 @@ import { MovieTagModel } from "../../models/movie-tag.model";
   styleUrls: ["./administration-movies.component.css"]
 })
 export class AdministrationMoviesComponent implements OnInit {
-  movies: MovieModel[] = [];
-  movieTags: MovieTagModel[] = [];
-  selectedItem: MovieModel;
+  public movies: MovieModel[] = [];
+  public movieTags: MovieTagModel[] = [];
+  public selectedItem: MovieModel;
 
   constructor(
     private movieService: MovieService,
@@ -45,7 +45,7 @@ export class AdministrationMoviesComponent implements OnInit {
     );
   }
 
-  editItem(): void {
+  updateItem(): void {
     const data: IDialogMovieData = {
       title: DialogTitle.Edit,
       movieTags: this.movieTags,
@@ -100,7 +100,7 @@ export class AdministrationMoviesComponent implements OnInit {
 
   deleteMovie(id: Id): void {
     this.movieService.deleteMovie(id).subscribe(() => {
-      this.movies = this.movies.filter(movie => movie.idMovie != id);
+      this.movies = this.movies.filter(movie => movie.idMovie !== id);
     }, error => {
       alert(error.error?.message || error.message);
     });
@@ -109,7 +109,6 @@ export class AdministrationMoviesComponent implements OnInit {
   getMovieTags(): void {
     this.movieTagService.getMovieTags().subscribe(response => {
       this.movieTags = response;
-      console.log("getMovieTags", response);
     }, error => {
       alert(error.error?.message || error.message);
     });

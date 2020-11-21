@@ -13,8 +13,8 @@ export interface IDialogDeleteConfirmationData {
   styleUrls: ["./dialog-delete-confirmation.component.css"]
 })
 export class DialogDeleteConfirmationComponent implements OnInit {
-  title: string;
-  text: string;
+  public title: string;
+  public text: string;
 
   constructor(
     private dialogRef: MatDialogRef<DialogDeleteConfirmationComponent>,

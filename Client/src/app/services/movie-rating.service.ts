@@ -5,6 +5,7 @@ import { ApiRouting } from "../routers/api-routing.module";
 import { Id } from "../models/id";
 import { Observable } from "rxjs";
 import { MovieRatingModel } from "../models/movie-rating.model";
+import { RatingModel } from "../models/rating.model";
 
 @Injectable({
   providedIn: "root"
@@ -28,19 +29,14 @@ export class MovieRatingService {
     return this.http.get<MovieRatingModel>(url);
   }
 
-  getMovieRatingsByIdUser(id: Id): Observable<MovieRatingModel[]> {
-    const url = `${this.baseUrlMovieRating}/user/${id}`;
-    return this.http.get<MovieRatingModel[]>(url);
+  getMovieRatingByIdUserAndIdMovie(idUser: Id, idMovie: Id): Observable<MovieRatingModel> {
+    const url = `${this.baseUrlMovieRating}/user/${idUser}/movie/${idMovie}`;
+    return this.http.get<MovieRatingModel>(url);
   }
 
-  getMovieRatingsByIdMovie(id: Id): Observable<MovieRatingModel[]> {
-    const url = `${this.baseUrlMovieRating}/movie/${id}`;
-    return this.http.get<MovieRatingModel[]>(url);
-  }
-
-  getRatingByIdMovie(id: Id): Observable<number> {
+  getRatingByIdMovie(id: Id): Observable<RatingModel> {
     const url = `${this.baseUrlMovieRating}/rating/${id}`;
-    return this.http.get<number>(url);
+    return this.http.get<RatingModel>(url);
   }
 
   updateMovieRating(data: MovieRatingModel): Observable<boolean> {

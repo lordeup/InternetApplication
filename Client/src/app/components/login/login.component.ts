@@ -11,7 +11,7 @@ import { AppRoutingService } from "../../routers/app-routing.service";
   styleUrls: ["./login.component.css"]
 })
 export class LoginComponent implements OnInit {
-  formGroup: FormGroup;
+  public formGroup: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,

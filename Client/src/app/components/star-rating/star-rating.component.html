@@ -1,0 +1,11 @@
+<button
+  mat-icon-button
+  color="primary"
+  *ngFor="let ratingId of ratings"
+  [id]="'star_' + ratingId"
+  (click)="onClick(ratingId)"
+>
+  <mat-icon>
+    {{showIcon(ratingId)}}
+  </mat-icon>
+</button>

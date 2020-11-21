@@ -1,0 +1,14 @@
+.rating-container {
+  margin-top: 40px;
+}
+
+.rating-content {
+  display: flex;
+}
+
+.rating-number {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+  margin-bottom: 0;
+}

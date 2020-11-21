@@ -19,12 +19,14 @@ namespace Server.Controllers
     public class ReviewsController : ControllerBase
     {
         private readonly IReviewRepository _reviewRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public ReviewsController(IReviewRepository reviewRepository, IMapper mapper)
+        public ReviewsController(IReviewRepository reviewRepository, IMapper mapper, IUserRepository userRepository)
         {
             _reviewRepository = reviewRepository;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         // GET: api/Reviews
@@ -83,7 +85,18 @@ namespace Server.Controllers
             try
             {
                 var entities = await _reviewRepository.GetReviewsByIdMovie(id);
-                return entities.Select(review => _mapper.Map<ReviewViewModel>(review)).ToList();
+                var viewModels = new HashSet<ReviewViewModel>();
+
+                foreach (var entity in entities)
+                {
+                    var reviewViewModel = _mapper.Map<ReviewViewModel>(entity);
+                    var user = await _userRepository.Get(entity.IdUser);
+                    reviewViewModel.User = _mapper.Map<UserViewModel>(user);
+
+                    viewModels.Add(reviewViewModel);
+                }
+
+                return viewModels;
             }
             catch (Exception e)
             {

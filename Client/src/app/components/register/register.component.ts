@@ -11,7 +11,7 @@ import { AppRoutingService } from "../../routers/app-routing.service";
   styleUrls: ["./register.component.css"]
 })
 export class RegisterComponent implements OnInit {
-  formGroup: FormGroup;
+  public formGroup: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,

@@ -18,9 +18,10 @@ export interface IDialogMovieData {
   styleUrls: ["./dialog-movie.component.css"]
 })
 export class DialogMovieComponent implements OnInit {
-  formGroup: FormGroup;
-  title: string;
-  allMovieTags: MovieTagModel[] = [];
+  public formGroup: FormGroup;
+  public title: string;
+  public allMovieTags: MovieTagModel[] = [];
+  public imageFile: File;
 
   constructor(
     private dialogRef: MatDialogRef<DialogMovieComponent>,
@@ -39,7 +40,7 @@ export class DialogMovieComponent implements OnInit {
     this.allMovieTags = movieTags;
   }
 
-  compareByValue(a: MovieTagModel, b: MovieTagModel) {
+  compareByValue(a: MovieTagModel, b: MovieTagModel): boolean {
     return a.idMovieTag === b.idMovieTag;
   }
 
@@ -54,6 +55,14 @@ export class DialogMovieComponent implements OnInit {
     }
 
     return data;
+  }
+
+  selectFile(event): void {
+    if (!!event.target.files?.length) {
+      const [file]: File[] = event.target.files;
+      console.log("selectFile", file);
+      this.imageFile = file;
+    }
   }
 
   onClose(): void {

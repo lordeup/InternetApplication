@@ -16,8 +16,8 @@ export interface IDialogMovieTagData {
   styleUrls: ["./dialog-movie-tag.component.css"]
 })
 export class DialogMovieTagComponent implements OnInit {
-  formGroup: FormGroup;
-  title: string;
+  public formGroup: FormGroup;
+  public title: string;
 
   constructor(
     private dialogRef: MatDialogRef<DialogMovieTagComponent>,

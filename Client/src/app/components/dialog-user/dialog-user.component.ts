@@ -16,8 +16,8 @@ export interface IDialogUserData {
   styleUrls: ["./dialog-user.component.css"]
 })
 export class DialogUserComponent implements OnInit {
-  formGroup: FormGroup;
-  title: string;
+  public formGroup: FormGroup;
+  public title: string;
 
   constructor(
     private dialogRef: MatDialogRef<DialogUserComponent>,

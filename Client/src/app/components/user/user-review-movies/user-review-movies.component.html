@@ -1,0 +1,16 @@
+<mat-card *ngIf="reviewMovies.length" class="mat-card">
+  <h2>Оценённые фильмы</h2>
+  <mat-card-content *ngFor="let item of reviewMovies" class="mat-card-content-review">
+    <div class="item-paper">
+      <img mat-card-image src="https://cutt.ly/1gKTqzl" alt="Photo" class="image">
+      <div class="content">
+        <p class="text title" (click)="onClickMovie(item?.idMovie)">
+          {{ item?.name }}
+        </p>
+        <p class="text description">
+          {{ item?.description }}
+        </p>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

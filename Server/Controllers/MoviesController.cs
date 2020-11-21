@@ -18,11 +18,14 @@ namespace Server.Controllers
     public class MoviesController : ControllerBase
     {
         private readonly IMovieRepository _movieRepository;
+        private readonly IMovieHasMovieTagRepository _movieHasMovieTagRepository;
         private readonly IMapper _mapper;
 
-        public MoviesController(IMovieRepository movieRepository, IMapper mapper)
+        public MoviesController(IMovieRepository movieRepository,
+            IMovieHasMovieTagRepository movieHasMovieTagRepository, IMapper mapper)
         {
             _movieRepository = movieRepository;
+            _movieHasMovieTagRepository = movieHasMovieTagRepository;
             _mapper = mapper;
         }
 
@@ -86,7 +89,7 @@ namespace Server.Controllers
                 await _movieRepository.Update(id, entity);
 
                 var movieTags = viewModel.MovieTags.Select(GetMapperMovieTagViewModelToMovieTag).ToList();
-                await _movieRepository.UpdateRelationsMovieHasMovieTags(id, movieTags);
+                await _movieHasMovieTagRepository.UpdateRelationsMovieHasMovieTags(id, movieTags);
 
                 return NoContent();
             }
@@ -109,7 +112,7 @@ namespace Server.Controllers
                 var model = await _movieRepository.Add(GetMapperMovieViewModelToMovie(viewModel));
 
                 var movieTags = viewModel.MovieTags.Select(GetMapperMovieTagViewModelToMovieTag).ToList();
-                await _movieRepository.AddRelationsMovieHasMovieTags(model.IdMovie, movieTags);
+                await _movieHasMovieTagRepository.AddRelationsMovieHasMovieTags(model.IdMovie, movieTags);
                 var movieTagViewModels = await GetMovieTagViewModelByIdMovie(model.IdMovie);
 
                 var movieViewModel = GetMapperMovieToMovieViewModel(model);
@@ -148,7 +151,7 @@ namespace Server.Controllers
 
         private async Task<ICollection<MovieTagViewModel>> GetMovieTagViewModelByIdMovie(int id)
         {
-            var movieTags = await _movieRepository.GetMovieTagsByIdMovie(id);
+            var movieTags = await _movieHasMovieTagRepository.GetMovieTagsByIdMovie(id);
             return movieTags.Select(GetMapperMovieTagToMovieTagViewModel).ToList();
         }
 

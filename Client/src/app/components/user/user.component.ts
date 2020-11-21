@@ -5,10 +5,7 @@ import { UserModel } from "../../models/user.model";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogTitle } from "../../models/dialog-title";
 import { DialogUserComponent, IDialogUserData } from "../dialog-user/dialog-user.component";
-import { ReviewService } from "../../services/review.service";
 import { Id } from "../../models/id";
-import { MovieModel } from "../../models/movie.model";
-import { AppRoutingService } from "../../routers/app-routing.service";
 
 @Component({
   selector: "app-user",
@@ -16,23 +13,18 @@ import { AppRoutingService } from "../../routers/app-routing.service";
   styleUrls: ["./user.component.css"]
 })
 export class UserComponent implements OnInit {
-  user: UserModel;
-  reviewMovies: MovieModel[] = [];
+  public idUser: Id;
+  public user: UserModel;
 
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private reviewService: ReviewService,
-    private appRoutingService: AppRoutingService,
     private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
+    this.idUser = this.authService.getIdUserFromLocalStorage();
     this.getCurrentUser();
-  }
-
-  onClickMovie(id: Id): void {
-    this.appRoutingService.goToMoviePage(id);
   }
 
   onClickUserEdit(): void {
@@ -48,30 +40,16 @@ export class UserComponent implements OnInit {
   }
 
   getCurrentUser(): void {
-    if (this.authService.isAuthenticated()) {
-      const id = this.authService.getIdUserFromLocalStorage();
-
-      this.userService.getUser(id).subscribe(response => {
-        this.user = response;
-        this.getReviewMoviesByIdUser(this.user.idUser);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    }
-  }
-
-  updateUser(data: UserModel): void {
-    this.userService.updateUser(data).subscribe(() => {
-      this.getCurrentUser();
+    this.userService.getUser(this.idUser).subscribe(response => {
+      this.user = response;
     }, error => {
       alert(error.error?.message || error.message);
     });
   }
 
-  getReviewMoviesByIdUser(id: Id): void {
-    this.reviewService.getReviewMoviesByIdUser(id).subscribe(response => {
-      this.reviewMovies = response;
-      console.log("getReviewMoviesByIdUser", response);
+  updateUser(data: UserModel): void {
+    this.userService.updateUser(data).subscribe(() => {
+      this.getCurrentUser();
     }, error => {
       alert(error.error?.message || error.message);
     });

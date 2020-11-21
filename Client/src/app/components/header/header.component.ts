@@ -34,8 +34,8 @@ const ADMINISTRATION_MENUS: IAdministrationMenu[] = [
   styleUrls: ["./header.component.css"]
 })
 export class HeaderComponent implements OnInit {
-  authorized$: Observable<boolean>;
-  menus: IAdministrationMenu[] = [];
+  public authorized$: Observable<boolean>;
+  public menus: IAdministrationMenu[] = [];
 
   constructor(
     private authService: AuthService,

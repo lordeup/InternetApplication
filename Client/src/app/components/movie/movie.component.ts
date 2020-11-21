@@ -5,8 +5,9 @@ import { ActivatedRoute } from "@angular/router";
 import { Id } from "../../models/id";
 import { ReviewService } from "../../services/review.service";
 import { ReviewModel } from "../../models/review.model";
-import { MovieRatingService } from "../../services/movie-rating.service";
 import { AppRoutingService } from "../../routers/app-routing.service";
+import { AuthService } from "../../services/auth.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-movie",
@@ -14,21 +15,34 @@ import { AppRoutingService } from "../../routers/app-routing.service";
   styleUrls: ["./movie.component.css"]
 })
 export class MovieComponent implements OnInit {
-  movie: MovieModel;
-  reviewModels: ReviewModel[] = [];
-  movieRatingCount: number;
+  public movie: MovieModel;
+  public reviews: ReviewModel[] = [];
+  public idMovie: Id;
+  public idUser: Id;
+  public authorized$: Observable<boolean>;
 
   constructor(
     private movieService: MovieService,
-    private movieRatingService: MovieRatingService,
     private reviewService: ReviewService,
+    private authService: AuthService,
     private appRoutingService: AppRoutingService,
     private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    const movieId: Id = this.activatedRoute.snapshot.params.id;
-    this.getMovie(movieId);
+    this.authorized$ = this.authService.getAuthorized();
+    this.idUser = this.authService.getIdUserFromLocalStorage();
+    this.idMovie = this.activatedRoute.snapshot.params.id;
+
+    this.getMovie(this.idMovie);
+  }
+
+  onChangeReviewData(): void {
+    this.getReviewsByIdMovie(this.idMovie);
+  }
+
+  onDeleteReview(id: Id): void {
+    this.reviews = this.reviews.filter(b => b.idReview !== id);
   }
 
   getMovie(id: Id): void {
@@ -36,7 +50,6 @@ export class MovieComponent implements OnInit {
       console.log("getMovie", response);
       this.movie = response;
       this.getReviewsByIdMovie(id);
-      this.getRatingByIdMovie(id);
     }, error => {
       alert(error.error?.message || error.message);
       this.appRoutingService.goToHomePage();
@@ -46,18 +59,10 @@ export class MovieComponent implements OnInit {
   getReviewsByIdMovie(id: Id): void {
     this.reviewService.getReviewsByIdMovie(id).subscribe(response => {
       console.log("getReviewsByIdMovie", response);
-      this.reviewModels = response;
+      this.reviews = response;
     }, error => {
       alert(error.error?.message || error.message);
     });
   }
 
-  getRatingByIdMovie(id: Id): void {
-    this.movieRatingService.getRatingByIdMovie(id).subscribe(response => {
-      console.log("getRatingByIdMovie", response);
-      this.movieRatingCount = response;
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
-  }
 }
