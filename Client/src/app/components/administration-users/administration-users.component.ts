@@ -38,8 +38,11 @@ export class AdministrationUsersComponent implements OnInit {
       user: this.selectedItem,
     };
     const dialogRef = this.dialog.open(DialogUserComponent, {data, autoFocus: false});
+
     dialogRef.afterClosed().subscribe(response => {
-        !!response && this.updateUser(response);
+        if (!!response) {
+          this.updateUser(response);
+        }
       }
     );
   }
@@ -50,8 +53,11 @@ export class AdministrationUsersComponent implements OnInit {
       text: `Вы уверены, что хотите удалить пользователя с логином: ${this.selectedItem.login}`
     };
     const dialogRef = this.dialog.open(DialogDeleteConfirmationComponent, {data, autoFocus: false});
+
     dialogRef.afterClosed().subscribe(response => {
-        !!response && this.deleteUser(this.selectedItem.idUser);
+        if (!!response) {
+          this.deleteUser(this.selectedItem.idUser);
+        }
       }
     );
   }

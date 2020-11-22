@@ -12,6 +12,11 @@ export interface IDialogMovieData {
   movie?: MovieModel;
 }
 
+export interface IDialogMovieResponse {
+  movie: MovieModel;
+  file?: File;
+}
+
 @Component({
   selector: "app-dialog-movie",
   templateUrl: "./dialog-movie.component.html",
@@ -34,6 +39,7 @@ export class DialogMovieComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       name: [movie?.name || "", Validators.required],
       description: movie?.description || "",
+      pictureUrl: movie?.pictureUrl || "",
       movieTags: new FormControl(movie?.movieTags || []),
     });
     this.title = title || "";
@@ -48,19 +54,26 @@ export class DialogMovieComponent implements OnInit {
     return this.formGroup.get("name").hasError("required") ? REQUIRED_TITLE_ERROR : "";
   }
 
-  dataValidation(data: MovieModel): MovieModel {
+  dataValidation(data: MovieModel): IDialogMovieResponse {
     const {movie} = this.dialogData;
     if (!!movie?.idMovie) {
       data.idMovie = movie?.idMovie;
     }
 
-    return data;
+    const response: IDialogMovieResponse = {
+      movie: data
+    };
+
+    if (!!this.imageFile) {
+      response.file = this.imageFile;
+    }
+
+    return response;
   }
 
   selectFile(event): void {
     if (!!event.target.files?.length) {
       const [file]: File[] = event.target.files;
-      console.log("selectFile", file);
       this.imageFile = file;
     }
   }
@@ -71,8 +84,8 @@ export class DialogMovieComponent implements OnInit {
 
   onSubmit(): void {
     const data = new MovieModel().deserialize(this.formGroup.value);
-    this.dataValidation(data);
-    this.dialogRef.close(data);
+    const response = this.dataValidation(data);
+    this.dialogRef.close(response);
   }
 
 }

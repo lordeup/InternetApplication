@@ -33,8 +33,11 @@ export class AdministrationMovieTagsComponent implements OnInit {
       title: DialogTitle.Add,
     };
     const dialogRef = this.dialog.open(DialogMovieTagComponent, {data});
+
     dialogRef.afterClosed().subscribe(response => {
-        !!response && this.addMovieTag(response);
+        if (!!response) {
+          this.addMovieTag(response);
+        }
       }
     );
   }
@@ -45,8 +48,11 @@ export class AdministrationMovieTagsComponent implements OnInit {
       movieTag: this.selectedItem,
     };
     const dialogRef = this.dialog.open(DialogMovieTagComponent, {data});
+
     dialogRef.afterClosed().subscribe(response => {
-        !!response && this.updateMovieTag(response);
+        if (!!response) {
+          this.updateMovieTag(response);
+        }
       }
     );
   }
@@ -61,8 +67,11 @@ export class AdministrationMovieTagsComponent implements OnInit {
       text: `Вы уверены, что хотите удалить жанр фильма: ${this.selectedItem.name}`
     };
     const dialogRef = this.dialog.open(DialogDeleteConfirmationComponent, {data, autoFocus: false});
+
     dialogRef.afterClosed().subscribe(response => {
-        !!response && this.deleteMovieTag(this.selectedItem.idMovieTag);
+        if (!!response) {
+          this.deleteMovieTag(this.selectedItem.idMovieTag);
+        }
       }
     );
   }

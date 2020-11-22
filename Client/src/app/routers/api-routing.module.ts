@@ -7,4 +7,5 @@ export enum ApiRouting {
   MovieRating = "api/movieRatings",
   MovieTag = "api/movieTags",
   Review = "api/reviews",
+  FileManager = "api/fileManager",
 }

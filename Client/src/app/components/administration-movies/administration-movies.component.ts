@@ -7,10 +7,12 @@ import {
   DialogDeleteConfirmationComponent,
   IDialogDeleteConfirmationData
 } from "../dialog-delete-confirmation/dialog-delete-confirmation.component";
-import { DialogMovieComponent, IDialogMovieData } from "../dialog-movie/dialog-movie.component";
+import { DialogMovieComponent, IDialogMovieData, IDialogMovieResponse } from "../dialog-movie/dialog-movie.component";
 import { MovieModel } from "../../models/movie.model";
 import { MovieTagService } from "../../services/movie-tag.service";
 import { MovieTagModel } from "../../models/movie-tag.model";
+import { FileManagerService } from "../../services/file-manager.service";
+import { FileModel } from "../../models/file.model";
 
 @Component({
   selector: "app-administration-movies",
@@ -25,6 +27,7 @@ export class AdministrationMoviesComponent implements OnInit {
   constructor(
     private movieService: MovieService,
     private movieTagService: MovieTagService,
+    private fileManagerService: FileManagerService,
     private dialog: MatDialog) {
   }
 
@@ -39,8 +42,16 @@ export class AdministrationMoviesComponent implements OnInit {
       movieTags: this.movieTags,
     };
     const dialogRef = this.dialog.open(DialogMovieComponent, {data, autoFocus: false});
-    dialogRef.afterClosed().subscribe(response => {
-        !!response && this.addMovie(response);
+
+    dialogRef.afterClosed().subscribe(async (response: IDialogMovieResponse) => {
+        let fileModel: FileModel;
+        if (!!response?.file) {
+          fileModel = await this.uploadFile(response.file);
+        }
+        if (!!response?.movie) {
+          response.movie.pictureUrl = !!fileModel ? fileModel.path : "";
+          this.addMovie(response.movie);
+        }
       }
     );
   }
@@ -52,8 +63,18 @@ export class AdministrationMoviesComponent implements OnInit {
       movie: this.selectedItem,
     };
     const dialogRef = this.dialog.open(DialogMovieComponent, {data, autoFocus: false});
-    dialogRef.afterClosed().subscribe(response => {
-        !!response && this.updateMovie(response);
+
+    dialogRef.afterClosed().subscribe(async (response: IDialogMovieResponse) => {
+        let fileModel: FileModel;
+        if (!!response?.file) {
+          fileModel = response.movie?.pictureUrl
+            ? await this.updateFile(response.movie?.pictureUrl, response.file)
+            : await this.uploadFile(response.file);
+        }
+        if (!!response?.movie) {
+          response.movie.pictureUrl = !!fileModel ? fileModel.path : "";
+          this.updateMovie(response.movie);
+        }
       }
     );
   }
@@ -68,8 +89,11 @@ export class AdministrationMoviesComponent implements OnInit {
       text: `Вы уверены, что хотите удалить фильм: ${this.selectedItem.name}`
     };
     const dialogRef = this.dialog.open(DialogDeleteConfirmationComponent, {data, autoFocus: false});
+
     dialogRef.afterClosed().subscribe(response => {
-        !!response && this.deleteMovie(this.selectedItem.idMovie);
+        if (!!response) {
+          this.deleteMovie(this.selectedItem.idMovie);
+        }
       }
     );
   }
@@ -111,6 +135,26 @@ export class AdministrationMoviesComponent implements OnInit {
       this.movieTags = response;
     }, error => {
       alert(error.error?.message || error.message);
+    });
+  }
+
+  async uploadFile(file: File): Promise<FileModel> {
+    return new Promise((resolve) => {
+      this.fileManagerService.uploadFile(file).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
+  }
+
+  async updateFile(fileName: string, file: File): Promise<FileModel> {
+    return new Promise((resolve) => {
+      this.fileManagerService.updateFile(fileName, file).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
     });
   }
 

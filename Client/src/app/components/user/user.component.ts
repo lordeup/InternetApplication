@@ -33,8 +33,11 @@ export class UserComponent implements OnInit {
       user: this.user,
     };
     const dialogRef = this.dialog.open(DialogUserComponent, {data, autoFocus: false});
+
     dialogRef.afterClosed().subscribe(response => {
-        !!response && this.updateUser(response);
+        if (!!response) {
+          this.updateUser(response);
+        }
       }
     );
   }

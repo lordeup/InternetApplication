@@ -41,8 +41,11 @@ export class MovieReviewsComponent implements OnInit {
       review: this.selectedItem,
     };
     const dialogRef = this.dialog.open(DialogReviewComponent, {data});
+
     dialogRef.afterClosed().subscribe(response => {
-        !!response && this.updateMovieTag(response);
+        if (!!response) {
+          this.updateMovieTag(response);
+        }
       }
     );
   }
@@ -53,8 +56,11 @@ export class MovieReviewsComponent implements OnInit {
       text: `Вы уверены, что хотите удалить данную рецензию`
     };
     const dialogRef = this.dialog.open(DialogDeleteConfirmationComponent, {data, autoFocus: false});
+
     dialogRef.afterClosed().subscribe(response => {
-        !!response && this.deleteReview(this.selectedItem.idReview);
+        if (!!response) {
+          this.deleteReview(this.selectedItem.idReview);
+        }
       }
     );
   }
