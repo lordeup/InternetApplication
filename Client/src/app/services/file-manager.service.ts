@@ -1,9 +1,6 @@
-import { Inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { API_URL } from "../app-injection-tokens";
-import { ApiRouting } from "../routers/api-routing.module";
-import { Observable } from "rxjs";
+import { Injectable } from "@angular/core";
 import { FileModel } from "../models/file.model";
+import { FileManagerDataService } from "./data-services/file-manager-data.service";
 
 @Injectable({
   providedIn: "root"
@@ -11,36 +8,31 @@ import { FileModel } from "../models/file.model";
 export class FileManagerService {
 
   constructor(
-    private http: HttpClient,
-    @Inject(API_URL) private apiUrl: string,
+    private fileManagerDataService: FileManagerDataService,
   ) {
   }
 
-  private baseUrlFileManager = this.apiUrl + ApiRouting.FileManager;
-
-  getFile(fileName: string): Observable<any> {
-    const url = `${this.baseUrlFileManager}/${fileName}`;
-    return this.http.get<any>(url);
+  getFilePath(fileName: string): string {
+    return this.fileManagerDataService.getFilePath(fileName);
   }
 
-  uploadFile(file: File): Observable<FileModel> {
-    const url = `${this.baseUrlFileManager}/upload`;
-    const formData = new FormData();
-    formData.append("file", file);
-
-    return this.http.post<FileModel>(url, formData);
+  uploadFile(file: File): Promise<FileModel> {
+    return new Promise((resolve) => {
+      this.fileManagerDataService.uploadFileRequest(file).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  updateFile(fileName: string, file: File): Observable<FileModel> {
-    const url = `${this.baseUrlFileManager}/${fileName}`;
-    const formData = new FormData();
-    formData.append("file", file);
-
-    return this.http.patch<FileModel>(url, formData);
-  }
-
-  deleteFile(fileName: string): Observable<boolean> {
-    const url = `${this.baseUrlFileManager}/${fileName}`;
-    return this.http.delete<boolean>(url);
+  updateFile(fileName: string, file: File): Promise<FileModel> {
+    return new Promise((resolve) => {
+      this.fileManagerDataService.updateFileRequest(fileName, file).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 }

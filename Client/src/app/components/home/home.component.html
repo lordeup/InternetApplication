@@ -6,7 +6,7 @@
 >
   <mat-grid-tile *ngFor="let movie of movies">
     <div (click)="onClickMovie(movie.idMovie)" class="item-paper">
-      <!--      <img mat-card-image src="" alt="Photo" class="image">-->
+      <img mat-card-image [src]="getFilePath(movie?.pictureUrl)" alt="Photo" class="image">
       <div class="content">
         <div class="content-text">
           <p class="text title">

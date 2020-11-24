@@ -30,6 +30,7 @@
 
 .image {
   max-height: 272px;
+  min-height: 272px;
 }
 
 .content {

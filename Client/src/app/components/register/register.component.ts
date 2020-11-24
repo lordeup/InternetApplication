@@ -40,14 +40,11 @@ export class RegisterComponent implements OnInit {
     this.appRoutingService.goToLoginPage();
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     const value = this.formGroup.value;
     const data = new RegisterUserModel().deserialize(value);
 
-    this.authService.registerUser(data).subscribe(() => {
-      this.appRoutingService.goToUserPage();
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+    await this.authService.registerUser(data);
+    this.appRoutingService.goToUserPage();
   }
 }

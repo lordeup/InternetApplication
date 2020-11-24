@@ -14,3 +14,7 @@
 ::ng-deep .mat-select-panel-wrap {
   margin-left: 15px;
 }
+
+.image {
+  width: 100%;
+}

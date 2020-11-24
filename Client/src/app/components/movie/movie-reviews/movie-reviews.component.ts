@@ -42,9 +42,9 @@ export class MovieReviewsComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(DialogReviewComponent, {data});
 
-    dialogRef.afterClosed().subscribe(response => {
+    dialogRef.afterClosed().subscribe(async response => {
         if (!!response) {
-          this.updateMovieTag(response);
+          await this.updateReview(response);
         }
       }
     );
@@ -57,28 +57,21 @@ export class MovieReviewsComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(DialogDeleteConfirmationComponent, {data, autoFocus: false});
 
-    dialogRef.afterClosed().subscribe(response => {
+    dialogRef.afterClosed().subscribe(async response => {
         if (!!response) {
-          this.deleteReview(this.selectedItem.idReview);
+          await this.deleteReview(this.selectedItem.idReview);
         }
       }
     );
   }
 
-  updateMovieTag(data: ReviewModel): void {
-    this.reviewService.updateReview(data).subscribe(() => {
-      this.changeEventData.emit();
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async updateReview(data: ReviewModel): Promise<void> {
+    await this.reviewService.updateReview(data);
+    this.changeEventData.emit();
   }
 
-  deleteReview(id: Id): void {
-    this.reviewService.deleteReview(id).subscribe(() => {
-      this.deleteReviewEventData.emit(id);
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async deleteReview(id: Id): Promise<void> {
+    await this.reviewService.deleteReview(id);
+    this.deleteReviewEventData.emit(id);
   }
-
 }

@@ -41,18 +41,14 @@ export class MovieAddReviewComponent implements OnInit {
     return this.formGroup.get("text").hasError("required") ? REQUIRED_TITLE_ERROR : "";
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     const data = new ReviewModel().deserialize(this.formGroup.value);
-    this.addReview(data);
+    await this.addReview(data);
   }
 
-  addReview(data: ReviewModel): void {
-    this.reviewService.addReview(data).subscribe(() => {
-      this.changeEventData.emit();
-      this.clearText();
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async addReview(data: ReviewModel): Promise<void> {
+    await this.reviewService.addReview(data);
+    this.changeEventData.emit();
+    this.clearText();
   }
-
 }

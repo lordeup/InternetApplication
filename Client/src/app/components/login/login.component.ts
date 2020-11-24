@@ -38,14 +38,11 @@ export class LoginComponent implements OnInit {
     this.appRoutingService.goToRegisterPage();
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     const value = this.formGroup.value;
     const data = new LoginUserModel().deserialize(value);
 
-    this.authService.loginUser(data).subscribe(() => {
-      this.appRoutingService.goToUserPage();
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+    await this.authService.loginUser(data);
+    this.appRoutingService.goToUserPage();
   }
 }

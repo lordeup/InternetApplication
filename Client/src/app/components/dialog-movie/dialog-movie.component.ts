@@ -5,6 +5,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { REQUIRED_TITLE_ERROR } from "../../const";
 import { MovieTagModel } from "../../models/movie-tag.model";
+import { FileManagerService } from "../../services/file-manager.service";
 
 export interface IDialogMovieData {
   title: DialogTitle;
@@ -31,6 +32,7 @@ export class DialogMovieComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<DialogMovieComponent>,
     private formBuilder: FormBuilder,
+    private fileManagerService: FileManagerService,
     @Inject(MAT_DIALOG_DATA) private dialogData: IDialogMovieData) {
   }
 
@@ -78,6 +80,10 @@ export class DialogMovieComponent implements OnInit {
     }
   }
 
+  getFilePath(fileName: string): string {
+    return !!fileName ? this.fileManagerService.getFilePath(fileName) : "";
+  }
+
   onClose(): void {
     this.dialogRef.close();
   }
@@ -87,5 +93,4 @@ export class DialogMovieComponent implements OnInit {
     const response = this.dataValidation(data);
     this.dialogRef.close(response);
   }
-
 }

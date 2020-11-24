@@ -31,9 +31,13 @@ export class AdministrationMoviesComponent implements OnInit {
     private dialog: MatDialog) {
   }
 
-  ngOnInit(): void {
-    this.getMovies();
-    this.getMovieTags();
+  async ngOnInit(): Promise<void> {
+    this.movies = await this.movieService.getMovies();
+    this.movieTags = await this.movieTagService.getMovieTags();
+  }
+
+  selectItem(item: MovieModel): void {
+    this.selectedItem = item;
   }
 
   addItem(): void {
@@ -44,13 +48,8 @@ export class AdministrationMoviesComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogMovieComponent, {data, autoFocus: false});
 
     dialogRef.afterClosed().subscribe(async (response: IDialogMovieResponse) => {
-        let fileModel: FileModel;
-        if (!!response?.file) {
-          fileModel = await this.uploadFile(response.file);
-        }
-        if (!!response?.movie) {
-          response.movie.pictureUrl = !!fileModel ? fileModel.path : "";
-          this.addMovie(response.movie);
+        if (!!response) {
+          await this.addMovie(response);
         }
       }
     );
@@ -65,22 +64,11 @@ export class AdministrationMoviesComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogMovieComponent, {data, autoFocus: false});
 
     dialogRef.afterClosed().subscribe(async (response: IDialogMovieResponse) => {
-        let fileModel: FileModel;
-        if (!!response?.file) {
-          fileModel = response.movie?.pictureUrl
-            ? await this.updateFile(response.movie?.pictureUrl, response.file)
-            : await this.uploadFile(response.file);
-        }
-        if (!!response?.movie) {
-          response.movie.pictureUrl = !!fileModel ? fileModel.path : "";
-          this.updateMovie(response.movie);
+        if (!!response) {
+          await this.updateMovie(response);
         }
       }
     );
-  }
-
-  selectItem(item: MovieModel): void {
-    this.selectedItem = item;
   }
 
   deleteItem(): void {
@@ -90,72 +78,43 @@ export class AdministrationMoviesComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(DialogDeleteConfirmationComponent, {data, autoFocus: false});
 
-    dialogRef.afterClosed().subscribe(response => {
+    dialogRef.afterClosed().subscribe(async response => {
         if (!!response) {
-          this.deleteMovie(this.selectedItem.idMovie);
+          await this.deleteMovie(this.selectedItem.idMovie);
         }
       }
     );
   }
 
-  getMovies(): void {
-    this.movieService.getMovies().subscribe(response => {
-      this.movies = response;
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async addMovie(response: IDialogMovieResponse): Promise<void> {
+    let fileModel: FileModel;
+    if (!!response?.file) {
+      fileModel = await this.fileManagerService.uploadFile(response.file);
+    }
+    if (!!response?.movie) {
+      response.movie.pictureUrl = !!fileModel ? fileModel.path : response.movie?.pictureUrl;
+      const movie = await this.movieService.addMovie(response.movie);
+      this.movies.push(movie);
+    }
   }
 
-  updateMovie(data: MovieModel): void {
-    this.movieService.updateMovie(data).subscribe(() => {
-      this.getMovies();
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async updateMovie(response: IDialogMovieResponse): Promise<void> {
+    let fileModel: FileModel;
+    if (!!response?.file) {
+      fileModel = response.movie?.pictureUrl
+        ? await this.fileManagerService.updateFile(response.movie?.pictureUrl, response.file)
+        : await this.fileManagerService.uploadFile(response.file);
+    }
+
+    if (!!response?.movie) {
+      response.movie.pictureUrl = !!fileModel ? fileModel.path : response.movie?.pictureUrl;
+      await this.movieService.updateMovie(response.movie);
+      this.movies = await this.movieService.getMovies();
+    }
   }
 
-  addMovie(data: MovieModel): void {
-    this.movieService.addMovie(data).subscribe(response => {
-      this.movies.push(response);
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async deleteMovie(id: Id): Promise<void> {
+    await this.movieService.deleteMovie(id);
+    this.movies = this.movies.filter(movie => movie.idMovie !== id);
   }
-
-  deleteMovie(id: Id): void {
-    this.movieService.deleteMovie(id).subscribe(() => {
-      this.movies = this.movies.filter(movie => movie.idMovie !== id);
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
-  }
-
-  getMovieTags(): void {
-    this.movieTagService.getMovieTags().subscribe(response => {
-      this.movieTags = response;
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
-  }
-
-  async uploadFile(file: File): Promise<FileModel> {
-    return new Promise((resolve) => {
-      this.fileManagerService.uploadFile(file).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
-  }
-
-  async updateFile(fileName: string, file: File): Promise<FileModel> {
-    return new Promise((resolve) => {
-      this.fileManagerService.updateFile(fileName, file).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
-  }
-
 }

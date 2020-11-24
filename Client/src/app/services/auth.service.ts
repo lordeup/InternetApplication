@@ -44,7 +44,7 @@ export class AuthService {
     this.authorizedSubject$.next(value);
   }
 
-  loginUser(data: LoginUserModel): Observable<AuthAccessModel> {
+  loginUserRequest(data: LoginUserModel): Observable<AuthAccessModel> {
     const url = this.apiUrl + ApiRouting.Login;
     return this.http.post<AuthAccessModel>(url, data).pipe(
       tap((authAccess) => {
@@ -55,7 +55,7 @@ export class AuthService {
     );
   }
 
-  registerUser(data: RegisterUserModel): Observable<AuthAccessModel> {
+  registerUserRequest(data: RegisterUserModel): Observable<AuthAccessModel> {
     const url = this.apiUrl + ApiRouting.Register;
     return this.http.post<AuthAccessModel>(url, data).pipe(
       tap((authAccess) => {
@@ -81,5 +81,25 @@ export class AuthService {
   logoutUser(): void {
     AuthService.clearAuthDataToLocalStorage();
     this.setAuthorized(false);
+  }
+
+  loginUser(data: LoginUserModel): Promise<void> {
+    return new Promise((resolve) => {
+      this.loginUserRequest(data).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
+  }
+
+  registerUser(data: RegisterUserModel): Promise<void> {
+    return new Promise((resolve) => {
+      this.registerUserRequest(data).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 }

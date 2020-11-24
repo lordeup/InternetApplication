@@ -20,12 +20,12 @@ export class MovieRatingComponent implements OnInit {
     private movieRatingService: MovieRatingService) {
   }
 
-  ngOnInit(): void {
-    this.getRatingByIdMovie(this.idMovie);
-    this.getMovieRatingByIdUserAndIdMovie(this.idUser, this.idMovie);
+  async ngOnInit(): Promise<void> {
+    this.movieRatingCount = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
+    this.movieRatingByIdUserAndIdMovie = await this.movieRatingService.getMovieRatingByIdUserAndIdMovie(this.idUser, this.idMovie);
   }
 
-  onRatingChanged(rating: number): void {
+  async onRatingChanged(rating: number): Promise<void> {
     const model: Partial<MovieRatingModel> = {
       idMovie: this.idMovie,
       idUser: this.idUser,
@@ -35,45 +35,23 @@ export class MovieRatingComponent implements OnInit {
     const data = new MovieRatingModel().deserialize(model);
 
     if (this.movieRatingByIdUserAndIdMovie == null) {
-      this.addMovieRating(data);
+      await this.addMovieRating(data);
     } else if (this.movieRatingByIdUserAndIdMovie.rating !== rating) {
       data.idMovieRating = this.movieRatingByIdUserAndIdMovie.idMovieRating;
-      this.updateMovieRating(data);
+      await this.updateMovieRating(data);
     }
   }
 
-  getRatingByIdMovie(id: Id): void {
-    this.movieRatingService.getRatingByIdMovie(id).subscribe(response => {
-      this.movieRatingCount = response.rating;
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async updateMovieRating(data: MovieRatingModel): Promise<void> {
+    await this.movieRatingService.updateMovieRating(data);
+    this.movieRatingCount = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
+    this.movieRatingByIdUserAndIdMovie = data;
   }
 
-  getMovieRatingByIdUserAndIdMovie(idUser: Id, idMovie: Id): void {
-    this.movieRatingService.getMovieRatingByIdUserAndIdMovie(idUser, idMovie).subscribe(response => {
-      this.movieRatingByIdUserAndIdMovie = response;
-    }, () => {
-      this.movieRatingByIdUserAndIdMovie = null;
-    });
+  async addMovieRating(data: MovieRatingModel): Promise<void> {
+    const ratingModel = await this.movieRatingService.addMovieRating(data);
+    this.movieRatingCount = await this.movieRatingService.getRatingByIdMovie(ratingModel.idMovie);
+    this.movieRatingByIdUserAndIdMovie =
+      await this.movieRatingService.getMovieRatingByIdUserAndIdMovie(ratingModel.idUser, ratingModel.idMovie);
   }
-
-  updateMovieRating(data: MovieRatingModel): void {
-    this.movieRatingService.updateMovieRating(data).subscribe(() => {
-      this.getRatingByIdMovie(this.idMovie);
-      this.movieRatingByIdUserAndIdMovie = data;
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
-  }
-
-  addMovieRating(data: MovieRatingModel): void {
-    this.movieRatingService.addMovieRating(data).subscribe(response => {
-      this.getRatingByIdMovie(response.idMovie);
-      this.getMovieRatingByIdUserAndIdMovie(this.idUser, this.idMovie);
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
-  }
-
 }

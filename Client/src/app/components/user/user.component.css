@@ -12,6 +12,14 @@
   margin-bottom: 100px;
 }
 
+.image {
+  width: 20%;
+}
+
+.image:first-child {
+  margin-top: 0;
+}
+
 .user-first-row {
   display: flex;
   justify-content: space-between;

@@ -8,6 +8,10 @@ import { ReviewModel } from "../../models/review.model";
 import { AppRoutingService } from "../../routers/app-routing.service";
 import { AuthService } from "../../services/auth.service";
 import { Observable } from "rxjs";
+import { FileManagerService } from "../../services/file-manager.service";
+
+// const UNKNOWN_MOVIE_IMAGE = require("src/assets/unknown-movie.png");
+const UNKNOWN_MOVIE_IMAGE = "assets/unknown-movie.png";
 
 @Component({
   selector: "app-movie",
@@ -25,44 +29,30 @@ export class MovieComponent implements OnInit {
     private movieService: MovieService,
     private reviewService: ReviewService,
     private authService: AuthService,
+    private fileManagerService: FileManagerService,
     private appRoutingService: AppRoutingService,
     private activatedRoute: ActivatedRoute) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.authorized$ = this.authService.getAuthorized();
     this.idUser = this.authService.getIdUserFromLocalStorage();
     this.idMovie = this.activatedRoute.snapshot.params.id;
 
-    this.getMovie(this.idMovie);
+    this.movie = await this.movieService.getMovie(this.idMovie);
+    //     this.appRoutingService.goToHomePage();
+    this.reviews = await this.reviewService.getReviewsByIdMovie(this.idMovie);
   }
 
-  onChangeReviewData(): void {
-    this.getReviewsByIdMovie(this.idMovie);
+  async onChangeReviewData(): Promise<void> {
+    this.reviews = await this.reviewService.getReviewsByIdMovie(this.idMovie);
+  }
+
+  getFilePath(fileName: string): string {
+    return !!fileName ? this.fileManagerService.getFilePath(fileName) : UNKNOWN_MOVIE_IMAGE;
   }
 
   onDeleteReview(id: Id): void {
     this.reviews = this.reviews.filter(b => b.idReview !== id);
   }
-
-  getMovie(id: Id): void {
-    this.movieService.getMovie(id).subscribe(response => {
-      console.log("getMovie", response);
-      this.movie = response;
-      this.getReviewsByIdMovie(id);
-    }, error => {
-      alert(error.error?.message || error.message);
-      this.appRoutingService.goToHomePage();
-    });
-  }
-
-  getReviewsByIdMovie(id: Id): void {
-    this.reviewService.getReviewsByIdMovie(id).subscribe(response => {
-      console.log("getReviewsByIdMovie", response);
-      this.reviews = response;
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
-  }
-
 }

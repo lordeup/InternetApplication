@@ -5,6 +5,9 @@ import { MovieModel } from "../../models/movie.model";
 import { Id } from "../../models/id";
 import { FileManagerService } from "../../services/file-manager.service";
 
+// const UNKNOWN_MOVIE_IMAGE = require("src/assets/unknown-movie.png");
+const UNKNOWN_MOVIE_IMAGE = "assets/unknown-movie.png";
+
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
@@ -19,29 +22,15 @@ export class HomeComponent implements OnInit {
     private appRoutingService: AppRoutingService) {
   }
 
-  ngOnInit(): void {
-    this.getMovies();
+  async ngOnInit(): Promise<void> {
+    this.movies = await this.movieService.getMovies();
   }
 
   onClickMovie(id: Id): void {
     this.appRoutingService.goToMoviePage(id);
   }
 
-  getMovies(): void {
-    this.movieService.getMovies().subscribe(response => {
-      this.movies = response;
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  getFilePath(fileName: string): string {
+    return !!fileName ? this.fileManagerService.getFilePath(fileName) : UNKNOWN_MOVIE_IMAGE;
   }
-
-  getFile(fileName: string): void {
-    this.fileManagerService.getFile(fileName).subscribe(response => {
-      console.log("response", response);
-    }, error => {
-      console.log("error", error.error?.message || error.message);
-      // alert(error.error?.message || error.message);
-    });
-  }
-
 }

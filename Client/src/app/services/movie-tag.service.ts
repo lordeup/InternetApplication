@@ -1,10 +1,7 @@
-import { Inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { API_URL } from "../app-injection-tokens";
-import { ApiRouting } from "../routers/api-routing.module";
+import { Injectable } from "@angular/core";
 import { Id } from "../models/id";
-import { Observable } from "rxjs";
 import { MovieTagModel } from "../models/movie-tag.model";
+import { MovieTagDataService } from "./data-services/movie-tag-data.service";
 
 @Injectable({
   providedIn: "root"
@@ -12,33 +9,47 @@ import { MovieTagModel } from "../models/movie-tag.model";
 export class MovieTagService {
 
   constructor(
-    private http: HttpClient,
-    @Inject(API_URL) private apiUrl: string,
+    private movieTagDataService: MovieTagDataService,
   ) {
   }
 
-  private baseUrlMovieTag = this.apiUrl + ApiRouting.MovieTag;
-
-  getMovieTags(): Observable<MovieTagModel[]> {
-    return this.http.get<MovieTagModel[]>(this.baseUrlMovieTag);
+  getMovieTags(): Promise<MovieTagModel[]> {
+    return new Promise((resolve) => {
+      this.movieTagDataService.getMovieTagsRequest().subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  getMovieTag(id: Id): Observable<MovieTagModel> {
-    const url = `${this.baseUrlMovieTag}/${id}`;
-    return this.http.get<MovieTagModel>(url);
+  updateMovieTag(data: MovieTagModel): Promise<void> {
+    return new Promise((resolve) => {
+      this.movieTagDataService.updateMovieTagRequest(data).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  updateMovieTag(data: MovieTagModel): Observable<boolean> {
-    const url = `${this.baseUrlMovieTag}/${data.idMovieTag}`;
-    return this.http.patch<boolean>(url, data);
+  addMovieTag(data: MovieTagModel): Promise<MovieTagModel> {
+    return new Promise((resolve) => {
+      this.movieTagDataService.addMovieTagRequest(data).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  addMovieTag(data: MovieTagModel): Observable<MovieTagModel> {
-    return this.http.post<MovieTagModel>(this.baseUrlMovieTag, data);
-  }
-
-  deleteMovieTag(id: Id): Observable<boolean> {
-    const url = `${this.baseUrlMovieTag}/${id}`;
-    return this.http.delete<boolean>(url);
+  deleteMovieTag(id: Id): Promise<void> {
+    return new Promise((resolve) => {
+      this.movieTagDataService.deleteMovieTagRequest(id).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 }

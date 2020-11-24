@@ -24,8 +24,12 @@ export class AdministrationMovieTagsComponent implements OnInit {
     private dialog: MatDialog) {
   }
 
-  ngOnInit(): void {
-    this.getMovieTags();
+  async ngOnInit(): Promise<void> {
+    this.movieTags = await this.movieTagService.getMovieTags();
+  }
+
+  selectItem(item: MovieTagModel): void {
+    this.selectedItem = item;
   }
 
   addItem(): void {
@@ -34,9 +38,9 @@ export class AdministrationMovieTagsComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(DialogMovieTagComponent, {data});
 
-    dialogRef.afterClosed().subscribe(response => {
+    dialogRef.afterClosed().subscribe(async response => {
         if (!!response) {
-          this.addMovieTag(response);
+          await this.addMovieTag(response);
         }
       }
     );
@@ -49,16 +53,12 @@ export class AdministrationMovieTagsComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(DialogMovieTagComponent, {data});
 
-    dialogRef.afterClosed().subscribe(response => {
+    dialogRef.afterClosed().subscribe(async response => {
         if (!!response) {
-          this.updateMovieTag(response);
+          await this.updateMovieTag(response);
         }
       }
     );
-  }
-
-  selectItem(item: MovieTagModel): void {
-    this.selectedItem = item;
   }
 
   deleteItem(): void {
@@ -68,43 +68,26 @@ export class AdministrationMovieTagsComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(DialogDeleteConfirmationComponent, {data, autoFocus: false});
 
-    dialogRef.afterClosed().subscribe(response => {
+    dialogRef.afterClosed().subscribe(async response => {
         if (!!response) {
-          this.deleteMovieTag(this.selectedItem.idMovieTag);
+          await this.deleteMovieTag(this.selectedItem.idMovieTag);
         }
       }
     );
   }
 
-  getMovieTags(): void {
-    this.movieTagService.getMovieTags().subscribe(response => {
-      this.movieTags = response;
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async addMovieTag(data: MovieTagModel): Promise<void> {
+    const movieTag = await this.movieTagService.addMovieTag(data);
+    this.movieTags.push(movieTag);
   }
 
-  updateMovieTag(data: MovieTagModel): void {
-    this.movieTagService.updateMovieTag(data).subscribe(() => {
-      this.getMovieTags();
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async updateMovieTag(data: MovieTagModel): Promise<void> {
+    await this.movieTagService.updateMovieTag(data);
+    this.movieTags = await this.movieTagService.getMovieTags();
   }
 
-  addMovieTag(data: MovieTagModel): void {
-    this.movieTagService.addMovieTag(data).subscribe(response => {
-      this.movieTags.push(response);
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
-  }
-
-  deleteMovieTag(id: Id): void {
-    this.movieTagService.deleteMovieTag(id).subscribe(() => {
-      this.movieTags = this.movieTags.filter(movieTag => movieTag.idMovieTag !== id);
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async deleteMovieTag(id: Id): Promise<void> {
+    await this.movieTagService.deleteMovieTag(id);
+    this.movieTags = this.movieTags.filter(movieTag => movieTag.idMovieTag !== id);
   }
 }

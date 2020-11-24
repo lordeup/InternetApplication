@@ -1,10 +1,7 @@
-import { Inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { API_URL } from "../app-injection-tokens";
-import { ApiRouting } from "../routers/api-routing.module";
+import { Injectable } from "@angular/core";
 import { Id } from "../models/id";
-import { Observable } from "rxjs";
 import { MovieModel } from "../models/movie.model";
+import { MovieDataService } from "./data-services/movie-data.service";
 
 @Injectable({
   providedIn: "root"
@@ -12,33 +9,58 @@ import { MovieModel } from "../models/movie.model";
 export class MovieService {
 
   constructor(
-    private http: HttpClient,
-    @Inject(API_URL) private apiUrl: string,
+    private movieDataService: MovieDataService,
   ) {
   }
 
-  private baseUrlMovie = this.apiUrl + ApiRouting.Movie;
-
-  getMovies(): Observable<MovieModel[]> {
-    return this.http.get<MovieModel[]>(this.baseUrlMovie);
+  getMovie(id: Id): Promise<MovieModel> {
+    return new Promise((resolve, reject) => {
+      this.movieDataService.getMovieRequest(id).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+        reject();
+      });
+    });
   }
 
-  getMovie(id: Id): Observable<MovieModel> {
-    const url = `${this.baseUrlMovie}/${id}`;
-    return this.http.get<MovieModel>(url);
+  getMovies(): Promise<MovieModel[]> {
+    return new Promise((resolve) => {
+      this.movieDataService.getMoviesRequest().subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  updateMovie(data: MovieModel): Observable<boolean> {
-    const url = `${this.baseUrlMovie}/${data.idMovie}`;
-    return this.http.patch<boolean>(url, data);
+  updateMovie(data: MovieModel): Promise<void> {
+    return new Promise((resolve) => {
+      this.movieDataService.updateMovieRequest(data).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  addMovie(data: MovieModel): Observable<MovieModel> {
-    return this.http.post<MovieModel>(this.baseUrlMovie, data);
+  addMovie(data: MovieModel): Promise<MovieModel> {
+    return new Promise((resolve) => {
+      this.movieDataService.addMovieRequest(data).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  deleteMovie(id: Id): Observable<boolean> {
-    const url = `${this.baseUrlMovie}/${id}`;
-    return this.http.delete<boolean>(url);
+  deleteMovie(id: Id): Promise<void> {
+    return new Promise((resolve) => {
+      this.movieDataService.deleteMovieRequest(id).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 }

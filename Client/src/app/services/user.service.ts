@@ -1,10 +1,7 @@
-import { Inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { API_URL } from "../app-injection-tokens";
-import { Observable } from "rxjs";
+import { Injectable } from "@angular/core";
 import { UserModel } from "../models/user.model";
-import { ApiRouting } from "../routers/api-routing.module";
 import { Id } from "../models/id";
+import { UserDataService } from "./data-services/user-data.service";
 
 @Injectable({
   providedIn: "root"
@@ -12,29 +9,47 @@ import { Id } from "../models/id";
 export class UserService {
 
   constructor(
-    private http: HttpClient,
-    @Inject(API_URL) private apiUrl: string,
+    private userDataService: UserDataService,
   ) {
   }
 
-  private baseUrlUser = this.apiUrl + ApiRouting.User;
-
-  getUsers(): Observable<UserModel[]> {
-    return this.http.get<UserModel[]>(this.baseUrlUser);
+  getUsers(): Promise<UserModel[]> {
+    return new Promise((resolve) => {
+      this.userDataService.getUsersRequest().subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  getUser(id: Id): Observable<UserModel> {
-    const url = `${this.baseUrlUser}/${id}`;
-    return this.http.get<UserModel>(url);
+  getUser(id: Id): Promise<UserModel> {
+    return new Promise((resolve) => {
+      this.userDataService.getUserRequest(id).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  updateUser(data: UserModel): Observable<boolean> {
-    const url = `${this.baseUrlUser}/${data.idUser}`;
-    return this.http.patch<boolean>(url, data);
+  updateUser(data: UserModel): Promise<void> {
+    return new Promise((resolve) => {
+      this.userDataService.updateUserRequest(data).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  deleteUser(id: Id): Observable<boolean> {
-    const url = `${this.baseUrlUser}/${id}`;
-    return this.http.delete<boolean>(url);
+  deleteUser(id: Id): Promise<void> {
+    return new Promise((resolve) => {
+      this.userDataService.deleteUserRequest(id).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 }

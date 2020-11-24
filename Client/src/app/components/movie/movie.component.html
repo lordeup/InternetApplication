@@ -1,9 +1,13 @@
 <div class="container">
-  <mat-card class="mat-card first">
+  <mat-card
+    *ngIf="!!movie?.idMovie"
+    class="mat-card first"
+  >
     <mat-card-content>
       <div>
         <h1>{{movie?.name}}</h1>
         <p>{{movie?.description}}</p>
+        <img mat-card-image [src]="getFilePath(movie?.pictureUrl)" alt="Photo" class="image">
       </div>
 
       <div *ngIf="!!movie?.movieTags.length" class="movie-tags-container">
@@ -15,7 +19,12 @@
         </mat-chip-list>
       </div>
 
-      <app-movie-rating [idMovie]="idMovie" [idUser]="idUser" [authorized$]="authorized$"></app-movie-rating>
+      <app-movie-rating
+        [idMovie]="movie?.idMovie"
+        [idUser]="idUser"
+        [authorized$]="authorized$"
+      >
+      </app-movie-rating>
     </mat-card-content>
   </mat-card>
 

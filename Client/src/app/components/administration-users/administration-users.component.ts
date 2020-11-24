@@ -8,7 +8,9 @@ import {
   IDialogDeleteConfirmationData
 } from "../dialog-delete-confirmation/dialog-delete-confirmation.component";
 import { DialogTitle } from "../../models/dialog-title";
-import { DialogUserComponent, IDialogUserData } from "../dialog-user/dialog-user.component";
+import { DialogUserComponent, IDialogUserData, IDialogUserResponse } from "../dialog-user/dialog-user.component";
+import { FileManagerService } from "../../services/file-manager.service";
+import { FileModel } from "../../models/file.model";
 
 @Component({
   selector: "app-administration-users",
@@ -21,11 +23,12 @@ export class AdministrationUsersComponent implements OnInit {
 
   constructor(
     private userService: UserService,
+    private fileManagerService: FileManagerService,
     private dialog: MatDialog) {
   }
 
-  ngOnInit(): void {
-    this.getUsers();
+  async ngOnInit(): Promise<void> {
+    this.users = await this.userService.getUsers();
   }
 
   selectItem(item: UserModel): void {
@@ -39,9 +42,9 @@ export class AdministrationUsersComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(DialogUserComponent, {data, autoFocus: false});
 
-    dialogRef.afterClosed().subscribe(response => {
+    dialogRef.afterClosed().subscribe(async (response: IDialogUserResponse) => {
         if (!!response) {
-          this.updateUser(response);
+          await this.updateUser(response);
         }
       }
     );
@@ -54,36 +57,30 @@ export class AdministrationUsersComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(DialogDeleteConfirmationComponent, {data, autoFocus: false});
 
-    dialogRef.afterClosed().subscribe(response => {
+    dialogRef.afterClosed().subscribe(async response => {
         if (!!response) {
-          this.deleteUser(this.selectedItem.idUser);
+          await this.deleteUser(this.selectedItem.idUser);
         }
       }
     );
   }
 
-  getUsers(): void {
-    this.userService.getUsers().subscribe(response => {
-      this.users = response;
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async updateUser(response: IDialogUserResponse): Promise<void> {
+    let fileModel: FileModel;
+    if (!!response?.file) {
+      fileModel = response.user?.pictureUrl
+        ? await this.fileManagerService.updateFile(response.user?.pictureUrl, response.file)
+        : await this.fileManagerService.uploadFile(response.file);
+    }
+    if (!!response?.user) {
+      response.user.pictureUrl = !!fileModel ? fileModel.path : response.user?.pictureUrl;
+      await this.userService.updateUser(response.user);
+      this.users = await this.userService.getUsers();
+    }
   }
 
-  updateUser(data: UserModel): void {
-    this.userService.updateUser(data).subscribe(() => {
-      this.getUsers();
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  async deleteUser(id: Id): Promise<void> {
+    await this.userService.deleteUser(id);
+    this.users = this.users.filter(user => user.idUser !== id);
   }
-
-  deleteUser(id: Id): void {
-    this.userService.deleteUser(id).subscribe(() => {
-      this.users = this.users.filter(user => user.idUser !== id);
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
-  }
-
 }

@@ -12,6 +12,13 @@
       </mat-form-field>
 
       <input type="file" accept="image/*" (change)="selectFile($event)">
+      <img
+        *ngIf="!!formGroup.get('pictureUrl').value"
+        mat-card-image
+        [src]="getFilePath(formGroup.get('pictureUrl').value)"
+        alt="Photo"
+        class="image"
+      >
 
       <mat-form-field class="form-element">
         <label>

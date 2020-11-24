@@ -3,6 +3,10 @@ import { MovieModel } from "../../../models/movie.model";
 import { ReviewService } from "../../../services/review.service";
 import { AppRoutingService } from "../../../routers/app-routing.service";
 import { Id } from "../../../models/id";
+import { FileManagerService } from "../../../services/file-manager.service";
+
+// const UNKNOWN_MOVIE_IMAGE = require("src/assets/unknown-movie.png");
+const UNKNOWN_MOVIE_IMAGE = "assets/unknown-movie.png";
 
 @Component({
   selector: "app-user-review-movies",
@@ -15,23 +19,19 @@ export class UserReviewMoviesComponent implements OnInit {
 
   constructor(
     private reviewService: ReviewService,
+    private fileManagerService: FileManagerService,
     private appRoutingService: AppRoutingService) {
   }
 
-  ngOnInit(): void {
-    this.getReviewMoviesByIdUser(this.idUser);
+  async ngOnInit(): Promise<void> {
+    this.reviewMovies = await this.reviewService.getReviewMoviesByIdUser(this.idUser);
   }
 
   onClickMovie(id: Id): void {
     this.appRoutingService.goToMoviePage(id);
   }
 
-  getReviewMoviesByIdUser(id: Id): void {
-    this.reviewService.getReviewMoviesByIdUser(id).subscribe(response => {
-      this.reviewMovies = response;
-    }, error => {
-      alert(error.error?.message || error.message);
-    });
+  getFilePath(fileName: string): string {
+    return !!fileName ? this.fileManagerService.getFilePath(fileName) : UNKNOWN_MOVIE_IMAGE;
   }
-
 }

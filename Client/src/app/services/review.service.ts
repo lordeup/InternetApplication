@@ -1,11 +1,8 @@
-import { Inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { API_URL } from "../app-injection-tokens";
-import { ApiRouting } from "../routers/api-routing.module";
+import { Injectable } from "@angular/core";
 import { Id } from "../models/id";
-import { Observable } from "rxjs";
 import { ReviewModel } from "../models/review.model";
 import { MovieModel } from "../models/movie.model";
+import { ReviewDataService } from "./data-services/review-data.service";
 
 @Injectable({
   providedIn: "root"
@@ -13,48 +10,57 @@ import { MovieModel } from "../models/movie.model";
 export class ReviewService {
 
   constructor(
-    private http: HttpClient,
-    @Inject(API_URL) private apiUrl: string,
+    private reviewDataService: ReviewDataService,
   ) {
   }
 
-  private baseUrlReview = this.apiUrl + ApiRouting.Review;
-
-  getReviews(): Observable<ReviewModel[]> {
-    return this.http.get<ReviewModel[]>(this.baseUrlReview);
+  getReviewsByIdMovie(idMovie: Id): Promise<ReviewModel[]> {
+    return new Promise((resolve) => {
+      this.reviewDataService.getReviewsByIdMovieRequest(idMovie).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  getReview(id: Id): Observable<ReviewModel> {
-    const url = `${this.baseUrlReview}/${id}`;
-    return this.http.get<ReviewModel>(url);
+  getReviewMoviesByIdUser(idUser: Id): Promise<MovieModel[]> {
+    return new Promise((resolve) => {
+      this.reviewDataService.getReviewMoviesByIdUserRequest(idUser).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  getReviewsByIdUser(id: Id): Observable<ReviewModel[]> {
-    const url = `${this.baseUrlReview}/user/${id}`;
-    return this.http.get<ReviewModel[]>(url);
+  updateReview(data: ReviewModel): Promise<void> {
+    return new Promise((resolve) => {
+      this.reviewDataService.updateReviewRequest(data).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  getReviewMoviesByIdUser(id: Id): Observable<MovieModel[]> {
-    const url = `${this.baseUrlReview}/movies/user/${id}`;
-    return this.http.get<MovieModel[]>(url);
+  addReview(data: ReviewModel): Promise<ReviewModel> {
+    return new Promise((resolve) => {
+      this.reviewDataService.addReviewRequest(data).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 
-  getReviewsByIdMovie(id: Id): Observable<ReviewModel[]> {
-    const url = `${this.baseUrlReview}/movie/${id}`;
-    return this.http.get<ReviewModel[]>(url);
-  }
-
-  updateReview(data: ReviewModel): Observable<boolean> {
-    const url = `${this.baseUrlReview}/${data.idReview}`;
-    return this.http.patch<boolean>(url, data);
-  }
-
-  addReview(data: ReviewModel): Observable<ReviewModel> {
-    return this.http.post<ReviewModel>(this.baseUrlReview, data);
-  }
-
-  deleteReview(id: Id): Observable<boolean> {
-    const url = `${this.baseUrlReview}/${id}`;
-    return this.http.delete<boolean>(url);
+  deleteReview(id: Id): Promise<void> {
+    return new Promise((resolve) => {
+      this.reviewDataService.deleteReviewRequest(id).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
   }
 }
