@@ -12,12 +12,24 @@
   margin-bottom: 100px;
 }
 
-.image {
-  width: 20%;
+.mat-card-content-container {
+  display: flex;
 }
 
-.image:first-child {
-  margin-top: 0;
+.content {
+  display: flex;
+  flex-direction: column;
+  padding-right: 16px;
+  padding-left: 40px;
+  width: 100%;
+}
+
+.image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-width: 244px;
+  height: 244px;
 }
 
 .user-first-row {
@@ -27,7 +39,6 @@
 
 .item-info {
   display: flex;
-  flex-direction: row;
 }
 
 .capture {

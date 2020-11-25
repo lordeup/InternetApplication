@@ -9,6 +9,9 @@ import {
 } from "../../dialog-delete-confirmation/dialog-delete-confirmation.component";
 import { Id } from "../../../models/id";
 import { DialogReviewComponent, IDialogReviewData } from "../../dialog-review/dialog-review.component";
+import { FileManagerService } from "../../../services/file-manager.service";
+
+const UNKNOWN_USER_IMAGE = "assets/unknown-user.png";
 
 @Component({
   selector: "app-movie-reviews",
@@ -25,6 +28,7 @@ export class MovieReviewsComponent implements OnInit {
 
   constructor(
     private reviewService: ReviewService,
+    private fileManagerService: FileManagerService,
     private dialog: MatDialog) {
   }
 
@@ -73,5 +77,9 @@ export class MovieReviewsComponent implements OnInit {
   async deleteReview(id: Id): Promise<void> {
     await this.reviewService.deleteReview(id);
     this.deleteReviewEventData.emit(id);
+  }
+
+  getFilePath(fileName: string): string {
+    return !!fileName ? this.fileManagerService.getFilePath(fileName) : UNKNOWN_USER_IMAGE;
   }
 }

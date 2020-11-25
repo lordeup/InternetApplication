@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Data.Exceptions;
 using Server.Models;
+using Server.ViewModels;
 
 namespace Server.Data.Repositories.Implementation
 {
@@ -39,11 +40,16 @@ namespace Server.Data.Repositories.Implementation
             return await _context.MovieRatings.Where(rating => rating.IdMovie == idMovie).ToListAsync();
         }
 
-        public async Task<double> GetRatingByIdMovie(int idMovie)
+        public async Task<RatingViewModel> GetRatingByIdMovie(int idMovie)
         {
             var ratingsByIdMovie = await GetMovieRatingsByIdMovie(idMovie);
             var rating = ratingsByIdMovie.DefaultIfEmpty().Average(b => b?.Rating ?? 0);
-            return Math.Round(rating, 3, MidpointRounding.AwayFromZero);
+
+            return new RatingViewModel
+            {
+                Rating = Math.Round(rating, 3, MidpointRounding.AwayFromZero),
+                Count = ratingsByIdMovie.Count
+            };
         }
 
         public async Task<MovieRating> GetMovieRatingByIdUserAndIdMovie(int idUser, int idMovie)

@@ -2,3 +2,22 @@
   padding: 8px 0 16px 0;
   width: 100%;
 }
+
+.item-paper {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.content {
+  display: flex;
+  padding-left: 40px;
+}
+
+.image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  min-width: 120px;
+  height: 120px;
+}

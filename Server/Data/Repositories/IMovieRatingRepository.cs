@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Server.Models;
+using Server.ViewModels;
 
 namespace Server.Data.Repositories
 {
     public interface IMovieRatingRepository : IRepository<MovieRating>
     {
-        Task<double> GetRatingByIdMovie(int idMovie);
+        Task<RatingViewModel> GetRatingByIdMovie(int idMovie);
 
         Task<MovieRating> GetMovieRatingByIdUserAndIdMovie(int idUser, int idMovie);
     }

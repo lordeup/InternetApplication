@@ -3,13 +3,12 @@
   <mat-dialog-content>
     <form [formGroup]="formGroup">
       <input type="file" accept="image/*" (change)="selectFile($event)">
-      <img
+      <div
         *ngIf="!!formGroup.get('pictureUrl').value"
-        mat-card-image
-        [src]="getFilePath(formGroup.get('pictureUrl').value)"
-        alt="Photo"
+        [style.backgroundImage]="'url('+ getFilePath(formGroup.get('pictureUrl').value) +')'"
         class="image"
       >
+      </div>
 
       <mat-form-field class="form-element">
         <label>

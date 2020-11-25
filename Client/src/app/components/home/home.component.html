@@ -4,9 +4,9 @@
   gutterSize="40px"
   class="mat-grid-list"
 >
-  <mat-grid-tile *ngFor="let movie of movies">
+  <mat-grid-tile *ngFor="let movie of movies" class="mat-grid-tile-container">
     <div (click)="onClickMovie(movie.idMovie)" class="item-paper">
-      <img mat-card-image [src]="getFilePath(movie?.pictureUrl)" alt="Photo" class="image">
+      <div [style.backgroundImage]="'url('+ getFilePath(movie?.pictureUrl) +')'" class="image"></div>
       <div class="content">
         <div class="content-text">
           <p class="text title">

@@ -5,6 +5,10 @@ import { ReviewService } from "../../../services/review.service";
 import { Id } from "../../../models/id";
 import { Observable } from "rxjs";
 import { REQUIRED_TITLE_ERROR } from "../../../const";
+import { UserModel } from "../../../models/user.model";
+import { FileManagerService } from "../../../services/file-manager.service";
+
+const UNKNOWN_USER_IMAGE = "assets/unknown-user.png";
 
 @Component({
   selector: "app-movie-add-review",
@@ -13,7 +17,7 @@ import { REQUIRED_TITLE_ERROR } from "../../../const";
 })
 export class MovieAddReviewComponent implements OnInit {
   @Input() public idMovie: Id;
-  @Input() public idUser: Id;
+  @Input() public user: UserModel;
   @Input() public authorized$: Observable<boolean>;
 
   @Output() public changeEventData = new EventEmitter<ReviewModel>();
@@ -22,12 +26,13 @@ export class MovieAddReviewComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private fileManagerService: FileManagerService,
     private reviewService: ReviewService) {
   }
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      idUser: this.idUser,
+      idUser: this.user.idUser,
       idMovie: this.idMovie,
       text: ["", Validators.required],
     });
@@ -39,6 +44,10 @@ export class MovieAddReviewComponent implements OnInit {
 
   getErrorText(): string {
     return this.formGroup.get("text").hasError("required") ? REQUIRED_TITLE_ERROR : "";
+  }
+
+  getFilePath(fileName: string): string {
+    return !!fileName ? this.fileManagerService.getFilePath(fileName) : UNKNOWN_USER_IMAGE;
   }
 
   async onSubmit(): Promise<void> {

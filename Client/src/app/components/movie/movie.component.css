@@ -15,6 +15,25 @@
   margin-bottom: 100px;
 }
 
+.item-paper {
+  display: flex;
+}
+
+.image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-width: 244px;
+  height: 244px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding-right: 16px;
+  padding-left: 40px;
+}
+
 .movie-tags-container {
   margin-top: 40px;
 }

@@ -1,13 +1,13 @@
-<div *ngIf="movieRatingCount >= 0" class="rating-container">
+<div *ngIf="movieRating?.count >= 0" class="rating-container">
   <h2>Рейтинг фильма</h2>
 
   <div class="rating-content">
     <app-star-rating
-      [rating]="movieRatingCount"
+      [rating]="movieRating?.rating"
       [starCount]="5"
       (ratingUpdated)="onRatingChanged($event)"
     >
     </app-star-rating>
-    <h3 class="rating-number">{{movieRatingCount}}</h3>
+    <h3 class="rating-number">{{movieRating?.rating}} ({{movieRating?.count}} чел.)</h3>
   </div>
 </div>

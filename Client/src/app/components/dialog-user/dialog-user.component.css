@@ -10,3 +10,11 @@
 .dialog-actions {
   justify-content: flex-end;
 }
+
+.image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-width: 244px;
+  height: 244px;
+}

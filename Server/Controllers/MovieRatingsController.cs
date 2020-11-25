@@ -62,12 +62,12 @@ namespace Server.Controllers
 
         // GET: api/MovieRatings/rating/:idMovie
         [HttpGet("rating/{idMovie}")]
-        public async Task<ActionResult> GetRatingByIdMovie(int idMovie)
+        public async Task<ActionResult<RatingViewModel>> GetRatingByIdMovie(int idMovie)
         {
             try
             {
-                var rating = await _movieRatingRepository.GetRatingByIdMovie(idMovie);
-                return Ok(new {Rating = rating});
+                var ratingViewModel = await _movieRatingRepository.GetRatingByIdMovie(idMovie);
+                return Ok(ratingViewModel);
             }
             catch (Exception e)
             {

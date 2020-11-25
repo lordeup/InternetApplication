@@ -13,13 +13,11 @@
 }
 
 .image {
-  max-height: 272px;
-  max-width: 40%;
-  margin: 0;
-}
-
-.image:first-child {
-  margin-top: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-width: 376px;
+  height: 244px;
 }
 
 .content {

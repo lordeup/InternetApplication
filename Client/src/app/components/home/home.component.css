@@ -2,9 +2,13 @@
   margin: 40px 24px 24px;
 }
 
+.mat-grid-tile-container {
+  border-radius: 4px;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
 .item-paper {
   min-height: 500px;
-  background-color: #e2e1e0;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -29,8 +33,10 @@
 }
 
 .image {
-  max-height: 272px;
-  min-height: 272px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 272px;
 }
 
 .content {

@@ -1,17 +1,17 @@
 <div class="container">
-  <mat-card class="mat-card">
-    <img mat-card-image [src]="getFilePath(user?.pictureUrl)" alt="Photo" class="image">
-    <mat-card-content>
-      <div class="user-first-row">
-        <div class="item-info">
-          <h3 class="capture">Имя: &nbsp;</h3>
-          <h3>{{user?.name}}</h3>
+  <mat-card class="mat-card" *ngIf="user?.idUser">
+    <mat-card-content class="mat-card-content-container">
+      <div [style.backgroundImage]="'url('+ getFilePath(user?.pictureUrl) +')'" class="image"></div>
+      <div class="content">
+        <div class="user-first-row">
+          <div class="item-info">
+            <h3 class="capture">Имя: &nbsp;</h3>
+            <h3>{{user?.name}}</h3>
+          </div>
+          <button mat-stroked-button (click)="onClickUserEdit()">
+            Редактировать
+          </button>
         </div>
-        <button mat-stroked-button (click)="onClickUserEdit()">
-          Редактировать
-        </button>
-      </div>
-      <div>
         <div class="item-info">
           <h3 class="capture">Фамилия: &nbsp;</h3>
           <h3>{{user?.surname}}</h3>

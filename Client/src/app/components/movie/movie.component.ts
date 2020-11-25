@@ -9,6 +9,8 @@ import { AppRoutingService } from "../../routers/app-routing.service";
 import { AuthService } from "../../services/auth.service";
 import { Observable } from "rxjs";
 import { FileManagerService } from "../../services/file-manager.service";
+import { UserModel } from "../../models/user.model";
+import { UserService } from "../../services/user.service";
 
 // const UNKNOWN_MOVIE_IMAGE = require("src/assets/unknown-movie.png");
 const UNKNOWN_MOVIE_IMAGE = "assets/unknown-movie.png";
@@ -23,12 +25,14 @@ export class MovieComponent implements OnInit {
   public reviews: ReviewModel[] = [];
   public idMovie: Id;
   public idUser: Id;
+  public currentUser: UserModel;
   public authorized$: Observable<boolean>;
 
   constructor(
     private movieService: MovieService,
     private reviewService: ReviewService,
     private authService: AuthService,
+    private userService: UserService,
     private fileManagerService: FileManagerService,
     private appRoutingService: AppRoutingService,
     private activatedRoute: ActivatedRoute) {
@@ -38,6 +42,8 @@ export class MovieComponent implements OnInit {
     this.authorized$ = this.authService.getAuthorized();
     this.idUser = this.authService.getIdUserFromLocalStorage();
     this.idMovie = this.activatedRoute.snapshot.params.id;
+
+    this.currentUser = await this.userService.getUser(this.idUser);
 
     this.movie = await this.movieService.getMovie(this.idMovie);
     //     this.appRoutingService.goToHomePage();

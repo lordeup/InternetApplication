@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { MovieRatingDataService } from "./data-services/movie-rating-data.service";
 import { Id } from "../models/id";
 import { MovieRatingModel } from "../models/movie-rating.model";
+import { RatingModel } from "../models/rating.model";
 
 @Injectable({
   providedIn: "root"
@@ -13,10 +14,10 @@ export class MovieRatingService {
   ) {
   }
 
-  getRatingByIdMovie(id: Id): Promise<number> {
+  getRatingByIdMovie(id: Id): Promise<RatingModel> {
     return new Promise((resolve) => {
       this.movieRatingDataService.getRatingByIdMovieRequest(id).subscribe(response => {
-        resolve(response.rating);
+        resolve(response);
       }, error => {
         alert(error.error?.message || error.message);
       });
