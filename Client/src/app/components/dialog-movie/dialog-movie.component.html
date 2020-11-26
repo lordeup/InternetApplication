@@ -11,14 +11,6 @@
         </mat-error>
       </mat-form-field>
 
-      <input type="file" accept="image/*" (change)="selectFile($event)">
-      <div
-        *ngIf="!!formGroup.get('pictureUrl').value"
-        [style.backgroundImage]="'url('+ getFilePath(formGroup.get('pictureUrl').value) +')'"
-        class="image"
-      >
-      </div>
-
       <mat-form-field class="form-element">
         <label>
           <textarea
@@ -41,6 +33,13 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <app-upload-image
+        [previewUrl]="previewUrl"
+        (changeImageFile)="setImageFile($event)"
+        (changePreviewUrl)="setPreviewUrl($event)"
+      >
+      </app-upload-image>
 
     </form>
   </mat-dialog-content>

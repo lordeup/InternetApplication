@@ -14,6 +14,7 @@ export interface IDialogUserData {
 export interface IDialogUserResponse {
   user: UserModel;
   file?: File;
+  isDeletePicture?: boolean;
 }
 
 @Component({
@@ -24,7 +25,8 @@ export interface IDialogUserResponse {
 export class DialogUserComponent implements OnInit {
   public formGroup: FormGroup;
   public title: string;
-  public imageFile: File;
+  public imageFile: File | undefined;
+  public previewUrl: string;
 
   constructor(
     private dialogRef: MatDialogRef<DialogUserComponent>,
@@ -43,6 +45,7 @@ export class DialogUserComponent implements OnInit {
       pictureUrl: user?.pictureUrl || "",
     });
     this.title = title || "";
+    this.previewUrl = this.getFilePath(user?.pictureUrl);
   }
 
   getErrorLogin(): string {
@@ -63,6 +66,10 @@ export class DialogUserComponent implements OnInit {
       user: data
     };
 
+    if (!!user?.pictureUrl && !this.imageFile && !this.previewUrl) {
+      response.isDeletePicture = true;
+    }
+
     if (!!this.imageFile) {
       response.file = this.imageFile;
     }
@@ -70,11 +77,12 @@ export class DialogUserComponent implements OnInit {
     return response;
   }
 
-  selectFile(event): void {
-    if (!!event.target.files?.length) {
-      const [file]: File[] = event.target.files;
-      this.imageFile = file;
-    }
+  setImageFile(file?: File): void {
+    this.imageFile = file;
+  }
+
+  setPreviewUrl(value: string): void {
+    this.previewUrl = value;
   }
 
   getFilePath(fileName: string): string {

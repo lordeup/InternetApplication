@@ -11,9 +11,7 @@ import { Observable } from "rxjs";
 import { FileManagerService } from "../../services/file-manager.service";
 import { UserModel } from "../../models/user.model";
 import { UserService } from "../../services/user.service";
-
-// const UNKNOWN_MOVIE_IMAGE = require("src/assets/unknown-movie.png");
-const UNKNOWN_MOVIE_IMAGE = "assets/unknown-movie.png";
+import { UNKNOWN_MOVIE_IMAGE } from "../../const";
 
 @Component({
   selector: "app-movie",

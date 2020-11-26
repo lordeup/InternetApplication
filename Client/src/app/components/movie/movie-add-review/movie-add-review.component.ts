@@ -4,11 +4,10 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ReviewService } from "../../../services/review.service";
 import { Id } from "../../../models/id";
 import { Observable } from "rxjs";
-import { REQUIRED_TITLE_ERROR } from "../../../const";
+import { REQUIRED_TITLE_ERROR, UNKNOWN_USER_IMAGE } from "../../../const";
 import { UserModel } from "../../../models/user.model";
 import { FileManagerService } from "../../../services/file-manager.service";
 
-const UNKNOWN_USER_IMAGE = "assets/unknown-user.png";
 
 @Component({
   selector: "app-movie-add-review",

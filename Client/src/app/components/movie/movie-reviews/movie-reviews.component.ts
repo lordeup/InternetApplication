@@ -10,8 +10,7 @@ import {
 import { Id } from "../../../models/id";
 import { DialogReviewComponent, IDialogReviewData } from "../../dialog-review/dialog-review.component";
 import { FileManagerService } from "../../../services/file-manager.service";
-
-const UNKNOWN_USER_IMAGE = "assets/unknown-user.png";
+import { UNKNOWN_USER_IMAGE } from "../../../const";
 
 @Component({
   selector: "app-movie-reviews",

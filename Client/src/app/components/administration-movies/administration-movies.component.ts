@@ -99,15 +99,20 @@ export class AdministrationMoviesComponent implements OnInit {
   }
 
   async updateMovie(response: IDialogMovieResponse): Promise<void> {
-    let fileModel: FileModel;
-    if (!!response?.file) {
-      fileModel = response.movie?.pictureUrl
-        ? await this.fileManagerService.updateFile(response.movie?.pictureUrl, response.file)
-        : await this.fileManagerService.uploadFile(response.file);
+    const pictureUrl = response?.movie?.pictureUrl;
+    const file = response?.file;
+
+    if (!!file) {
+      const fileModel = !!pictureUrl
+        ? await this.fileManagerService.updateFile(pictureUrl, file)
+        : await this.fileManagerService.uploadFile(file);
+      response.movie.pictureUrl = fileModel.path;
+    } else if (!!response?.isDeletePicture && !!pictureUrl) {
+      await this.fileManagerService.deleteFile(pictureUrl);
+      response.movie.pictureUrl = "";
     }
 
     if (!!response?.movie) {
-      response.movie.pictureUrl = !!fileModel ? fileModel.path : response.movie?.pictureUrl;
       await this.movieService.updateMovie(response.movie);
       this.movies = await this.movieService.getMovies();
     }

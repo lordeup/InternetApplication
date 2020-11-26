@@ -1,0 +1,38 @@
+.file {
+  min-width: 200px;
+  height: 200px;
+}
+
+.image-block {
+  display: flex;
+}
+
+.add-picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px dashed grey;
+}
+
+.delete-picture {
+  position: absolute;
+}
+
+.delete-icon {
+  color: white;
+}
+
+.icon {
+  font-size: 30px;
+}
+
+.input-file {
+  display: none;
+}
+
+.image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}

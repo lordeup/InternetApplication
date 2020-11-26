@@ -4,9 +4,8 @@ import { ReviewService } from "../../../services/review.service";
 import { AppRoutingService } from "../../../routers/app-routing.service";
 import { Id } from "../../../models/id";
 import { FileManagerService } from "../../../services/file-manager.service";
+import { UNKNOWN_MOVIE_IMAGE } from "../../../const";
 
-// const UNKNOWN_MOVIE_IMAGE = require("src/assets/unknown-movie.png");
-const UNKNOWN_MOVIE_IMAGE = "assets/unknown-movie.png";
 
 @Component({
   selector: "app-user-review-movies",

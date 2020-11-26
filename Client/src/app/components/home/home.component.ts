@@ -4,9 +4,7 @@ import { AppRoutingService } from "../../routers/app-routing.service";
 import { MovieModel } from "../../models/movie.model";
 import { Id } from "../../models/id";
 import { FileManagerService } from "../../services/file-manager.service";
-
-// const UNKNOWN_MOVIE_IMAGE = require("src/assets/unknown-movie.png");
-const UNKNOWN_MOVIE_IMAGE = "assets/unknown-movie.png";
+import { UNKNOWN_MOVIE_IMAGE } from "../../const";
 
 @Component({
   selector: "app-home",

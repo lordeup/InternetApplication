@@ -7,10 +7,7 @@ import { DialogTitle } from "../../models/dialog-title";
 import { DialogUserComponent, IDialogUserData, IDialogUserResponse } from "../dialog-user/dialog-user.component";
 import { Id } from "../../models/id";
 import { FileManagerService } from "../../services/file-manager.service";
-import { FileModel } from "../../models/file.model";
-
-// const UNKNOWN_USER_IMAGE = require("src/assets/unknown-user.png");
-const UNKNOWN_USER_IMAGE = "assets/unknown-user.png";
+import { UNKNOWN_USER_IMAGE } from "../../const";
 
 @Component({
   selector: "app-user",
@@ -49,14 +46,20 @@ export class UserComponent implements OnInit {
   }
 
   async updateUser(response: IDialogUserResponse): Promise<void> {
-    let fileModel: FileModel;
-    if (!!response?.file) {
-      fileModel = response.user?.pictureUrl
-        ? await this.fileManagerService.updateFile(response.user?.pictureUrl, response.file)
-        : await this.fileManagerService.uploadFile(response.file);
+    const pictureUrl = response?.user?.pictureUrl;
+    const file = response?.file;
+
+    if (!!file) {
+      const fileModel = !!pictureUrl
+        ? await this.fileManagerService.updateFile(pictureUrl, file)
+        : await this.fileManagerService.uploadFile(file);
+      response.user.pictureUrl = fileModel.path;
+    } else if (!!response?.isDeletePicture && !!pictureUrl) {
+      await this.fileManagerService.deleteFile(pictureUrl);
+      response.user.pictureUrl = "";
     }
+
     if (!!response?.user) {
-      response.user.pictureUrl = !!fileModel ? fileModel.path : response.user?.pictureUrl;
       await this.userService.updateUser(response.user);
       this.user = await this.userService.getUser(this.idUser);
     }

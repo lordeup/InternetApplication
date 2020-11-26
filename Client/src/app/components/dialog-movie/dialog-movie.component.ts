@@ -16,6 +16,7 @@ export interface IDialogMovieData {
 export interface IDialogMovieResponse {
   movie: MovieModel;
   file?: File;
+  isDeletePicture?: boolean;
 }
 
 @Component({
@@ -27,7 +28,8 @@ export class DialogMovieComponent implements OnInit {
   public formGroup: FormGroup;
   public title: string;
   public allMovieTags: MovieTagModel[] = [];
-  public imageFile: File;
+  public imageFile: File | undefined;
+  public previewUrl: string;
 
   constructor(
     private dialogRef: MatDialogRef<DialogMovieComponent>,
@@ -46,6 +48,7 @@ export class DialogMovieComponent implements OnInit {
     });
     this.title = title || "";
     this.allMovieTags = movieTags;
+    this.previewUrl = this.getFilePath(movie?.pictureUrl);
   }
 
   compareByValue(a: MovieTagModel, b: MovieTagModel): boolean {
@@ -66,6 +69,10 @@ export class DialogMovieComponent implements OnInit {
       movie: data
     };
 
+    if (!!movie?.pictureUrl && !this.imageFile && !this.previewUrl) {
+      response.isDeletePicture = true;
+    }
+
     if (!!this.imageFile) {
       response.file = this.imageFile;
     }
@@ -73,11 +80,12 @@ export class DialogMovieComponent implements OnInit {
     return response;
   }
 
-  selectFile(event): void {
-    if (!!event.target.files?.length) {
-      const [file]: File[] = event.target.files;
-      this.imageFile = file;
-    }
+  setImageFile(file?: File): void {
+    this.imageFile = file;
+  }
+
+  setPreviewUrl(value: string): void {
+    this.previewUrl = value;
   }
 
   getFilePath(fileName: string): string {
