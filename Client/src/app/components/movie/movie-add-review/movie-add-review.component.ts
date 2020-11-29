@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ReviewService } from "../../../services/review.service";
 import { Id } from "../../../models/id";
 import { Observable } from "rxjs";
-import { REQUIRED_TITLE_ERROR, UNKNOWN_USER_IMAGE } from "../../../const";
+import { UNKNOWN_USER_IMAGE } from "../../../const";
 import { UserModel } from "../../../models/user.model";
 import { FileManagerService } from "../../../services/file-manager.service";
 
@@ -39,10 +39,6 @@ export class MovieAddReviewComponent implements OnInit {
 
   clearText(): void {
     this.formGroup.get("text").reset();
-  }
-
-  getErrorText(): string {
-    return this.formGroup.get("text").hasError("required") ? REQUIRED_TITLE_ERROR : "";
   }
 
   getFilePath(fileName: string): string {

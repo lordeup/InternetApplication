@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Data.Exceptions;
+using Server.Data.FileManager;
 using Server.Models;
 
 namespace Server.Data.Repositories.Implementation
@@ -10,10 +11,12 @@ namespace Server.Data.Repositories.Implementation
     public class MovieRepository : IMovieRepository
     {
         private readonly ApplicationContext _context;
+        private readonly IFileManager _fileManager;
 
-        public MovieRepository(ApplicationContext context)
+        public MovieRepository(ApplicationContext context, IFileManager fileManager)
         {
             _context = context;
+            _fileManager = fileManager;
         }
 
         public async Task<List<Movie>> GetAll()
@@ -68,6 +71,11 @@ namespace Server.Data.Repositories.Implementation
             if (entity == null)
             {
                 throw new MovieNotFoundException();
+            }
+
+            if (!string.IsNullOrEmpty(entity.PictureUrl))
+            {
+                _fileManager.DeleteFile(entity.PictureUrl);
             }
 
             _context.Movies.Remove(entity);

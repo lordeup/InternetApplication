@@ -6,6 +6,11 @@
   display: flex;
 }
 
+.rating-info {
+  display: flex;
+  flex-direction: column;
+}
+
 .rating-number {
   display: flex;
   align-items: center;

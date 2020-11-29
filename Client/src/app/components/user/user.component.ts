@@ -27,7 +27,7 @@ export class UserComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.idUser = this.authService.getIdUserFromLocalStorage();
-    this.user = await this.userService.getUser(this.idUser);
+    this.user = !!this.idUser && await this.userService.getUser(this.idUser);
   }
 
   onClickUserEdit(): void {

@@ -5,6 +5,8 @@ import { ApiRouting } from "../../routers/api-routing.module";
 import { Observable } from "rxjs";
 import { Id } from "../../models/id";
 import { MovieModel } from "../../models/movie.model";
+import { MovieTagModel } from "../../models/movie-tag.model";
+import { CollectionMovieTagModel } from "../../models/collection-movie-tag-.model";
 
 @Injectable({
   providedIn: "root"
@@ -26,6 +28,11 @@ export class MovieDataService {
   getMovieRequest(id: Id): Observable<MovieModel> {
     const url = `${this.baseUrlMovie}/${id}`;
     return this.http.get<MovieModel>(url);
+  }
+
+  findMoviesByMovieTagsRequest(data: CollectionMovieTagModel): Observable<MovieModel[]> {
+    const url = `${this.baseUrlMovie}/findByMovieTags`;
+    return this.http.post<MovieModel[]>(url, data);
   }
 
   updateMovieRequest(data: MovieModel): Observable<boolean> {

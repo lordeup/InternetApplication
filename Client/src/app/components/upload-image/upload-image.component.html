@@ -16,12 +16,18 @@
     *ngIf="!previewUrl"
     for="input"
   >
+    Добавьте изображение
     <div class="add-picture file">
       <mat-icon class="icon">add</mat-icon>
     </div>
   </label>
   <label *ngIf="!!previewUrl" class="delete-picture">
-    <button mat-icon-button (click)="onDeletePicture()">
+    <button
+      mat-icon-button
+      (click)="onDeletePicture()"
+      matTooltip="Удалить изображение"
+      matTooltipPosition="right"
+    >
       <mat-icon class="delete-icon">delete</mat-icon>
     </button>
   </label>

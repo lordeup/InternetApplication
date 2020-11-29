@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Security.Authentication;
 using Server.Data.Exceptions;
+using Server.Data.FileManager;
 using Server.Models;
 using Server.ViewModels;
 
@@ -15,11 +16,13 @@ namespace Server.Data.Repositories.Implementation
     {
         private readonly ApplicationContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IFileManager _fileManager;
 
-        public UserRepository(ApplicationContext context, IPasswordHasher<User> passwordHasher)
+        public UserRepository(ApplicationContext context, IPasswordHasher<User> passwordHasher, IFileManager fileManager)
         {
             _context = context;
             _passwordHasher = passwordHasher;
+            _fileManager = fileManager;
         }
 
         public async Task<List<User>> GetAll()
@@ -76,6 +79,11 @@ namespace Server.Data.Repositories.Implementation
             if (entity == null)
             {
                 throw new UserNotFoundException();
+            }
+
+            if (!string.IsNullOrEmpty(entity.PictureUrl))
+            {
+                _fileManager.DeleteFile(entity.PictureUrl);
             }
 
             _context.Users.Remove(entity);

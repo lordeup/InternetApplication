@@ -2,6 +2,9 @@ import { Injectable } from "@angular/core";
 import { Id } from "../models/id";
 import { MovieModel } from "../models/movie.model";
 import { MovieDataService } from "./data-services/movie-data.service";
+import { AppRoutingService } from "../routers/app-routing.service";
+import { MovieTagModel } from "../models/movie-tag.model";
+import { CollectionMovieTagModel } from "../models/collection-movie-tag-.model";
 
 @Injectable({
   providedIn: "root"
@@ -10,16 +13,17 @@ export class MovieService {
 
   constructor(
     private movieDataService: MovieDataService,
+    private appRoutingService: AppRoutingService,
   ) {
   }
 
   getMovie(id: Id): Promise<MovieModel> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.movieDataService.getMovieRequest(id).subscribe(response => {
         resolve(response);
       }, error => {
         alert(error.error?.message || error.message);
-        reject();
+        this.appRoutingService.goToHomePage();
       });
     });
   }
@@ -47,6 +51,16 @@ export class MovieService {
   addMovie(data: MovieModel): Promise<MovieModel> {
     return new Promise((resolve) => {
       this.movieDataService.addMovieRequest(data).subscribe(response => {
+        resolve(response);
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
+  }
+
+  findMoviesByMovieTags(data: CollectionMovieTagModel): Promise<MovieModel[]> {
+    return new Promise((resolve) => {
+      this.movieDataService.findMoviesByMovieTagsRequest(data).subscribe(response => {
         resolve(response);
       }, error => {
         alert(error.error?.message || error.message);

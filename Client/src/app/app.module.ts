@@ -33,6 +33,7 @@ import { DialogReviewComponent } from "./components/dialog-review/dialog-review.
 import { StarRatingComponent } from "./components/star-rating/star-rating.component";
 import { UserReviewMoviesComponent } from "./components/user/user-review-movies/user-review-movies.component";
 import { UploadImageComponent } from "./components/upload-image/upload-image.component";
+import { FilterMovieTagComponent } from "./components/home/filter-movie-tag/filter-movie-tag.component";
 
 export function tokenGetter(): string {
   return localStorage.getItem(KeyLocalStorage.AccessToken);
@@ -62,6 +63,7 @@ export function tokenGetter(): string {
     StarRatingComponent,
     UserReviewMoviesComponent,
     UploadImageComponent,
+    FilterMovieTagComponent,
   ],
   imports: [
     BrowserModule,

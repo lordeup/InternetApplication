@@ -7,19 +7,19 @@
       <form [formGroup]="formGroup">
         <mat-form-field class="form-element">
           <label>
-            <input matInput name="login" formControlName="login" placeholder="Логин"/>
+            <input matInput name="login" formControlName="login" placeholder="Логин" required/>
           </label>
-          <mat-error *ngIf="!formGroup.controls['login'].valid && formGroup.controls['login'].touched">
-            {{ getErrorLogin() }}
+          <mat-error>
+            Поле логина обязательно к заполнению
           </mat-error>
         </mat-form-field>
 
         <mat-form-field class="form-element">
           <label>
-            <input matInput name="password" formControlName="password" placeholder="Пароль" type="password"/>
+            <input matInput name="password" formControlName="password" placeholder="Пароль" type="password" required/>
           </label>
-          <mat-error *ngIf="!formGroup.controls['password'].valid && formGroup.controls['password'].touched">
-            {{ getErrorPassword() }}
+          <mat-error>
+            Поле пароля обязательно к заполнению
           </mat-error>
         </mat-form-field>
 

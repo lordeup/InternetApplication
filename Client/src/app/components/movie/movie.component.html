@@ -8,7 +8,7 @@
         <div [style.backgroundImage]="'url('+ getFilePath(movie?.pictureUrl) +')'" class="image"></div>
         <div class="content">
           <h1>{{movie?.name}}</h1>
-          <p>{{movie?.description}}</p>
+          <p class="movie-description">{{movie?.description}}</p>
 
           <div *ngIf="!!movie?.movieTags.length" class="movie-tags-container">
             <h2>Жанр фильма</h2>
@@ -38,7 +38,7 @@
     >
     </app-movie-reviews>
     <app-movie-add-review
-      *ngIf="!!currentUser?.idUser"
+      *ngIf="!!currentUser?.idUser && !!movie"
       [idMovie]="idMovie"
       [user]="currentUser"
       [authorized$]="authorized$"

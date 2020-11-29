@@ -40,10 +40,7 @@ namespace Server.Controllers
 
                 foreach (var entity in entities)
                 {
-                    var movieTagViewModels = await GetMovieTagViewModelByIdMovie(entity.IdMovie);
-                    var movieViewModel = GetMapperMovieToMovieViewModel(entity);
-                    movieViewModel.MovieTags = movieTagViewModels;
-
+                    var movieViewModel = await GetMovieViewModels(entity);
                     viewModels.Add(movieViewModel);
                 }
 
@@ -62,16 +59,40 @@ namespace Server.Controllers
             try
             {
                 var entity = await _movieRepository.Get(id);
-                var movieTagViewModels = await GetMovieTagViewModelByIdMovie(id);
-
-                var movieViewModel = GetMapperMovieToMovieViewModel(entity);
-                movieViewModel.MovieTags = movieTagViewModels;
+                var movieViewModel = await GetMovieViewModels(entity);
 
                 return movieViewModel;
             }
             catch (MovieNotFoundException e)
             {
                 return NotFound(new {message = e.Message});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
+            }
+        }
+
+        // POST: api/Movies/findByMovieTags
+        [Route("findByMovieTags")]
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<MovieViewModel>>> FindMoviesByMovieTags(
+            CollectionMovieTagViewModel viewModel)
+        {
+            try
+            {
+                var movieTags = viewModel.MovieTags.Select(GetMapperMovieTagViewModelToMovieTag).ToList();
+                var movies = await _movieHasMovieTagRepository.FindMoviesByMovieTags(movieTags);
+
+                var viewModels = new HashSet<MovieViewModel>();
+
+                foreach (var entity in movies)
+                {
+                    var movieViewModel = await GetMovieViewModels(entity);
+                    viewModels.Add(movieViewModel);
+                }
+
+                return viewModels;
             }
             catch (Exception e)
             {
@@ -113,10 +134,7 @@ namespace Server.Controllers
 
                 var movieTags = viewModel.MovieTags.Select(GetMapperMovieTagViewModelToMovieTag).ToList();
                 await _movieHasMovieTagRepository.AddRelationsMovieHasMovieTags(model.IdMovie, movieTags);
-                var movieTagViewModels = await GetMovieTagViewModelByIdMovie(model.IdMovie);
-
-                var movieViewModel = GetMapperMovieToMovieViewModel(model);
-                movieViewModel.MovieTags = movieTagViewModels;
+                var movieViewModel = await GetMovieViewModels(model);
 
                 return movieViewModel;
             }
@@ -149,10 +167,15 @@ namespace Server.Controllers
             }
         }
 
-        private async Task<ICollection<MovieTagViewModel>> GetMovieTagViewModelByIdMovie(int id)
+        private async Task<MovieViewModel> GetMovieViewModels(Movie entity)
         {
-            var movieTags = await _movieHasMovieTagRepository.GetMovieTagsByIdMovie(id);
-            return movieTags.Select(GetMapperMovieTagToMovieTagViewModel).ToList();
+            var movieTags = await _movieHasMovieTagRepository.GetMovieTagsByIdMovie(entity.IdMovie);
+            var movieTagViewModels = movieTags.Select(GetMapperMovieTagToMovieTagViewModel).ToList();
+
+            var movieViewModel = GetMapperMovieToMovieViewModel(entity);
+            movieViewModel.MovieTags = movieTagViewModels;
+
+            return movieViewModel;
         }
 
         private MovieViewModel GetMapperMovieToMovieViewModel(Movie entity)

@@ -14,6 +14,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { TextFieldModule } from "@angular/cdk/text-field";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatChipsModule } from "@angular/material/chips";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 const components = [
   MatFormFieldModule,
@@ -31,6 +32,7 @@ const components = [
   TextFieldModule,
   MatAutocompleteModule,
   MatChipsModule,
+  MatTooltipModule
 ];
 
 @NgModule({

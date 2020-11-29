@@ -22,8 +22,11 @@ export class MovieRatingComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.movieRating = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
-    this.movieRatingByIdUserAndIdMovie = await this.movieRatingService.getMovieRatingByIdUserAndIdMovie(this.idUser, this.idMovie);
+    if (!!this.idMovie) {
+      this.movieRating = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
+      this.movieRatingByIdUserAndIdMovie = !!this.idUser &&
+        await this.movieRatingService.getMovieRatingByIdUserAndIdMovie(this.idUser, this.idMovie);
+    }
   }
 
   async onRatingChanged(rating: number): Promise<void> {

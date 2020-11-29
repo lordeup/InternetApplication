@@ -12,11 +12,12 @@
             name="text"
             formControlName="text"
             placeholder="Текст"
+            required
           >
           </textarea>
         </label>
-        <mat-error *ngIf="!formGroup.controls['text'].valid && formGroup.controls['text'].touched">
-          {{ getErrorText() }}
+        <mat-error>
+          Поле рецензии обязательно к заполнению
         </mat-error>
       </mat-form-field>
     </form>

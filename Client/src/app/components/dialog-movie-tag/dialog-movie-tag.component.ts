@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MovieTagModel } from "../../models/movie-tag.model";
 import { DialogTitle } from "../../models/dialog-title";
-import { REQUIRED_TITLE_ERROR } from "../../const";
 
 export interface IDialogMovieTagData {
   title: DialogTitle;
@@ -31,10 +30,6 @@ export class DialogMovieTagComponent implements OnInit {
       name: [movieTag?.name || "", Validators.required],
     });
     this.title = title || "";
-  }
-
-  getErrorName(): string {
-    return this.formGroup.get("name").hasError("required") ? REQUIRED_TITLE_ERROR : "";
   }
 
   dataValidation(data: MovieTagModel): MovieTagModel {

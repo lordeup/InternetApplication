@@ -29,6 +29,7 @@
 
 .review-text {
   max-width: 70%;
+  white-space: pre-line;
 }
 
 .review-date {
@@ -40,6 +41,6 @@
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 50%;
-  min-width: 120px;
-  height: 120px;
+  min-width: 80px;
+  height: 80px;
 }

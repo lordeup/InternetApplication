@@ -4,10 +4,10 @@
     <form [formGroup]="formGroup">
       <mat-form-field class="form-element">
         <label>
-          <input matInput name="name" formControlName="name" placeholder="Название"/>
+          <input matInput name="name" formControlName="name" placeholder="Название" required/>
         </label>
-        <mat-error *ngIf="!formGroup.controls['name'].valid && formGroup.controls['name'].touched">
-          {{ getErrorName() }}
+        <mat-error>
+          Поле названия обязательно к заполнению
         </mat-error>
       </mat-form-field>
     </form>

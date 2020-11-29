@@ -23,7 +23,7 @@ export class UserReviewMoviesComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.reviewMovies = await this.reviewService.getReviewMoviesByIdUser(this.idUser);
+    this.reviewMovies = !!this.idUser && await this.reviewService.getReviewMoviesByIdUser(this.idUser);
   }
 
   onClickMovie(id: Id): void {

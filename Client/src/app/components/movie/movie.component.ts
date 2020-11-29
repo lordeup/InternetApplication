@@ -32,7 +32,6 @@ export class MovieComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private fileManagerService: FileManagerService,
-    private appRoutingService: AppRoutingService,
     private activatedRoute: ActivatedRoute) {
   }
 
@@ -41,11 +40,12 @@ export class MovieComponent implements OnInit {
     this.idUser = this.authService.getIdUserFromLocalStorage();
     this.idMovie = this.activatedRoute.snapshot.params.id;
 
-    this.currentUser = await this.userService.getUser(this.idUser);
+    this.currentUser = !!this.idUser && await this.userService.getUser(this.idUser);
 
-    this.movie = await this.movieService.getMovie(this.idMovie);
-    //     this.appRoutingService.goToHomePage();
-    this.reviews = await this.reviewService.getReviewsByIdMovie(this.idMovie);
+    if (!!this.idMovie) {
+      this.movie = await this.movieService.getMovie(this.idMovie);
+      this.reviews = await this.reviewService.getReviewsByIdMovie(this.idMovie);
+    }
   }
 
   async onChangeReviewData(): Promise<void> {

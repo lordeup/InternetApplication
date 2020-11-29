@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.Internal;
 using Microsoft.EntityFrameworkCore;
 using Server.Data.Exceptions;
 using Server.Models;
@@ -46,6 +47,34 @@ namespace Server.Data.Repositories.Implementation
                 .ToListAsync();
 
             return movieTags;
+        }
+
+        private async Task<List<int>> GetIdsMovieByIdMovieTag(int idMovieTag)
+        {
+            return await _context.MovieHasMovieTags
+                .Where(value => value.IdMovieTag == idMovieTag)
+                .Select(o => o.IdMovie)
+                .ToListAsync();
+        }
+
+        public async Task<List<Movie>> FindMoviesByMovieTags(IEnumerable<MovieTag> movieTags)
+        {
+            var idSet = new HashSet<int>();
+            var movies = new HashSet<Movie>();
+
+            foreach (var movieTag in movieTags)
+            {
+                var idsMovieByIdMovieTag = await GetIdsMovieByIdMovieTag(movieTag.IdMovieTag);
+                idsMovieByIdMovieTag.ForEach(value => idSet.Add(value));
+            }
+
+            foreach (var id in idSet)
+            {
+                var entity = await _context.Movies.FindAsync(id);
+                movies.Add(entity);
+            }
+
+            return movies.ToList();
         }
 
         public async Task<MovieHasMovieTag> Add(MovieHasMovieTag entity)

@@ -13,6 +13,7 @@
   justify-content: center;
   cursor: pointer;
   border: 1px dashed grey;
+  margin-top: 8px;
 }
 
 .delete-picture {

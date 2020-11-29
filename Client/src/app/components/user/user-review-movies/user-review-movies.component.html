@@ -2,7 +2,7 @@
   <h2>Оценённые фильмы</h2>
   <mat-card-content *ngFor="let item of reviewMovies" class="mat-card-content-review">
     <div class="item-paper">
-      <div [style.backgroundImage]="'url('+ getFilePath(item?.pictureUrl) +')'" class="image"></div>
+      <div [style.backgroundImage]="'url('+ getFilePath(item?.pictureUrl) +')'" class="image" (click)="onClickMovie(item?.idMovie)"></div>
       <div class="content">
         <p class="text title" (click)="onClickMovie(item?.idMovie)">
           {{ item?.name }}

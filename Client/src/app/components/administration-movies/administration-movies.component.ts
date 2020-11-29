@@ -87,12 +87,13 @@ export class AdministrationMoviesComponent implements OnInit {
   }
 
   async addMovie(response: IDialogMovieResponse): Promise<void> {
-    let fileModel: FileModel;
-    if (!!response?.file) {
-      fileModel = await this.fileManagerService.uploadFile(response.file);
+    const file = response?.file;
+
+    if (!!file) {
+      const fileModel = await this.fileManagerService.uploadFile(file);
+      response.movie.pictureUrl = fileModel.path;
     }
     if (!!response?.movie) {
-      response.movie.pictureUrl = !!fileModel ? fileModel.path : response.movie?.pictureUrl;
       const movie = await this.movieService.addMovie(response.movie);
       this.movies.push(movie);
     }

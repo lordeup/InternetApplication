@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { REQUIRED_TITLE_ERROR } from "../../const";
 import { DialogTitle } from "../../models/dialog-title";
 import { ReviewModel } from "../../models/review.model";
 
@@ -33,10 +32,6 @@ export class DialogReviewComponent implements OnInit {
       text: [review?.text || "", Validators.required],
     });
     this.title = title || "";
-  }
-
-  getErrorText(): string {
-    return this.formGroup.get("text").hasError("required") ? REQUIRED_TITLE_ERROR : "";
   }
 
   dataValidation(data: ReviewModel): ReviewModel {

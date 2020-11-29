@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { REQUIRED_TITLE_ERROR } from "../../const";
 import { DialogTitle } from "../../models/dialog-title";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
@@ -46,10 +45,6 @@ export class DialogUserComponent implements OnInit {
     });
     this.title = title || "";
     this.previewUrl = this.getFilePath(user?.pictureUrl);
-  }
-
-  getErrorLogin(): string {
-    return this.formGroup.get("login").hasError("required") ? REQUIRED_TITLE_ERROR : "";
   }
 
   dataValidation(data: UserModel): IDialogUserResponse {

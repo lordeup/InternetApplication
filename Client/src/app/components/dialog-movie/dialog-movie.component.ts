@@ -3,7 +3,6 @@ import { DialogTitle } from "../../models/dialog-title";
 import { MovieModel } from "../../models/movie.model";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { REQUIRED_TITLE_ERROR } from "../../const";
 import { MovieTagModel } from "../../models/movie-tag.model";
 import { FileManagerService } from "../../services/file-manager.service";
 
@@ -53,10 +52,6 @@ export class DialogMovieComponent implements OnInit {
 
   compareByValue(a: MovieTagModel, b: MovieTagModel): boolean {
     return a.idMovieTag === b.idMovieTag;
-  }
-
-  getErrorName(): string {
-    return this.formGroup.get("name").hasError("required") ? REQUIRED_TITLE_ERROR : "";
   }
 
   dataValidation(data: MovieModel): IDialogMovieResponse {

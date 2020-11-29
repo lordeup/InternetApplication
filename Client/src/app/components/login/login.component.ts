@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { REQUIRED_TITLE_ERROR } from "src/app/const";
 import { AuthService } from "src/app/services/auth.service";
 import { LoginUserModel } from "../../models/login-user.model";
 import { AppRoutingService } from "../../routers/app-routing.service";
@@ -24,14 +23,6 @@ export class LoginComponent implements OnInit {
       login: ["", Validators.required],
       password: ["", Validators.required],
     });
-  }
-
-  getErrorLogin(): string {
-    return this.formGroup.get("login").hasError("required") ? REQUIRED_TITLE_ERROR : "";
-  }
-
-  getErrorPassword(): string {
-    return this.formGroup.get("password").hasError("required") ? REQUIRED_TITLE_ERROR : "";
   }
 
   onClickRegisterPage(): void {
