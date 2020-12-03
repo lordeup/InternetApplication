@@ -1,12 +1,12 @@
 .movie-tags-container {
   display: flex;
   flex-direction: column;
-  margin: 40px 24px 24px;
+  margin: var(--lg-indent) var(--sm-indent) var(--sm-indent);
 }
 
 .add-button {
   display: flex;
   justify-content: center;
   max-width: 200px;
-  margin-bottom: 16px;
+  margin-bottom: var(--s-indent);
 }

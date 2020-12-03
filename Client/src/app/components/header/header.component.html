@@ -12,7 +12,12 @@
 
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button *ngIf="authorized$ | async" mat-icon-button class="menu-button" (click)="sidenav.open()">
+      <button
+        *ngIf="(authorized$ | async) && isUserTypeAdmin()"
+        mat-icon-button
+        class="menu-button"
+        (click)="sidenav.open()"
+      >
         <mat-icon>menu</mat-icon>
       </button>
       <span (click)="onClickHomePage()" class="title">Кинопоиск</span>

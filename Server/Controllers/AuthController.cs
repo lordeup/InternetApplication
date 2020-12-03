@@ -15,11 +15,14 @@ namespace Server.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserTypeRepository _userTypeRepository;
         private readonly TokenGenerator _tokenGenerator;
 
-        public AuthController(IUserRepository userRepository, TokenGenerator tokenGenerator)
+        public AuthController(IUserRepository userRepository, IUserTypeRepository userTypeRepository,
+            TokenGenerator tokenGenerator)
         {
             _userRepository = userRepository;
+            _userTypeRepository = userTypeRepository;
             _tokenGenerator = tokenGenerator;
         }
 
@@ -31,7 +34,8 @@ namespace Server.Controllers
             try
             {
                 var user = await _userRepository.LoginUser(viewModel);
-                var token = _tokenGenerator.GenerateToken(user);
+                var userType = await _userTypeRepository.Get(user.IdUserType);
+                var token = _tokenGenerator.GenerateToken(user, userType.Name);
 
                 return new AuthAccessViewModel
                 {
@@ -40,6 +44,10 @@ namespace Server.Controllers
                 };
             }
             catch (UserNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
+            }
+            catch (UserTypeNotFoundException e)
             {
                 return NotFound(new {message = e.Message});
             }
@@ -61,7 +69,8 @@ namespace Server.Controllers
             try
             {
                 var user = await _userRepository.RegisterUser(viewModel);
-                var token = _tokenGenerator.GenerateToken(user);
+                var userType = await _userTypeRepository.Get(user.IdUserType);
+                var token = _tokenGenerator.GenerateToken(user, userType.Name);
 
                 return new AuthAccessViewModel
                 {
@@ -72,6 +81,10 @@ namespace Server.Controllers
             catch (UserExistsException e)
             {
                 return BadRequest(new {message = e.Message});
+            }
+            catch (UserTypeNotFoundException e)
+            {
+                return NotFound(new {message = e.Message});
             }
             catch (Exception e)
             {

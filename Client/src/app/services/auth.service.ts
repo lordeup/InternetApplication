@@ -9,6 +9,7 @@ import { ApiRouting } from "../routers/api-routing.module";
 import { tap } from "rxjs/operators";
 import { API_URL } from "../app-injection-tokens";
 import { KeyLocalStorage } from "../key-local-storage";
+import { UserType } from "../models/user-type";
 
 @Injectable({
   providedIn: "root"
@@ -24,6 +25,7 @@ export class AuthService {
       this.setAuthorized(true);
     }
   }
+
   private authorizedSubject$ = new BehaviorSubject<boolean>(false);
 
   private static setAuthDataToLocalStorage(authAccess: AuthAccessModel): void {
@@ -42,6 +44,18 @@ export class AuthService {
 
   private setAuthorized(value: boolean): void {
     this.authorizedSubject$.next(value);
+  }
+
+  private getUserType(): string {
+    return this.jwtHelperService.decodeToken(this.getTokenFromLocalStorage())?.role || "";
+  }
+
+  isUserTypeUser(): boolean {
+    return this.getUserType() === UserType.User;
+  }
+
+  isUserTypeAdmin(): boolean {
+    return this.getUserType() === UserType.Admin;
   }
 
   loginUserRequest(data: LoginUserModel): Observable<AuthAccessModel> {

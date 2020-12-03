@@ -1,19 +1,29 @@
 .rating-container {
-  margin-top: 40px;
+  margin-top: var(--lg-indent);
 }
 
 .rating-content {
   display: flex;
+  flex-direction: column;
 }
 
 .rating-info {
   display: flex;
-  flex-direction: column;
 }
 
 .rating-number {
   display: flex;
   align-items: center;
-  margin-left: 16px;
+  margin-left: var(--s-indent);
   margin-bottom: 0;
+}
+
+.user-rating-content {
+  display: flex;
+  align-items: baseline;
+  margin-top: var(--xs-indent);
+}
+
+.delete-button {
+  margin-left: var(--s-indent);
 }

@@ -53,4 +53,14 @@ export class MovieRatingService {
       });
     });
   }
+
+  deleteMovieRating(id: Id): Promise<void> {
+    return new Promise((resolve) => {
+      this.movieRatingDataService.deleteMovieRatingRequest(id).subscribe(() => {
+        resolve();
+      }, error => {
+        alert(error.error?.message || error.message);
+      });
+    });
+  }
 }

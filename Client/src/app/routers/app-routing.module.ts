@@ -7,6 +7,7 @@ import { RegisterComponent } from "src/app/components/register/register.componen
 import { PathRouting } from "./path-routing.module";
 import { MovieComponent } from "../components/movie/movie.component";
 import { AuthGuardService } from "../services/auth-guard.service";
+import { AdminAuthGuardService } from "../services/admin-auth-guard.service";
 import { AdministrationMovieTagsComponent } from "../components/administration-movie-tags/administration-movie-tags.component";
 import { AdministrationUsersComponent } from "../components/administration-users/administration-users.component";
 import { AdministrationMoviesComponent } from "../components/administration-movies/administration-movies.component";
@@ -32,17 +33,17 @@ const routes: Routes = [
   {
     path: PathRouting.AdministrationUsers,
     component: AdministrationUsersComponent,
-    canActivate: [AuthGuardService],
+    canActivate: [AdminAuthGuardService],
   },
   {
     path: PathRouting.AdministrationMovies,
     component: AdministrationMoviesComponent,
-    canActivate: [AuthGuardService],
+    canActivate: [AdminAuthGuardService],
   },
   {
     path: PathRouting.AdministrationMovieTags,
     component: AdministrationMovieTagsComponent,
-    canActivate: [AuthGuardService],
+    canActivate: [AdminAuthGuardService],
   },
   {
     path: `${PathRouting.Movie}/:id`,

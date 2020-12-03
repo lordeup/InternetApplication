@@ -1,6 +1,8 @@
 .file {
-  min-width: 200px;
-  height: 200px;
+  --file-size: 200px;
+
+  min-width: var(--file-size);
+  height: var(--file-size);
 }
 
 .image-block {
@@ -13,7 +15,7 @@
   justify-content: center;
   cursor: pointer;
   border: 1px dashed grey;
-  margin-top: 8px;
+  margin-top: var(--xs-indent);
 }
 
 .delete-picture {

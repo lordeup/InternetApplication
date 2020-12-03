@@ -33,6 +33,9 @@
   <mat-card *ngIf="!!reviews.length || (authorized$ | async)" class="mat-card">
     <app-movie-reviews
       [reviews]="reviews"
+      [authorized$]="authorized$"
+      [currentUserId]="currentUser?.idUser"
+      [isUserTypeAdmin]="isUserTypeAdmin()"
       (deleteReviewEventData)="onDeleteReview($event)"
       (changeEventData)="onChangeReviewData()"
     >

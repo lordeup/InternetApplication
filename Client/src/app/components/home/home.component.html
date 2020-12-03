@@ -24,6 +24,13 @@
             {{ movie.description }}
           </p>
         </div>
+        <div *ngIf="!!movie?.movieTags.length" class="movie-tags-container">
+          <mat-chip-list>
+            <mat-chip selected color="primary" *ngFor="let item of movie.movieTags | slice:0:2">
+              {{item.name}}
+            </mat-chip>
+          </mat-chip-list>
+        </div>
       </div>
     </div>
   </mat-grid-tile>

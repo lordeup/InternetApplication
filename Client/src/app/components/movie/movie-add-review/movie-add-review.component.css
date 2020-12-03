@@ -1,23 +1,25 @@
 .form-element {
-  padding: 8px 0 16px 0;
+  padding: var(--xs-indent) 0 var(--s-indent) 0;
   width: 100%;
 }
 
 .item-paper {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: var(--sm-indent);
 }
 
 .content {
   display: flex;
-  padding-left: 40px;
+  padding-left: var(--lg-indent);
 }
 
 .image {
+  --current-user-image-size: 80px;
+
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 50%;
-  min-width: 80px;
-  height: 80px;
+  min-width: var(--current-user-image-size);
+  height: var(--current-user-image-size);
 }

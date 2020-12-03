@@ -5,7 +5,6 @@ import { ActivatedRoute } from "@angular/router";
 import { Id } from "../../models/id";
 import { ReviewService } from "../../services/review.service";
 import { ReviewModel } from "../../models/review.model";
-import { AppRoutingService } from "../../routers/app-routing.service";
 import { AuthService } from "../../services/auth.service";
 import { Observable } from "rxjs";
 import { FileManagerService } from "../../services/file-manager.service";
@@ -58,5 +57,9 @@ export class MovieComponent implements OnInit {
 
   onDeleteReview(id: Id): void {
     this.reviews = this.reviews.filter(b => b.idReview !== id);
+  }
+
+  isUserTypeAdmin(): boolean {
+    return this.authService.isUserTypeAdmin();
   }
 }

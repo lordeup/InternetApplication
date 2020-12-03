@@ -1,5 +1,8 @@
 .mat-grid-list {
-  margin: 40px 24px 24px;
+  margin: var(--lg-indent) var(--sm-indent) var(--sm-indent);
+
+  --item-min-height: 500px;
+  --image-height: 272px;
 }
 
 .mat-grid-tile-container {
@@ -8,7 +11,7 @@
 }
 
 .item-paper {
-  min-height: 500px;
+  min-height: var(--item-min-height);
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -37,18 +40,19 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  height: 272px;
+  height: var(--image-height);
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  padding: 24px 32px;
+  padding: var(--sm-indent) var(--md-indent);
+  min-height: calc(var(--item-min-height) - var(--image-height) - 2 * var(--sm-indent));
 }
 
 .content-text {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  margin-bottom: 16px;
+  margin-bottom: var(--s-indent);
 }

@@ -1,9 +1,11 @@
 <button
   mat-icon-button
-  color="primary"
+  [color]="color"
   *ngFor="let ratingId of ratings"
   [id]="'star_' + ratingId"
   (click)="onClick(ratingId)"
+  (mouseover)="onMouseOver($event, ratingId)"
+  (mouseout)="onMouseOut($event)"
 >
   <mat-icon>
     {{showIcon(ratingId)}}

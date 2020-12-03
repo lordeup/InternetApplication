@@ -1,11 +1,14 @@
 .mat-card {
-  max-width: 940px;
+  max-width: var(--max-page-content-width);
   width: 100%;
-  padding: 24px;
+  padding: var(--sm-indent);
+
+  --image-width: 376px;
+  --image-height: 244px;
 }
 
 .mat-card-content-review {
-  margin-bottom: 40px;
+  margin-bottom: var(--lg-indent);
 }
 
 .item-paper {
@@ -16,17 +19,17 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  min-width: 376px;
-  height: 244px;
+  min-width: var(--image-width);
+  height: var(--image-height);
   cursor: pointer;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  padding-right: 16px;
-  padding-left: 40px;
-  /*width: calc(940px - 376px);*/
+  padding-right: var(--s-indent);
+  padding-left: var(--lg-indent);
+  width: calc(var(--max-page-content-width) - var(--image-width));
 }
 
 .text {

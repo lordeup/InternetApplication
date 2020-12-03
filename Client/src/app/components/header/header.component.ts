@@ -63,4 +63,8 @@ export class HeaderComponent implements OnInit {
     this.authService.logoutUser();
     this.appRoutingService.goToHomePage();
   }
+
+  isUserTypeAdmin(): boolean {
+    return this.authService.isUserTypeAdmin();
+  }
 }

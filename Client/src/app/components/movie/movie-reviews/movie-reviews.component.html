@@ -5,19 +5,20 @@
     <div class="content">
       <div class="item-info">
         <h3>{{item.user.login}}</h3>
-        <div class="review">
-          <p class="review-text">{{item?.text}}</p>
-          <h4 class="review-date">{{item.date}}</h4>
-        </div>
+        <button
+          *ngIf="(authorized$ | async) && isCheckAccess(item)"
+          mat-icon-button
+          #menuTrigger="matMenuTrigger"
+          [matMenuTriggerFor]="menu"
+          (click)="menuTrigger.openMenu()"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
       </div>
-      <button
-        mat-icon-button
-        #menuTrigger="matMenuTrigger"
-        [matMenuTriggerFor]="menu"
-        (click)="menuTrigger.openMenu()"
-      >
-        <mat-icon>more_vert</mat-icon>
-      </button>
+      <div class="review">
+        <p class="review-text">{{item?.text}}</p>
+        <h4 class="review-date">{{item.date}}</h4>
+      </div>
     </div>
   </div>
   <mat-menu #menu="matMenu">

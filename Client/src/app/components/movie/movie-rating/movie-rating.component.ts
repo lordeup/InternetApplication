@@ -15,7 +15,7 @@ export class MovieRatingComponent implements OnInit {
   @Input() public idUser: Id;
   @Input() public authorized$: Observable<boolean>;
   public movieRating: RatingModel;
-  public movieRatingByIdUserAndIdMovie: MovieRatingModel;
+  public movieRatingByIdUser: MovieRatingModel;
 
   constructor(
     private movieRatingService: MovieRatingService) {
@@ -24,7 +24,7 @@ export class MovieRatingComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     if (!!this.idMovie) {
       this.movieRating = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
-      this.movieRatingByIdUserAndIdMovie = !!this.idUser &&
+      this.movieRatingByIdUser = !!this.idUser &&
         await this.movieRatingService.getMovieRatingByIdUserAndIdMovie(this.idUser, this.idMovie);
     }
   }
@@ -38,10 +38,10 @@ export class MovieRatingComponent implements OnInit {
 
     const data = new MovieRatingModel().deserialize(model);
 
-    if (this.movieRatingByIdUserAndIdMovie == null) {
+    if (this.movieRatingByIdUser == null) {
       await this.addMovieRating(data);
-    } else if (this.movieRatingByIdUserAndIdMovie.rating !== rating) {
-      data.idMovieRating = this.movieRatingByIdUserAndIdMovie.idMovieRating;
+    } else if (this.movieRatingByIdUser.rating !== rating) {
+      data.idMovieRating = this.movieRatingByIdUser.idMovieRating;
       await this.updateMovieRating(data);
     }
   }
@@ -49,13 +49,18 @@ export class MovieRatingComponent implements OnInit {
   async updateMovieRating(data: MovieRatingModel): Promise<void> {
     await this.movieRatingService.updateMovieRating(data);
     this.movieRating = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
-    this.movieRatingByIdUserAndIdMovie = data;
+    this.movieRatingByIdUser = data;
   }
 
   async addMovieRating(data: MovieRatingModel): Promise<void> {
     const ratingModel = await this.movieRatingService.addMovieRating(data);
     this.movieRating = await this.movieRatingService.getRatingByIdMovie(ratingModel.idMovie);
-    this.movieRatingByIdUserAndIdMovie =
-      await this.movieRatingService.getMovieRatingByIdUserAndIdMovie(ratingModel.idUser, ratingModel.idMovie);
+    this.movieRatingByIdUser = await this.movieRatingService.getMovieRatingByIdUserAndIdMovie(ratingModel.idUser, ratingModel.idMovie);
+  }
+
+  async onDeleteRating(id: Id): Promise<void> {
+    await this.movieRatingService.deleteMovieRating(id);
+    this.movieRating = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
+    this.movieRatingByIdUser = null;
   }
 }

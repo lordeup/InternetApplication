@@ -7,21 +7,37 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } fro
   encapsulation: ViewEncapsulation.Emulated
 })
 export class StarRatingComponent implements OnInit {
-  @Input() rating: number;
-  @Input() starCount: number;
+  @Input() public rating: number;
+  @Input() public starCount: number;
 
   @Output() ratingUpdated = new EventEmitter<number>();
 
   public ratings: number[] = [];
+  public color: StarRatingColor;
+  public localRating: number;
 
   ngOnInit(): void {
     for (let index = 1; index <= this.starCount; ++index) {
       this.ratings.push(index);
     }
+    this.color = StarRatingColor.Primary;
   }
 
   onClick(rating: number): void {
     this.ratingUpdated.emit(rating);
+    // this.localRating = rating;
+    // this.color = StarRatingColor.Accent;
+  }
+
+  onMouseOver(event: MouseEvent, rating: number): void {
+    this.localRating = this.rating;
+    // this.rating = rating;
+    this.color = StarRatingColor.Accent;
+  }
+
+  onMouseOut(event: MouseEvent): void {
+    // this.rating = this.localRating;
+    this.color = StarRatingColor.Primary;
   }
 
   showIcon(count: number): string {
@@ -36,4 +52,10 @@ export class StarRatingComponent implements OnInit {
       return "star_border";
     }
   }
+}
+
+export enum StarRatingColor {
+  Primary = "primary",
+  Accent = "accent",
+  Warn = "warn"
 }

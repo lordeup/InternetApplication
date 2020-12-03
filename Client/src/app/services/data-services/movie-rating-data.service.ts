@@ -48,7 +48,7 @@ export class MovieRatingDataService {
     return this.http.post<MovieRatingModel>(this.baseUrlMovieRating, data);
   }
 
-  deleteMovieRating(id: Id): Observable<boolean> {
+  deleteMovieRatingRequest(id: Id): Observable<boolean> {
     const url = `${this.baseUrlMovieRating}/${id}`;
     return this.http.delete<boolean>(url);
   }

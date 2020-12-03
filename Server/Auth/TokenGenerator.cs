@@ -17,7 +17,7 @@ namespace Server.Auth
             _authOptions = authOptions;
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(User user, string userType)
         {
             var authParams = _authOptions.Value;
             var credentials =
@@ -27,6 +27,7 @@ namespace Server.Auth
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Login),
                 new Claim(JwtRegisteredClaimNames.Sub, user.IdUser.ToString()),
+                new Claim("role", userType)
             };
 
             var jwtSecurityToken = new JwtSecurityToken(

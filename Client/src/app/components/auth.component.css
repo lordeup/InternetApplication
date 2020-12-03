@@ -16,7 +16,7 @@
 }
 
 .form-element {
-  padding: 8px 0 16px 0;
+  padding: var(--xs-indent) 0 var(--s-indent) 0;
   width: 100%;
 }
 
@@ -28,5 +28,5 @@
   color: -webkit-link;
   text-decoration-line: underline;
   cursor: pointer;
-  margin-top: 16px;
+  margin-top: var(--s-indent);
 }

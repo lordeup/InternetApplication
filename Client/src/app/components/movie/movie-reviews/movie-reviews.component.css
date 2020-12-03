@@ -1,5 +1,7 @@
 .review-container {
-  margin-bottom: 40px;
+  margin-bottom: var(--lg-indent);
+
+  --user-image-size: 80px;
 }
 
 .review-card {
@@ -9,22 +11,22 @@
 
 .content {
   display: flex;
-  padding-right: 16px;
-  padding-left: 40px;
+  flex-direction: column;
+  padding-right: var(--s-indent);
+  padding-left: var(--lg-indent);
   width: 100%;
   justify-content: space-between;
 }
 
 .item-info {
   display: flex;
-  flex-direction: column;
-  width: inherit;
+  justify-content: space-between;
 }
 
 .review {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: var(--sm-indent);
 }
 
 .review-text {
@@ -41,6 +43,6 @@
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 50%;
-  min-width: 80px;
-  height: 80px;
+  min-width: var(--user-image-size);
+  height: var(--user-image-size);
 }

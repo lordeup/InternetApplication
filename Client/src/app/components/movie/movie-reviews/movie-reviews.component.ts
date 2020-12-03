@@ -11,6 +11,7 @@ import { Id } from "../../../models/id";
 import { DialogReviewComponent, IDialogReviewData } from "../../dialog-review/dialog-review.component";
 import { FileManagerService } from "../../../services/file-manager.service";
 import { UNKNOWN_USER_IMAGE } from "../../../const";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-movie-reviews",
@@ -19,6 +20,9 @@ import { UNKNOWN_USER_IMAGE } from "../../../const";
 })
 export class MovieReviewsComponent implements OnInit {
   @Input() public reviews: ReviewModel[];
+  @Input() public authorized$: Observable<boolean>;
+  @Input() public isUserTypeAdmin: boolean;
+  @Input() public currentUserId: Id;
 
   @Output() public deleteReviewEventData = new EventEmitter<Id>();
   @Output() public changeEventData = new EventEmitter();
@@ -80,5 +84,12 @@ export class MovieReviewsComponent implements OnInit {
 
   getFilePath(fileName: string): string {
     return !!fileName ? this.fileManagerService.getFilePath(fileName) : UNKNOWN_USER_IMAGE;
+  }
+
+  isCheckAccess(item: ReviewModel): boolean {
+    if (this.isUserTypeAdmin) {
+      return true;
+    }
+    return item.user.idUser === this.currentUserId;
   }
 }

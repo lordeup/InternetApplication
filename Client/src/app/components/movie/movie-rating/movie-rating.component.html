@@ -2,13 +2,24 @@
   <h2>Рейтинг фильма</h2>
 
   <div class="rating-content">
-    <app-star-rating
-      [rating]="movieRating?.rating"
-      [starCount]="5"
-      (ratingUpdated)="onRatingChanged($event)"
-    >
-    </app-star-rating>
-    <h3 class="rating-number">{{movieRating?.rating}} ({{movieRating?.count}} чел.)</h3>
-<!--    <h4 *ngIf="!!movieRatingByIdUserAndIdMovie.rating">Моя оценка {{movieRatingByIdUserAndIdMovie.rating}}</h4>-->
+    <div class="rating-info">
+      <app-star-rating
+        [rating]="movieRating?.rating"
+        [starCount]="5"
+        (ratingUpdated)="onRatingChanged($event)"
+      >
+      </app-star-rating>
+      <h3 class="rating-number">{{movieRating?.rating}} ({{movieRating?.count}} чел.)</h3>
+    </div>
+    <div *ngIf="!!movieRatingByIdUser" class="user-rating-content">
+      <h4>Моя оценка: {{movieRatingByIdUser.rating}}</h4>
+      <button
+        mat-stroked-button
+        (click)="onDeleteRating(movieRatingByIdUser.idMovieRating)"
+        class="delete-button"
+      >
+        Удалить
+      </button>
+    </div>
   </div>
 </div>
