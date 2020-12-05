@@ -13,8 +13,8 @@ export class UploadImageComponent implements OnInit {
   @Output() public changeImageFile = new EventEmitter<File>();
 
   constructor(
-    private fileManagerService: FileManagerService,
-  ) { }
+    private fileManagerService: FileManagerService) {
+  }
 
   ngOnInit(): void {
   }

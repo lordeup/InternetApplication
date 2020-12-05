@@ -1,3 +1,12 @@
+.filtration-content {
+  display: flex;
+  margin: var(--sm-indent);
+}
+
+.search-movie {
+  margin-left: var(--lg-indent);
+}
+
 .mat-grid-list {
   margin: var(--lg-indent) var(--sm-indent) var(--sm-indent);
 
@@ -46,7 +55,7 @@
 .content {
   display: flex;
   flex-direction: column;
-  padding: var(--sm-indent) var(--md-indent);
+  padding: var(--sm-indent);
   min-height: calc(var(--item-min-height) - var(--image-height) - 2 * var(--sm-indent));
 }
 

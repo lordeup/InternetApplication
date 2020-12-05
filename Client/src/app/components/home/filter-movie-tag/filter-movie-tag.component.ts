@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { MovieTagModel } from "../../../models/movie-tag.model";
-import { CollectionMovieTagModel } from "../../../models/collection-movie-tag-.model";
 
 @Component({
   selector: "app-filter-movie-tag",
@@ -10,18 +9,19 @@ import { CollectionMovieTagModel } from "../../../models/collection-movie-tag-.m
 })
 export class FilterMovieTagComponent implements OnInit {
   @Input() public allMovieTags: MovieTagModel[];
-  @Output() public changeEventUseFilterData = new EventEmitter<CollectionMovieTagModel>();
-  @Output() public changeEventClearFilterData = new EventEmitter();
+  @Output() public changeEventFilterData = new EventEmitter<{ fieldName: string, value?: string | MovieTagModel[] }>();
 
   public formGroup: FormGroup;
+  private previousMovieTags: MovieTagModel[] = [];
+  private movieTagsFieldName = "movieTags";
 
   constructor(
-    private formBuilder: FormBuilder
-  ) { }
+    private formBuilder: FormBuilder) {
+  }
 
   async ngOnInit(): Promise<void> {
     this.formGroup = this.formBuilder.group({
-      movieTags: new FormControl([]),
+      [this.movieTagsFieldName]: new FormControl([]),
     });
   }
 
@@ -29,27 +29,32 @@ export class FilterMovieTagComponent implements OnInit {
     return a.idMovieTag === b.idMovieTag;
   }
 
-  getMovieTagsValue(): MovieTagModel[] {
-    return this.formGroup.get("movieTags").value;
+  get movieTagsValue(): MovieTagModel[] {
+    return this.formGroup.get(this.movieTagsFieldName).value;
   }
 
-  async onSubmitFilter(): Promise<void> {
-    const movieTagsValue = this.getMovieTagsValue();
-    const collectionMovieTag: CollectionMovieTagModel = {
-      movieTags: movieTagsValue,
-    };
-    !!movieTagsValue.length ? this.changeEventUseFilterData.emit(collectionMovieTag) :  this.changeEventClearFilterData.emit();
+  setPreviousMovieTags(): void {
+    this.previousMovieTags = this.movieTagsValue;
   }
 
-  async onClearFilter(event: MouseEvent): Promise<void> {
-    const movieTagsValue = this.getMovieTagsValue();
-    event.stopPropagation();
-    if (!!movieTagsValue.length) {
-      this.formGroup.patchValue({
-        movieTags: [],
+  onSubmitFilter(): void {
+    if (JSON.stringify(this.movieTagsValue) !== JSON.stringify(this.previousMovieTags)) {
+      this.changeEventFilterData.emit({
+        fieldName: this.movieTagsFieldName,
+        value: this.movieTagsValue.length ? this.movieTagsValue : undefined,
       });
-      this.changeEventClearFilterData.emit();
     }
+    this.setPreviousMovieTags();
   }
 
+  onClearFilter(event: MouseEvent): void {
+    event.stopPropagation();
+    this.formGroup.patchValue({
+      [this.movieTagsFieldName]: [],
+    });
+    this.setPreviousMovieTags();
+    this.changeEventFilterData.emit({
+      fieldName: this.movieTagsFieldName
+    });
+  }
 }

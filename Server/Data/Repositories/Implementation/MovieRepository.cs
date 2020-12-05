@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Data.Exceptions;
@@ -33,6 +34,15 @@ namespace Server.Data.Repositories.Implementation
             }
 
             return entity;
+        }
+
+        public List<Movie> FindMoviesByMovieName(string movieName)
+        {
+            var text = movieName.ToLower();
+            var movies = _context.Movies
+                .Where(value => value.Name.ToLower().Contains(text))
+                .ToList();
+            return movies;
         }
 
         public async Task<Movie> Add(Movie entity)

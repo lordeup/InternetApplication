@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper.Internal;
 using Microsoft.EntityFrameworkCore;
 using Server.Data.Exceptions;
 using Server.Models;

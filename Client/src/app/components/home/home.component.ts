@@ -7,7 +7,7 @@ import { FileManagerService } from "../../services/file-manager.service";
 import { UNKNOWN_MOVIE_IMAGE } from "../../const";
 import { MovieTagService } from "../../services/movie-tag.service";
 import { MovieTagModel } from "../../models/movie-tag.model";
-import { CollectionMovieTagModel } from "../../models/collection-movie-tag-.model";
+import { FilterMovieModel } from "../../models/filter-movie.model";
 
 @Component({
   selector: "app-home",
@@ -17,13 +17,14 @@ import { CollectionMovieTagModel } from "../../models/collection-movie-tag-.mode
 export class HomeComponent implements OnInit {
   public movies: MovieModel[] = [];
   public allMovieTags: MovieTagModel[] = [];
+  private filterMovieData: Partial<FilterMovieModel>;
 
   constructor(
     private movieService: MovieService,
     private movieTagService: MovieTagService,
     private fileManagerService: FileManagerService,
     private appRoutingService: AppRoutingService,
-    ) {
+  ) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -39,11 +40,19 @@ export class HomeComponent implements OnInit {
     return !!fileName ? this.fileManagerService.getFilePath(fileName) : UNKNOWN_MOVIE_IMAGE;
   }
 
-  async onChangeUseFilterData(collectionMovieTag: CollectionMovieTagModel): Promise<void> {
-    this.movies = await this.movieService.findMoviesByMovieTags(collectionMovieTag);
+  async onChangeFilterData(fieldName: string, value?: string | MovieTagModel[]): Promise<void> {
+    this.filterMovieData = {
+      ...this.filterMovieData,
+      [fieldName]: value
+    };
+    await this.filterMovie();
   }
 
-  async onChangeClearFilterData(): Promise<void> {
-    this.movies = await this.movieService.getMovies();
+  async filterMovie(): Promise<void> {
+    const hasName = !!this.filterMovieData?.name;
+    const hasMovieTags = !!this.filterMovieData?.movieTags;
+    this.movies = hasName || hasMovieTags
+      ? await this.movieService.filterMovie(this.filterMovieData)
+      : await this.movieService.getMovies();
   }
 }

@@ -1,9 +1,9 @@
-<form [formGroup]="formGroup" class="filter-form">
+<form [formGroup]="formGroup">
   <mat-form-field class="form-element">
     <mat-select
       multiple
       formControlName="movieTags"
-      placeholder="Фильтр фильмов по жанру"
+      placeholder="Фильтр по жанру"
       [compareWith]="compareByValue"
       (closed)="onSubmitFilter()"
     >
@@ -12,6 +12,7 @@
       </mat-option>
     </mat-select>
     <button
+      *ngIf="movieTagsValue.length"
       mat-icon-button
       mat-button
       matSuffix

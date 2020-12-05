@@ -73,20 +73,36 @@ namespace Server.Controllers
             }
         }
 
-        // POST: api/Movies/findByMovieTags
-        [Route("findByMovieTags")]
+        // POST: api/Movies/filterMovie
+        [Route("filterMovie")]
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<MovieViewModel>>> FindMoviesByMovieTags(
-            CollectionMovieTagViewModel viewModel)
+        public async Task<ActionResult<IEnumerable<MovieViewModel>>> FilterMovie(FilterMovieViewModel viewModel)
         {
+            var moviesByMovieTags = new List<Movie>();
+            var moviesFilter = new List<Movie>();
+
+            var hasMovieTags = viewModel.MovieTags.Count > 0;
+
             try
             {
-                var movieTags = viewModel.MovieTags.Select(GetMapperMovieTagViewModelToMovieTag).ToList();
-                var movies = await _movieHasMovieTagRepository.FindMoviesByMovieTags(movieTags);
+                if (hasMovieTags)
+                {
+                    var movieTags = viewModel.MovieTags.Select(GetMapperMovieTagViewModelToMovieTag).ToList();
+                    moviesByMovieTags = await _movieHasMovieTagRepository.FindMoviesByMovieTags(movieTags);
+                    moviesFilter = moviesByMovieTags;
+                }
+
+                if (!string.IsNullOrEmpty(viewModel.Name))
+                {
+                    var moviesByMovieName = _movieRepository.FindMoviesByMovieName(viewModel.Name);
+                    moviesFilter = hasMovieTags
+                        ? moviesByMovieName.Intersect(moviesByMovieTags).ToList()
+                        : moviesByMovieName;
+                }
 
                 var viewModels = new HashSet<MovieViewModel>();
 
-                foreach (var entity in movies)
+                foreach (var entity in moviesFilter)
                 {
                     var movieViewModel = await GetMovieViewModels(entity);
                     viewModels.Add(movieViewModel);

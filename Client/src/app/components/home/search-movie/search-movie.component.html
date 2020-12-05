@@ -1,0 +1,22 @@
+<form [formGroup]="formGroup" class="form-search-movie">
+  <mat-form-field class="form-element">
+    <label>
+      <input
+        matInput
+        placeholder="Поиск по названию"
+        formControlName="name"
+        (blur)="onSubmitFilter()"
+      >
+    </label>
+    <button
+      *ngIf="value"
+      mat-button
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="onClearFilter()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</form>

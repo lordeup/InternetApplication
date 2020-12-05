@@ -3,8 +3,7 @@ import { Id } from "../models/id";
 import { MovieModel } from "../models/movie.model";
 import { MovieDataService } from "./data-services/movie-data.service";
 import { AppRoutingService } from "../routers/app-routing.service";
-import { MovieTagModel } from "../models/movie-tag.model";
-import { CollectionMovieTagModel } from "../models/collection-movie-tag-.model";
+import { FilterMovieModel } from "../models/filter-movie.model";
 
 @Injectable({
   providedIn: "root"
@@ -58,9 +57,9 @@ export class MovieService {
     });
   }
 
-  findMoviesByMovieTags(data: CollectionMovieTagModel): Promise<MovieModel[]> {
+  filterMovie(data: Partial<FilterMovieModel>): Promise<MovieModel[]> {
     return new Promise((resolve) => {
-      this.movieDataService.findMoviesByMovieTagsRequest(data).subscribe(response => {
+      this.movieDataService.filterMovieRequest(data).subscribe(response => {
         resolve(response);
       }, error => {
         alert(error.error?.message || error.message);
