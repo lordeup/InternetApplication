@@ -3,12 +3,14 @@
 
   <div class="rating-content">
     <div class="rating-info">
-      <app-star-rating
-        [rating]="movieRating?.rating"
-        [starCount]="5"
-        (ratingUpdated)="onRatingChanged($event)"
+      <star-rating-control
+        [hoverEnabled]="true"
+        [numOfStars]="5"
+        [showHalfStars]="true"
+        [rating]="rating || 0"
+        (starClickChange)="onClickChange($event)"
       >
-      </app-star-rating>
+      </star-rating-control>
       <h3 class="rating-number">{{movieRating?.rating}} ({{movieRating?.count}} чел.)</h3>
     </div>
     <div *ngIf="!!movieRatingByIdUser" class="user-rating-content">

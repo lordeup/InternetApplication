@@ -4,6 +4,7 @@ import { Id } from "../../../models/id";
 import { Observable } from "rxjs";
 import { MovieRatingModel } from "../../../models/movie-rating.model";
 import { RatingModel } from "../../../models/rating.model";
+import { ClickEvent } from "angular-star-rating";
 
 @Component({
   selector: "app-movie-rating",
@@ -14,6 +15,8 @@ export class MovieRatingComponent implements OnInit {
   @Input() public idMovie: Id;
   @Input() public idUser: Id;
   @Input() public authorized$: Observable<boolean>;
+
+  public rating: number;
   public movieRating: RatingModel;
   public movieRatingByIdUser: MovieRatingModel;
 
@@ -23,13 +26,19 @@ export class MovieRatingComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     if (!!this.idMovie) {
-      this.movieRating = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
+      await this.updateRating();
       this.movieRatingByIdUser = !!this.idUser &&
         await this.movieRatingService.getMovieRatingByIdUserAndIdMovie(this.idUser, this.idMovie);
     }
   }
 
-  async onRatingChanged(rating: number): Promise<void> {
+  async updateRating(): Promise<void> {
+    this.movieRating = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
+    this.rating = this.movieRating.rating;
+  }
+
+  async onClickChange(event: ClickEvent): Promise<void> {
+    const rating = event.rating;
     const model: Partial<MovieRatingModel> = {
       idMovie: this.idMovie,
       idUser: this.idUser,
@@ -44,11 +53,12 @@ export class MovieRatingComponent implements OnInit {
       data.idMovieRating = this.movieRatingByIdUser.idMovieRating;
       await this.updateMovieRating(data);
     }
+    this.rating = rating;
   }
 
   async updateMovieRating(data: MovieRatingModel): Promise<void> {
     await this.movieRatingService.updateMovieRating(data);
-    this.movieRating = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
+    await this.updateRating();
     this.movieRatingByIdUser = data;
   }
 
@@ -60,7 +70,7 @@ export class MovieRatingComponent implements OnInit {
 
   async onDeleteRating(id: Id): Promise<void> {
     await this.movieRatingService.deleteMovieRating(id);
-    this.movieRating = await this.movieRatingService.getRatingByIdMovie(this.idMovie);
+    await this.updateRating();
     this.movieRatingByIdUser = null;
   }
 }

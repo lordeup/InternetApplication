@@ -7,6 +7,18 @@
   flex-direction: column;
 }
 
+::ng-deep .rating {
+  outline: none;
+}
+
+::ng-deep .star-container {
+  margin-left: 0;
+}
+
+::ng-deep .star {
+  cursor: pointer;
+}
+
 .rating-info {
   display: flex;
 }

@@ -30,7 +30,7 @@ import { MovieRatingComponent } from "./components/movie/movie-rating/movie-rati
 import { MovieAddReviewComponent } from "./components/movie/movie-add-review/movie-add-review.component";
 import { MovieReviewsComponent } from "./components/movie/movie-reviews/movie-reviews.component";
 import { DialogReviewComponent } from "./components/dialog-review/dialog-review.component";
-import { StarRatingComponent } from "./components/star-rating/star-rating.component";
+import { StarRatingModule } from "angular-star-rating";
 import { UserReviewMoviesComponent } from "./components/user/user-review-movies/user-review-movies.component";
 import { UploadImageComponent } from "./components/upload-image/upload-image.component";
 import { FilterMovieTagComponent } from "./components/home/filter-movie-tag/filter-movie-tag.component";
@@ -61,7 +61,6 @@ export function tokenGetter(): string {
     MovieAddReviewComponent,
     MovieReviewsComponent,
     DialogReviewComponent,
-    StarRatingComponent,
     UserReviewMoviesComponent,
     UploadImageComponent,
     FilterMovieTagComponent,
@@ -74,6 +73,7 @@ export function tokenGetter(): string {
     BrowserAnimationsModule,
     ReactiveFormsModule,
     AppMaterialModule,
+    StarRatingModule.forRoot(),
 
     JwtModule.forRoot({
       config: {
