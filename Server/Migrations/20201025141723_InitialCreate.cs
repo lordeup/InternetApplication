@@ -162,7 +162,7 @@ namespace Server.Migrations
                     { "User" },
                 }
             );
-            
+
             migrationBuilder.InsertData(
                 table: "movie_tag",
                 columns: new[] { "name" },
@@ -177,13 +177,13 @@ namespace Server.Migrations
                     { "Мелодрама" },
                 }
             );
-            
+
             migrationBuilder.InsertData(
                 table: "user",
                 columns: new[] { "id_user_type", "name", "login", "password" },
                 values: new object[,]
                 {
-                    { "1", "Andrey", "1", "AQAAAAEAACcQAAAAELbXf1gvR9n5gQoOpdXLeOny31uG2TwHuOxgKyjvevEGEfTy2OD+AlZll8vH2yKNZw==" },
+                    { "1", "Andrey", "lordeup", "AQAAAAEAACcQAAAAEE7GtVQHSvnhR0nzVjw19EfPPwT7xPS//kR1JtzmPvS+1b2AGfmRkdV0udRfXSYPWg==" },
                 }
             );
 
