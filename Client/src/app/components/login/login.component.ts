@@ -3,12 +3,12 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/fo
 import { AuthService } from "src/app/services/auth.service";
 import { LoginUserModel } from "../../models/login-user.model";
 import { AppRoutingService } from "../../routers/app-routing.service";
-import { LOGIN_ERROR_TEXT, PASSWORD_ERROR_TEXT, PASSWORD_PATTERN } from "../../const";
+import { LOGIN_ERROR_TEXT, LOGIN_MIN_LENGTH, PASSWORD_ERROR_TEXT, PASSWORD_PATTERN } from "../../const";
 
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"]
+  styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit {
   public formGroup: FormGroup;
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      login: ["", [Validators.required, Validators.minLength(4)]],
+      login: ["", [Validators.required, Validators.minLength(LOGIN_MIN_LENGTH)]],
       password: ["", [Validators.required, Validators.pattern(PASSWORD_PATTERN)]],
     });
   }

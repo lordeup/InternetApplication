@@ -1,0 +1,30 @@
+@import "src/app/const-styles";
+
+.mat-sidenav-container {
+  position: fixed;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  min-width: 100%;
+
+  .icon {
+    margin-right: $xs-indent;
+  }
+
+  .mat-toolbar-row, .mat-toolbar-single-row {
+    padding: 0 $sm-indent;
+  }
+
+  .title {
+    outline: none;
+    cursor: pointer;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .main-container {
+    height: calc(100% - #{$sidebar-height});
+  }
+}

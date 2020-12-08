@@ -10,7 +10,7 @@ import { UNKNOWN_MOVIE_IMAGE } from "../../../const";
 @Component({
   selector: "app-user-review-movies",
   templateUrl: "./user-review-movies.component.html",
-  styleUrls: ["./user-review-movies.component.css"]
+  styleUrls: ["./user-review-movies.component.scss"]
 })
 export class UserReviewMoviesComponent implements OnInit {
   @Input() public idUser: Id;

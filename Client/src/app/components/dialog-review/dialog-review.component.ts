@@ -12,7 +12,7 @@ export interface IDialogReviewData {
 @Component({
   selector: "app-dialog-review",
   templateUrl: "./dialog-review.component.html",
-  styleUrls: ["./dialog-review.component.css"]
+  styleUrls: ["./dialog-review.component.scss"]
 })
 export class DialogReviewComponent implements OnInit {
   public formGroup: FormGroup;

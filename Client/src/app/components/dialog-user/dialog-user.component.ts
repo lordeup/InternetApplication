@@ -19,7 +19,7 @@ export interface IDialogUserResponse {
 @Component({
   selector: "app-dialog-user",
   templateUrl: "./dialog-user.component.html",
-  styleUrls: ["./dialog-user.component.css"]
+  styleUrls: ["./dialog-user.component.scss"]
 })
 export class DialogUserComponent implements OnInit {
   public formGroup: FormGroup;

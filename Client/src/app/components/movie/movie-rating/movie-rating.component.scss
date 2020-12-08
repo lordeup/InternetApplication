@@ -1,0 +1,43 @@
+@import "src/app/const-styles";
+
+.rating-container {
+  margin-top: $lg-indent;
+
+  .rating-content {
+    display: flex;
+    flex-direction: column;
+
+    .rating-info {
+      display: flex;
+
+      ::ng-deep .rating {
+        outline: none;
+      }
+
+      ::ng-deep .star-container {
+        margin-left: 0;
+      }
+
+      ::ng-deep .star {
+        cursor: pointer;
+      }
+
+      .rating-number {
+        display: flex;
+        align-items: center;
+        margin-left: $s-indent;
+        margin-bottom: 0;
+      }
+    }
+
+    .user-rating-content {
+      display: flex;
+      align-items: baseline;
+      margin-top: $xs-indent;
+
+      .delete-button {
+        margin-left: $s-indent;
+      }
+    }
+  }
+}

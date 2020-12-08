@@ -12,12 +12,11 @@ import { MovieModel } from "../../models/movie.model";
 import { MovieTagService } from "../../services/movie-tag.service";
 import { MovieTagModel } from "../../models/movie-tag.model";
 import { FileManagerService } from "../../services/file-manager.service";
-import { FileModel } from "../../models/file.model";
 
 @Component({
   selector: "app-administration-movies",
   templateUrl: "./administration-movies.component.html",
-  styleUrls: ["./administration-movies.component.css"]
+  styleUrls: ["./administration-movies.component.scss"]
 })
 export class AdministrationMoviesComponent implements OnInit {
   public movies: MovieModel[] = [];

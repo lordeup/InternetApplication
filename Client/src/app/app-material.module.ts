@@ -15,6 +15,7 @@ import { TextFieldModule } from "@angular/cdk/text-field";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 const components = [
   MatFormFieldModule,
@@ -32,7 +33,8 @@ const components = [
   TextFieldModule,
   MatAutocompleteModule,
   MatChipsModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatSlideToggleModule,
 ];
 
 @NgModule({

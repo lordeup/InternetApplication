@@ -21,7 +21,7 @@ export interface IDialogMovieResponse {
 @Component({
   selector: "app-dialog-movie",
   templateUrl: "./dialog-movie.component.html",
-  styleUrls: ["./dialog-movie.component.css"]
+  styleUrls: ["./dialog-movie.component.scss"]
 })
 export class DialogMovieComponent implements OnInit {
   public formGroup: FormGroup;

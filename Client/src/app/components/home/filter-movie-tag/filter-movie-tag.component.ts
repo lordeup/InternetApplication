@@ -5,7 +5,7 @@ import { MovieTagModel } from "../../../models/movie-tag.model";
 @Component({
   selector: "app-filter-movie-tag",
   templateUrl: "./filter-movie-tag.component.html",
-  styleUrls: ["./filter-movie-tag.component.css"]
+  styleUrls: ["./filter-movie-tag.component.scss"]
 })
 export class FilterMovieTagComponent implements OnInit {
   @Input() public allMovieTags: MovieTagModel[];

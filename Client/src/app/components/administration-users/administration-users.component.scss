@@ -1,0 +1,7 @@
+@import "src/app/const-styles";
+
+.users-container {
+  display: flex;
+  flex-direction: column;
+  margin: $lg-indent $sm-indent $sm-indent;
+}

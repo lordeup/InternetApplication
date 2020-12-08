@@ -13,7 +13,7 @@ import {
 @Component({
   selector: "app-administration-movie-tags",
   templateUrl: "./administration-movie-tags.component.html",
-  styleUrls: ["./administration-movie-tags.component.css"]
+  styleUrls: ["./administration-movie-tags.component.scss"]
 })
 export class AdministrationMovieTagsComponent implements OnInit {
   public movieTags: MovieTagModel[] = [];

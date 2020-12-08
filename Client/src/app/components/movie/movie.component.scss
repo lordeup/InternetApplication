@@ -1,0 +1,47 @@
+@import "src/app/const-styles";
+
+$movie-image-size: 244px;
+
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: $lg-indent $sm-indent $sm-indent;
+
+  .mat-card {
+    max-width: $max-page-content-width;
+    width: 100%;
+    padding: $sm-indent;
+
+    .item-paper {
+      display: flex;
+
+      .image {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        min-width: $movie-image-size;
+        height: $movie-image-size;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        padding-right: $s-indent;
+        padding-left: $lg-indent;
+
+        .movie-description {
+          white-space: pre-line;
+        }
+
+        .movie-tags-container {
+          margin-top: $lg-indent;
+        }
+      }
+    }
+  }
+
+  .first {
+    margin-bottom: 100px;
+  }
+}

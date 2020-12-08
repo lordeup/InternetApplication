@@ -16,7 +16,7 @@ import { Observable } from "rxjs";
 @Component({
   selector: "app-movie-reviews",
   templateUrl: "./movie-reviews.component.html",
-  styleUrls: ["./movie-reviews.component.css"]
+  styleUrls: ["./movie-reviews.component.scss"]
 })
 export class MovieReviewsComponent implements OnInit {
   @Input() public reviews: ReviewModel[];

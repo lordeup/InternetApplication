@@ -12,7 +12,7 @@ import { FileManagerService } from "../../../services/file-manager.service";
 @Component({
   selector: "app-movie-add-review",
   templateUrl: "./movie-add-review.component.html",
-  styleUrls: ["./movie-add-review.component.css"]
+  styleUrls: ["./movie-add-review.component.scss"]
 })
 export class MovieAddReviewComponent implements OnInit {
   @Input() public idMovie: Id;

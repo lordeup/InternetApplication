@@ -1,0 +1,31 @@
+@import "src/app/const-styles";
+
+$current-user-image-size: 80px;
+
+.item-paper {
+  display: flex;
+  margin-bottom: $sm-indent;
+
+  .image {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    min-width: $current-user-image-size;
+    height: $current-user-image-size;
+  }
+
+  .content {
+    display: flex;
+    padding-left: $lg-indent;
+  }
+}
+
+.form-element {
+  padding: $xs-indent 0 $s-indent 0;
+  width: 100%;
+}
+
+
+
+

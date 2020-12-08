@@ -15,7 +15,7 @@ import { FileModel } from "../../models/file.model";
 @Component({
   selector: "app-administration-users",
   templateUrl: "./administration-users.component.html",
-  styleUrls: ["./administration-users.component.css"]
+  styleUrls: ["./administration-users.component.scss"]
 })
 export class AdministrationUsersComponent implements OnInit {
   public users: UserModel[] = [];

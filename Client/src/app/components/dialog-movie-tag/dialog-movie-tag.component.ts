@@ -12,7 +12,7 @@ export interface IDialogMovieTagData {
 @Component({
   selector: "app-dialog-movie-tag",
   templateUrl: "./dialog-movie-tag.component.html",
-  styleUrls: ["./dialog-movie-tag.component.css"]
+  styleUrls: ["./dialog-movie-tag.component.scss"]
 })
 export class DialogMovieTagComponent implements OnInit {
   public formGroup: FormGroup;

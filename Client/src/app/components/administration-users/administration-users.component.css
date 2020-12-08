@@ -1,5 +1,0 @@
-.users-container {
-  display: flex;
-  flex-direction: column;
-  margin: var(--lg-indent) var(--sm-indent) var(--sm-indent);
-}

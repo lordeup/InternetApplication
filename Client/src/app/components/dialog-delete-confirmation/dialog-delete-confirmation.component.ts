@@ -10,7 +10,7 @@ export interface IDialogDeleteConfirmationData {
 @Component({
   selector: "app-dialog-delete-confirmation",
   templateUrl: "./dialog-delete-confirmation.component.html",
-  styleUrls: ["./dialog-delete-confirmation.component.css"]
+  styleUrls: ["./dialog-delete-confirmation.component.scss"]
 })
 export class DialogDeleteConfirmationComponent implements OnInit {
   public title: string;

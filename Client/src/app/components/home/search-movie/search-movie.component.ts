@@ -5,7 +5,7 @@ import { MovieTagModel } from "../../../models/movie-tag.model";
 @Component({
   selector: "app-search-movie",
   templateUrl: "./search-movie.component.html",
-  styleUrls: ["./search-movie.component.css"]
+  styleUrls: ["./search-movie.component.scss"]
 })
 export class SearchMovieComponent implements OnInit {
   @Output() public changeEventFilterData = new EventEmitter<{ fieldName: string, value?: string | MovieTagModel[] }>();
