@@ -7,7 +7,7 @@
       [compareWith]="compareByValue"
       (closed)="onSubmitFilter()"
     >
-      <mat-option *ngFor="let item of allMovieTags" [value]="item">
+      <mat-option *ngFor="let item of allMovieTags" [value]="item" class="mat-option-item">
         {{item.name}}
       </mat-option>
     </mat-select>

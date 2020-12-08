@@ -35,14 +35,14 @@ $image-size: 244px;
         .user-first-row {
           display: flex;
           justify-content: space-between;
+        }
 
-          .item-info {
-            display: flex;
-          }
+        .item-info {
+          display: flex;
+        }
 
-          .capture {
-            color: #657295;
-          }
+        .capture {
+          color: #657295;
         }
       }
     }

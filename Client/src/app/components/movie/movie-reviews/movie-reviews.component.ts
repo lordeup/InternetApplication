@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ReviewService } from "../../../services/review.service";
 import { ReviewModel } from "../../../models/review.model";
 import { MatDialog } from "@angular/material/dialog";
-import { DialogTitle } from "../../../models/dialog-title";
+import { DialogTitle } from "../../../utils/dialog-title";
 import {
   DialogDeleteConfirmationComponent,
   IDialogDeleteConfirmationData

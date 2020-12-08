@@ -1,8 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, HostBinding, OnInit } from "@angular/core";
 import { AppRoutingService } from "../../routers/app-routing.service";
 import { AuthService } from "../../services/auth.service";
 import { Observable } from "rxjs";
 import { PathRouting } from "../../routers/path-routing.module";
+import { MatSlideToggleChange } from "@angular/material/slide-toggle";
+import { OverlayContainer } from "@angular/cdk/overlay";
+import { LocalStorageUtils } from "../../utils/local-storage-utils";
 
 interface IAdministrationMenu {
   title: string;
@@ -36,15 +39,22 @@ const ADMINISTRATION_MENUS: IAdministrationMenu[] = [
 export class HeaderComponent implements OnInit {
   public authorized$: Observable<boolean>;
   public menus: IAdministrationMenu[] = [];
+  public isDarkMode: boolean;
+
+  @HostBinding("class") private className: string;
 
   constructor(
     private authService: AuthService,
+    private localStorageUtils: LocalStorageUtils,
+    private overlayContainer: OverlayContainer,
     private appRoutingService: AppRoutingService) {
   }
 
   ngOnInit(): void {
     this.authorized$ = this.authService.getAuthorized();
     this.menus = ADMINISTRATION_MENUS;
+    this.isDarkMode = JSON.parse(this.localStorageUtils.getDarkMode()) || false;
+    this.onChangeDarkClassName(this.isDarkMode);
   }
 
   onClickHomePage(): void {
@@ -66,5 +76,24 @@ export class HeaderComponent implements OnInit {
 
   isUserTypeAdmin(): boolean {
     return this.authService.isUserTypeAdmin();
+  }
+
+  onChangeDarkClassName(value: boolean): void {
+    const darkClassName = "darkMode";
+    const classList = this.overlayContainer.getContainerElement().classList;
+
+    this.className = value ? darkClassName : "";
+    if (value) {
+      classList.add(darkClassName);
+    } else if (classList.contains(darkClassName)) {
+      classList.remove(darkClassName);
+    }
+  }
+
+  onChangeDarkMode(event: MatSlideToggleChange): void {
+    const value = event.checked;
+    this.isDarkMode = value;
+    this.localStorageUtils.setDarkMode(value);
+    this.onChangeDarkClassName(value);
   }
 }

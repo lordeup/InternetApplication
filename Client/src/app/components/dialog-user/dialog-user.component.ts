@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { DialogTitle } from "../../models/dialog-title";
+import { DialogTitle } from "../../utils/dialog-title";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserModel } from "../../models/user.model";

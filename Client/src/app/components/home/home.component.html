@@ -21,7 +21,7 @@
   <mat-grid-tile *ngFor="let movie of movies" class="mat-grid-tile-container">
     <div (click)="onClickMovie(movie.idMovie)" class="item-paper">
       <div [style.backgroundImage]="'url('+ getFilePath(movie?.pictureUrl) +')'" class="image"></div>
-      <div class="content">
+        <mat-card class="content">
         <div class="content-text">
           <p class="text title">
             {{ movie.name }}
@@ -37,7 +37,7 @@
             </mat-chip>
           </mat-chip-list>
         </div>
-      </div>
+        </mat-card>
     </div>
   </mat-grid-tile>
 </mat-grid-list>

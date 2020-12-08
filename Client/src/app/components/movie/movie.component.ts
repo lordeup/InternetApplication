@@ -11,6 +11,7 @@ import { FileManagerService } from "../../services/file-manager.service";
 import { UserModel } from "../../models/user.model";
 import { UserService } from "../../services/user.service";
 import { UNKNOWN_MOVIE_IMAGE } from "../../const";
+import { LocalStorageUtils } from "../../utils/local-storage-utils";
 
 @Component({
   selector: "app-movie",
@@ -30,13 +31,14 @@ export class MovieComponent implements OnInit {
     private reviewService: ReviewService,
     private authService: AuthService,
     private userService: UserService,
+    private localStorageUtils: LocalStorageUtils,
     private fileManagerService: FileManagerService,
     private activatedRoute: ActivatedRoute) {
   }
 
   async ngOnInit(): Promise<void> {
     this.authorized$ = this.authService.getAuthorized();
-    this.idUser = this.authService.getIdUserFromLocalStorage();
+    this.idUser = this.localStorageUtils.getIdUser();
     this.idMovie = this.activatedRoute.snapshot.params.id;
 
     this.currentUser = !!this.idUser && await this.userService.getUser(this.idUser);

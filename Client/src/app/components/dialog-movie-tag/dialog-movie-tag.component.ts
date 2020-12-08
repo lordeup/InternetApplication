@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MovieTagModel } from "../../models/movie-tag.model";
-import { DialogTitle } from "../../models/dialog-title";
+import { DialogTitle } from "../../utils/dialog-title";
 
 export interface IDialogMovieTagData {
   title: DialogTitle;

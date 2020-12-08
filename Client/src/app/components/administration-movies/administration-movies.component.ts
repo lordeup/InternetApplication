@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { MovieService } from "../../services/movie.service";
 import { Id } from "../../models/id";
 import { MatDialog } from "@angular/material/dialog";
-import { DialogTitle } from "../../models/dialog-title";
+import { DialogTitle } from "../../utils/dialog-title";
 import {
   DialogDeleteConfirmationComponent,
   IDialogDeleteConfirmationData

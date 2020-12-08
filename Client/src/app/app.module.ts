@@ -9,7 +9,7 @@ import { environment } from "../environments/environment";
 import { AppMaterialModule } from "./app-material.module";
 import { AppRoutingModule } from "src/app/routers/app-routing.module";
 import { API_URL } from "./app-injection-tokens";
-import { KeyLocalStorage } from "./key-local-storage";
+import { KeyLocalStorage } from "./utils/key-local-storage";
 
 import { AppComponent } from "./app.component";
 import { RegisterComponent } from "./components/register/register.component";

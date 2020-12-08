@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { DialogTitle } from "../../models/dialog-title";
+import { DialogTitle } from "../../utils/dialog-title";
 
 export interface IDialogDeleteConfirmationData {
   title: DialogTitle;

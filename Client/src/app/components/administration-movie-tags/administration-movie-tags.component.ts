@@ -4,7 +4,7 @@ import { MovieTagService } from "../../services/movie-tag.service";
 import { Id } from "../../models/id";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogMovieTagComponent, IDialogMovieTagData } from "../dialog-movie-tag/dialog-movie-tag.component";
-import { DialogTitle } from "../../models/dialog-title";
+import { DialogTitle } from "../../utils/dialog-title";
 import {
   DialogDeleteConfirmationComponent,
   IDialogDeleteConfirmationData

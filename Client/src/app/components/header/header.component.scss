@@ -7,6 +7,10 @@
   width: 100%;
   min-width: 100%;
 
+  ::ng-deep .mat-drawer-backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
   .icon {
     margin-right: $xs-indent;
   }
@@ -22,6 +26,10 @@
 
   .spacer {
     flex: 1 1 auto;
+  }
+
+  .slide-toggle {
+    margin-right: $s-indent;
   }
 
   .main-container {

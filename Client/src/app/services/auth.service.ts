@@ -8,8 +8,8 @@ import { LoginUserModel } from "../models/login-user.model";
 import { ApiRouting } from "../routers/api-routing.module";
 import { tap } from "rxjs/operators";
 import { API_URL } from "../app-injection-tokens";
-import { KeyLocalStorage } from "../key-local-storage";
-import { UserType } from "../models/user-type";
+import { UserType } from "../utils/user-type";
+import { LocalStorageUtils } from "../utils/local-storage-utils";
 
 @Injectable({
   providedIn: "root"
@@ -20,6 +20,7 @@ export class AuthService {
     private http: HttpClient,
     @Inject(API_URL) private apiUrl: string,
     private jwtHelperService: JwtHelperService,
+    private localStorageUtils: LocalStorageUtils,
   ) {
     if (this.isAuthenticated()) {
       this.setAuthorized(true);
@@ -28,14 +29,9 @@ export class AuthService {
 
   private authorizedSubject$ = new BehaviorSubject<boolean>(false);
 
-  private static setAuthDataToLocalStorage(authAccess: AuthAccessModel): void {
-    localStorage.setItem(KeyLocalStorage.AccessToken, authAccess.accessToken);
-    localStorage.setItem(KeyLocalStorage.IdUser, authAccess.idUser);
-  }
-
-  private static clearAuthDataToLocalStorage(): void {
-    localStorage.removeItem(KeyLocalStorage.AccessToken);
-    localStorage.removeItem(KeyLocalStorage.IdUser);
+  private setAuthDataToLocalStorage(authAccess: AuthAccessModel): void {
+    this.localStorageUtils.setAccessToken(authAccess.accessToken);
+    this.localStorageUtils.setIdUser(authAccess.idUser);
   }
 
   getAuthorized(): Observable<boolean> {
@@ -47,7 +43,8 @@ export class AuthService {
   }
 
   private getUserType(): string {
-    return this.jwtHelperService.decodeToken(this.getTokenFromLocalStorage())?.role || "";
+    const accessToken = this.localStorageUtils.getAccessToken();
+    return this.jwtHelperService.decodeToken(accessToken)?.role || "";
   }
 
   isUserTypeUser(): boolean {
@@ -62,7 +59,7 @@ export class AuthService {
     const url = this.apiUrl + ApiRouting.Login;
     return this.http.post<AuthAccessModel>(url, data).pipe(
       tap((authAccess) => {
-          AuthService.setAuthDataToLocalStorage(authAccess);
+          this.setAuthDataToLocalStorage(authAccess);
           this.setAuthorized(true);
         }
       )
@@ -73,27 +70,21 @@ export class AuthService {
     const url = this.apiUrl + ApiRouting.Register;
     return this.http.post<AuthAccessModel>(url, data).pipe(
       tap((authAccess) => {
-          AuthService.setAuthDataToLocalStorage(authAccess);
+          this.setAuthDataToLocalStorage(authAccess);
           this.setAuthorized(true);
         }
       )
     );
   }
 
-  getTokenFromLocalStorage(): string {
-    return localStorage.getItem(KeyLocalStorage.AccessToken);
-  }
-
-  getIdUserFromLocalStorage(): string {
-    return localStorage.getItem(KeyLocalStorage.IdUser);
-  }
-
   isAuthenticated(): boolean {
-    return !this.jwtHelperService.isTokenExpired(this.getTokenFromLocalStorage());
+    const accessToken = this.localStorageUtils.getAccessToken();
+    return !this.jwtHelperService.isTokenExpired(accessToken);
   }
 
   logoutUser(): void {
-    AuthService.clearAuthDataToLocalStorage();
+    this.localStorageUtils.removeAccessToken();
+    this.localStorageUtils.removeIdUser();
     this.setAuthorized(false);
   }
 

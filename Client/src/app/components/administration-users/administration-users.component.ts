@@ -7,7 +7,7 @@ import {
   DialogDeleteConfirmationComponent,
   IDialogDeleteConfirmationData
 } from "../dialog-delete-confirmation/dialog-delete-confirmation.component";
-import { DialogTitle } from "../../models/dialog-title";
+import { DialogTitle } from "../../utils/dialog-title";
 import { DialogUserComponent, IDialogUserData, IDialogUserResponse } from "../dialog-user/dialog-user.component";
 import { FileManagerService } from "../../services/file-manager.service";
 import { FileModel } from "../../models/file.model";
