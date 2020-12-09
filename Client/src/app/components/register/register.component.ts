@@ -61,6 +61,5 @@ export class RegisterComponent implements OnInit {
     const data = new RegisterUserModel().deserialize(value);
 
     await this.authService.registerUser(data);
-    this.appRoutingService.goToUserPage();
   }
 }

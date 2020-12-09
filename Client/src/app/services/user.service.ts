@@ -9,47 +9,39 @@ import { UserDataService } from "./data-services/user-data.service";
 export class UserService {
 
   constructor(
-    private userDataService: UserDataService,
+    private userDataService: UserDataService
   ) {
   }
 
-  getUsers(): Promise<UserModel[]> {
-    return new Promise((resolve) => {
-      this.userDataService.getUsersRequest().subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async getUsers(): Promise<UserModel[]> {
+    try {
+      return await this.userDataService.getAll();
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  getUser(id: Id): Promise<UserModel> {
-    return new Promise((resolve) => {
-      this.userDataService.getUserRequest(id).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async getUser(id: Id): Promise<UserModel> {
+    try {
+      return await this.userDataService.getById(id);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  updateUser(data: UserModel): Promise<void> {
-    return new Promise((resolve) => {
-      this.userDataService.updateUserRequest(data).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async updateUser(data: UserModel): Promise<void> {
+    try {
+      await this.userDataService.update(data.idUser, data);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  deleteUser(id: Id): Promise<void> {
-    return new Promise((resolve) => {
-      this.userDataService.deleteUserRequest(id).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async deleteUser(id: Id): Promise<void> {
+    try {
+      await this.userDataService.delete(id);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 }

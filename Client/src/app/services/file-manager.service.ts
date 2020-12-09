@@ -8,7 +8,7 @@ import { FileManagerDataService } from "./data-services/file-manager-data.servic
 export class FileManagerService {
 
   constructor(
-    private fileManagerDataService: FileManagerDataService,
+    private fileManagerDataService: FileManagerDataService
   ) {
   }
 
@@ -20,33 +20,27 @@ export class FileManagerService {
     return URL.createObjectURL(file);
   }
 
-  uploadFile(file: File): Promise<FileModel> {
-    return new Promise((resolve) => {
-      this.fileManagerDataService.uploadFileRequest(file).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async uploadFile(file: File): Promise<FileModel> {
+    try {
+      return await this.fileManagerDataService.uploadFileRequest(file);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  updateFile(fileName: string, file: File): Promise<FileModel> {
-    return new Promise((resolve) => {
-      this.fileManagerDataService.updateFileRequest(fileName, file).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async updateFile(fileName: string, file: File): Promise<FileModel> {
+    try {
+      return await this.fileManagerDataService.updateFileRequest(fileName, file);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  deleteFile(fileName: string): Promise<void> {
-    return new Promise((resolve) => {
-      this.fileManagerDataService.deleteFileRequest(fileName).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async deleteFile(fileName: string): Promise<void> {
+    try {
+      await this.fileManagerDataService.deleteFileRequest(fileName);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 }

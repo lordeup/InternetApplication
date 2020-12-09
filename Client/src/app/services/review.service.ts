@@ -10,57 +10,47 @@ import { ReviewDataService } from "./data-services/review-data.service";
 export class ReviewService {
 
   constructor(
-    private reviewDataService: ReviewDataService,
+    private reviewDataService: ReviewDataService
   ) {
   }
 
-  getReviewsByIdMovie(idMovie: Id): Promise<ReviewModel[]> {
-    return new Promise((resolve) => {
-      this.reviewDataService.getReviewsByIdMovieRequest(idMovie).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async getReviewsByIdMovie(idMovie: Id): Promise<ReviewModel[]> {
+    try {
+      return await this.reviewDataService.getReviewsByIdMovieRequest(idMovie);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  getReviewMoviesByIdUser(idUser: Id): Promise<MovieModel[]> {
-    return new Promise((resolve) => {
-      this.reviewDataService.getReviewMoviesByIdUserRequest(idUser).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async getReviewMoviesByIdUser(idUser: Id): Promise<MovieModel[]> {
+    try {
+      return await this.reviewDataService.getReviewMoviesByIdUserRequest(idUser);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  updateReview(data: ReviewModel): Promise<void> {
-    return new Promise((resolve) => {
-      this.reviewDataService.updateReviewRequest(data).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async updateReview(data: ReviewModel): Promise<void> {
+    try {
+      await this.reviewDataService.update(data.idReview, data);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  addReview(data: ReviewModel): Promise<ReviewModel> {
-    return new Promise((resolve) => {
-      this.reviewDataService.addReviewRequest(data).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async addReview(data: ReviewModel): Promise<ReviewModel> {
+    try {
+      return await this.reviewDataService.add(data);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  deleteReview(id: Id): Promise<void> {
-    return new Promise((resolve) => {
-      this.reviewDataService.deleteReviewRequest(id).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async deleteReview(id: Id): Promise<void> {
+    try {
+      await this.reviewDataService.delete(id);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 }

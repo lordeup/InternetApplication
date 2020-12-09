@@ -12,68 +12,56 @@ export class MovieService {
 
   constructor(
     private movieDataService: MovieDataService,
-    private appRoutingService: AppRoutingService,
+    private appRoutingService: AppRoutingService
   ) {
   }
 
-  getMovie(id: Id): Promise<MovieModel> {
-    return new Promise((resolve) => {
-      this.movieDataService.getMovieRequest(id).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-        this.appRoutingService.goToHomePage();
-      });
-    });
+  async getMovie(id: Id): Promise<MovieModel> {
+    try {
+      return await this.movieDataService.getById(id);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+      this.appRoutingService.goToHomePage();
+    }
   }
 
-  getMovies(): Promise<MovieModel[]> {
-    return new Promise((resolve) => {
-      this.movieDataService.getMoviesRequest().subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async getMovies(): Promise<MovieModel[]> {
+    try {
+      return await this.movieDataService.getAll();
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  updateMovie(data: MovieModel): Promise<void> {
-    return new Promise((resolve) => {
-      this.movieDataService.updateMovieRequest(data).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async updateMovie(data: MovieModel): Promise<void> {
+    try {
+      await this.movieDataService.update(data.idMovie, data);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  addMovie(data: MovieModel): Promise<MovieModel> {
-    return new Promise((resolve) => {
-      this.movieDataService.addMovieRequest(data).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async addMovie(data: MovieModel): Promise<MovieModel> {
+    try {
+      return await this.movieDataService.add(data);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  filterMovie(data: Partial<FilterMovieModel>): Promise<MovieModel[]> {
-    return new Promise((resolve) => {
-      this.movieDataService.filterMovieRequest(data).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async filterMovie(data: Partial<FilterMovieModel>): Promise<MovieModel[]> {
+    try {
+      return await this.movieDataService.filterMovieRequest(data);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  deleteMovie(id: Id): Promise<void> {
-    return new Promise((resolve) => {
-      this.movieDataService.deleteMovieRequest(id).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async deleteMovie(id: Id): Promise<void> {
+    try {
+      await this.movieDataService.delete(id);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 }

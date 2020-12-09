@@ -10,57 +10,47 @@ import { RatingModel } from "../models/rating.model";
 export class MovieRatingService {
 
   constructor(
-    private movieRatingDataService: MovieRatingDataService,
+    private movieRatingDataService: MovieRatingDataService
   ) {
   }
 
-  getRatingByIdMovie(id: Id): Promise<RatingModel> {
-    return new Promise((resolve) => {
-      this.movieRatingDataService.getRatingByIdMovieRequest(id).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async getRatingByIdMovie(id: Id): Promise<RatingModel> {
+    try {
+      return await this.movieRatingDataService.getRatingByIdMovieRequest(id);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  getMovieRatingByIdUserAndIdMovie(idUser: Id, idMovie: Id): Promise<MovieRatingModel> {
-    return new Promise((resolve) => {
-      this.movieRatingDataService.getMovieRatingByIdUserAndIdMovieRequest(idUser, idMovie).subscribe(response => {
-        resolve(response);
-      }, () => {
-        resolve();
-      });
-    });
+  async getMovieRatingByIdUserAndIdMovie(idUser: Id, idMovie: Id): Promise<MovieRatingModel> {
+    try {
+      return await this.movieRatingDataService.getMovieRatingByIdUserAndIdMovieRequest(idUser, idMovie);
+    } catch (e) {
+      console.error(e.error?.message || e.message);
+    }
   }
 
-  updateMovieRating(data: MovieRatingModel): Promise<void> {
-    return new Promise((resolve) => {
-      this.movieRatingDataService.updateMovieRatingRequest(data).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async updateMovieRating(data: MovieRatingModel): Promise<void> {
+    try {
+      await this.movieRatingDataService.update(data.idMovieRating, data);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  addMovieRating(data: MovieRatingModel): Promise<MovieRatingModel> {
-    return new Promise((resolve) => {
-      this.movieRatingDataService.addMovieRatingRequest(data).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async addMovieRating(data: MovieRatingModel): Promise<MovieRatingModel> {
+    try {
+      return await this.movieRatingDataService.add(data);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  deleteMovieRating(id: Id): Promise<void> {
-    return new Promise((resolve) => {
-      this.movieRatingDataService.deleteMovieRatingRequest(id).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async deleteMovieRating(id: Id): Promise<void> {
+    try {
+      await this.movieRatingDataService.delete(id);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 }

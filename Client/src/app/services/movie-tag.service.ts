@@ -9,47 +9,39 @@ import { MovieTagDataService } from "./data-services/movie-tag-data.service";
 export class MovieTagService {
 
   constructor(
-    private movieTagDataService: MovieTagDataService,
+    private movieTagDataService: MovieTagDataService
   ) {
   }
 
-  getMovieTags(): Promise<MovieTagModel[]> {
-    return new Promise((resolve) => {
-      this.movieTagDataService.getMovieTagsRequest().subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async getMovieTags(): Promise<MovieTagModel[]> {
+    try {
+      return await this.movieTagDataService.getAll();
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  updateMovieTag(data: MovieTagModel): Promise<void> {
-    return new Promise((resolve) => {
-      this.movieTagDataService.updateMovieTagRequest(data).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async updateMovieTag(data: MovieTagModel): Promise<void> {
+    try {
+       await this.movieTagDataService.update(data.idMovieTag, data);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  addMovieTag(data: MovieTagModel): Promise<MovieTagModel> {
-    return new Promise((resolve) => {
-      this.movieTagDataService.addMovieTagRequest(data).subscribe(response => {
-        resolve(response);
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async addMovieTag(data: MovieTagModel): Promise<MovieTagModel> {
+    try {
+      return await this.movieTagDataService.add(data);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  deleteMovieTag(id: Id): Promise<void> {
-    return new Promise((resolve) => {
-      this.movieTagDataService.deleteMovieTagRequest(id).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async deleteMovieTag(id: Id): Promise<void> {
+    try {
+      await this.movieTagDataService.delete(id);
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 }

@@ -38,6 +38,9 @@ export class MovieRatingComponent implements OnInit {
   }
 
   async onClickChange(event: ClickEvent): Promise<void> {
+    if (!this.idUser) {
+      return;
+    }
     const rating = event.rating;
     const model: Partial<MovieRatingModel> = {
       idMovie: this.idMovie,

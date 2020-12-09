@@ -36,7 +36,7 @@ export class AdministrationMovieTagsComponent implements OnInit {
     const data: IDialogMovieTagData = {
       title: DialogTitle.Add,
     };
-    const dialogRef = this.dialog.open(DialogMovieTagComponent, {data});
+    const dialogRef = this.dialog.open(DialogMovieTagComponent, {data, autoFocus: false});
 
     dialogRef.afterClosed().subscribe(async response => {
         if (!!response) {
@@ -51,7 +51,7 @@ export class AdministrationMovieTagsComponent implements OnInit {
       title: DialogTitle.Edit,
       movieTag: this.selectedItem,
     };
-    const dialogRef = this.dialog.open(DialogMovieTagComponent, {data});
+    const dialogRef = this.dialog.open(DialogMovieTagComponent, {data, autoFocus: false});
 
     dialogRef.afterClosed().subscribe(async response => {
         if (!!response) {

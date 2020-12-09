@@ -59,6 +59,5 @@ export class LoginComponent implements OnInit {
     const data = new LoginUserModel().deserialize(value);
 
     await this.authService.loginUser(data);
-    this.appRoutingService.goToUserPage();
   }
 }

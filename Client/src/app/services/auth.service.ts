@@ -1,15 +1,13 @@
-import { Inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { AuthAccessModel } from "../models/auth-access.model";
 import { RegisterUserModel } from "../models/register-user.model";
 import { LoginUserModel } from "../models/login-user.model";
-import { ApiRouting } from "../routers/api-routing.module";
-import { tap } from "rxjs/operators";
-import { API_URL } from "../app-injection-tokens";
 import { UserType } from "../utils/user-type";
 import { LocalStorageUtils } from "../utils/local-storage-utils";
+import { AuthDataService } from "./data-services/auth-data.service";
+import { AppRoutingService } from "../routers/app-routing.service";
 
 @Injectable({
   providedIn: "root"
@@ -17,10 +15,10 @@ import { LocalStorageUtils } from "../utils/local-storage-utils";
 export class AuthService {
 
   constructor(
-    private http: HttpClient,
-    @Inject(API_URL) private apiUrl: string,
+    private authDataService: AuthDataService,
     private jwtHelperService: JwtHelperService,
     private localStorageUtils: LocalStorageUtils,
+    private appRoutingService: AppRoutingService
   ) {
     if (this.isAuthenticated()) {
       this.setAuthorized(true);
@@ -55,28 +53,6 @@ export class AuthService {
     return this.getUserType() === UserType.Admin;
   }
 
-  loginUserRequest(data: LoginUserModel): Observable<AuthAccessModel> {
-    const url = this.apiUrl + ApiRouting.Login;
-    return this.http.post<AuthAccessModel>(url, data).pipe(
-      tap((authAccess) => {
-          this.setAuthDataToLocalStorage(authAccess);
-          this.setAuthorized(true);
-        }
-      )
-    );
-  }
-
-  registerUserRequest(data: RegisterUserModel): Observable<AuthAccessModel> {
-    const url = this.apiUrl + ApiRouting.Register;
-    return this.http.post<AuthAccessModel>(url, data).pipe(
-      tap((authAccess) => {
-          this.setAuthDataToLocalStorage(authAccess);
-          this.setAuthorized(true);
-        }
-      )
-    );
-  }
-
   isAuthenticated(): boolean {
     const accessToken = this.localStorageUtils.getAccessToken();
     return !this.jwtHelperService.isTokenExpired(accessToken);
@@ -88,23 +64,25 @@ export class AuthService {
     this.setAuthorized(false);
   }
 
-  loginUser(data: LoginUserModel): Promise<void> {
-    return new Promise((resolve) => {
-      this.loginUserRequest(data).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async loginUser(data: LoginUserModel): Promise<void> {
+    try {
+      const authAccess = await this.authDataService.loginUser(data);
+      this.setAuthDataToLocalStorage(authAccess);
+      this.setAuthorized(true);
+      this.appRoutingService.goToUserPage();
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 
-  registerUser(data: RegisterUserModel): Promise<void> {
-    return new Promise((resolve) => {
-      this.registerUserRequest(data).subscribe(() => {
-        resolve();
-      }, error => {
-        alert(error.error?.message || error.message);
-      });
-    });
+  async registerUser(data: RegisterUserModel): Promise<void> {
+    try {
+      const authAccess = await this.authDataService.registerUser(data);
+      this.setAuthDataToLocalStorage(authAccess);
+      this.setAuthorized(true);
+      this.appRoutingService.goToUserPage();
+    } catch (e) {
+      alert(e.error?.message || e.message);
+    }
   }
 }

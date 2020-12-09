@@ -2,7 +2,6 @@ import { Inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { API_URL } from "../../app-injection-tokens";
 import { ApiRouting } from "../../routers/api-routing.module";
-import { Observable } from "rxjs";
 import { FileModel } from "../../models/file.model";
 
 @Injectable({
@@ -12,7 +11,7 @@ export class FileManagerDataService {
 
   constructor(
     private http: HttpClient,
-    @Inject(API_URL) private apiUrl: string,
+    @Inject(API_URL) private apiUrl: string
   ) {
   }
 
@@ -22,24 +21,24 @@ export class FileManagerDataService {
     return `${this.baseUrlFileManager}/${fileName}`;
   }
 
-  uploadFileRequest(file: File): Observable<FileModel> {
+  uploadFileRequest(file: File): Promise<FileModel> {
     const url = `${this.baseUrlFileManager}/upload`;
     const formData = new FormData();
     formData.append("file", file);
 
-    return this.http.post<FileModel>(url, formData);
+    return this.http.post<FileModel>(url, formData).toPromise();
   }
 
-  updateFileRequest(fileName: string, file: File): Observable<FileModel> {
+  updateFileRequest(fileName: string, file: File): Promise<FileModel> {
     const url = `${this.baseUrlFileManager}/${fileName}`;
     const formData = new FormData();
     formData.append("file", file);
 
-    return this.http.patch<FileModel>(url, formData);
+    return this.http.patch<FileModel>(url, formData).toPromise();
   }
 
-  deleteFileRequest(fileName: string): Observable<boolean> {
+  deleteFileRequest(fileName: string): Promise<boolean> {
     const url = `${this.baseUrlFileManager}/${fileName}`;
-    return this.http.delete<boolean>(url);
+    return this.http.delete<boolean>(url).toPromise();
   }
 }
