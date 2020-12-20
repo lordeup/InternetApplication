@@ -36,7 +36,7 @@ namespace Server.Controllers
             try
             {
                 var entities = await _reviewRepository.GetAll();
-                return entities.Select(review => _mapper.Map<ReviewViewModel>(review)).ToList();
+                return entities.Select(GetMapperReviewToReviewViewModel).ToList();
             }
             catch (Exception e)
             {
@@ -51,7 +51,7 @@ namespace Server.Controllers
             try
             {
                 var entity = await _reviewRepository.Get(id);
-                return _mapper.Map<ReviewViewModel>(entity);
+                return GetMapperReviewToReviewViewModel(entity);
             }
             catch (ReviewNotFoundException e)
             {
@@ -70,7 +70,7 @@ namespace Server.Controllers
             try
             {
                 var entities = await _reviewRepository.GetReviewsByIdUser(id);
-                return entities.Select(review => _mapper.Map<ReviewViewModel>(review)).ToList();
+                return entities.Select(GetMapperReviewToReviewViewModel).ToList();
             }
             catch (Exception e)
             {
@@ -89,7 +89,7 @@ namespace Server.Controllers
 
                 foreach (var entity in entities)
                 {
-                    var reviewViewModel = _mapper.Map<ReviewViewModel>(entity);
+                    var reviewViewModel = GetMapperReviewToReviewViewModel(entity);
                     var user = await _userRepository.Get(entity.IdUser);
                     reviewViewModel.User = _mapper.Map<UserViewModel>(user);
 
@@ -126,7 +126,7 @@ namespace Server.Controllers
         {
             try
             {
-                var entity = _mapper.Map<Review>(viewModel);
+                var entity = GetMapperReviewViewModelToReview(viewModel);
                 await _reviewRepository.Update(id, entity);
                 return NoContent();
             }
@@ -147,9 +147,9 @@ namespace Server.Controllers
         {
             try
             {
-                var entity = _mapper.Map<Review>(viewModel);
+                var entity = GetMapperReviewViewModelToReview(viewModel);
                 var model = await _reviewRepository.Add(entity);
-                return _mapper.Map<ReviewViewModel>(model);
+                return GetMapperReviewToReviewViewModel(model);
             }
             catch (InvalidDataException e)
             {
@@ -179,6 +179,19 @@ namespace Server.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new {message = e.Message});
             }
+        }
+
+        private ReviewViewModel GetMapperReviewToReviewViewModel(Review entity)
+        {
+            var reviewViewModel = _mapper.Map<ReviewViewModel>(entity);
+            reviewViewModel.Date = entity.Date.ToString("dd.MM.yyyy HH:mm:ss");
+
+            return reviewViewModel;
+        }
+
+        private Review GetMapperReviewViewModelToReview(ReviewViewModel viewModel)
+        {
+            return _mapper.Map<Review>(viewModel);
         }
     }
 }

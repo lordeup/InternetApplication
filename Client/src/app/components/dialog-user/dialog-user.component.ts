@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { DialogTitle } from "../../utils/dialog-title";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserModel } from "../../models/user.model";
 import { FileManagerService } from "../../services/file-manager.service";
+import { LOGIN_ERROR_TEXT, LOGIN_MIN_LENGTH, PASSWORD_ERROR_TEXT, PASSWORD_PATTERN } from "../../const";
 
 export interface IDialogUserData {
   title: DialogTitle;
@@ -37,14 +38,34 @@ export class DialogUserComponent implements OnInit {
   ngOnInit(): void {
     const {user, title} = this.dialogData;
     this.formGroup = this.formBuilder.group({
-      login: [user?.login || "", Validators.required],
-      password: "",
+      login: [user?.login || "", [Validators.required, Validators.minLength(LOGIN_MIN_LENGTH)]],
+      password: ["", [Validators.pattern(PASSWORD_PATTERN)]],
       name: user?.name || "",
       surname: user?.surname || "",
       pictureUrl: user?.pictureUrl || "",
     });
     this.title = title || "";
     this.previewUrl = this.getFilePath(user?.pictureUrl);
+  }
+
+  get login(): AbstractControl {
+    return this.formGroup.get("login");
+  }
+
+  get password(): AbstractControl {
+    return this.formGroup.get("password");
+  }
+
+  getLoginErrorMessage(): string {
+    if (this.login.hasError("required")) {
+      return "Поле логина обязательно к заполнению";
+    }
+
+    return this.login.hasError("minlength") ? LOGIN_ERROR_TEXT : "";
+  }
+
+  getPasswordErrorMessage(): string {
+    return this.password.hasError("pattern") ? PASSWORD_ERROR_TEXT : "";
   }
 
   dataValidation(data: UserModel): IDialogUserResponse {

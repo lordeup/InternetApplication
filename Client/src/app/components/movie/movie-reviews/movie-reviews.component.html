@@ -22,7 +22,7 @@
     </div>
   </div>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="updateItem()">Редактировать</button>
+    <button mat-menu-item *ngIf="isCurrentUser(this.selectedItem)" (click)="updateItem()">Редактировать</button>
     <button mat-menu-item (click)="deleteItem()">Удалить</button>
   </mat-menu>
 </mat-card-content>

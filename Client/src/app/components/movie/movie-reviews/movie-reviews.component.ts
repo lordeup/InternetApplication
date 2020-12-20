@@ -86,10 +86,14 @@ export class MovieReviewsComponent implements OnInit {
     return !!fileName ? this.fileManagerService.getFilePath(fileName) : UNKNOWN_USER_IMAGE;
   }
 
+  isCurrentUser(item: ReviewModel): boolean {
+    return !!this.currentUserId && item?.user?.idUser === this.currentUserId;
+  }
+
   isCheckAccess(item: ReviewModel): boolean {
     if (this.isUserTypeAdmin) {
       return true;
     }
-    return item.user.idUser === this.currentUserId;
+    return this.isCurrentUser(item);
   }
 }
