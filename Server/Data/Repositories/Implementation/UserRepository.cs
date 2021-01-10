@@ -102,7 +102,7 @@ namespace Server.Data.Repositories.Implementation
             var verificationResult = _passwordHasher.VerifyHashedPassword(entity, entity.Password, viewModel.Password);
             if (verificationResult == PasswordVerificationResult.Failed)
             {
-                throw new InvalidCredentialException("Invalid password");
+                throw new InvalidCredentialException("Неправильный пароль");
             }
 
             return entity;

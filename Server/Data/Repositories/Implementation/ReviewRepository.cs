@@ -70,7 +70,7 @@ namespace Server.Data.Repositories.Implementation
 
             if (entity == null)
             {
-                throw new InvalidDataException("Review not created");
+                throw new InvalidDataException("Рецензия не создана");
             }
 
             return entity;

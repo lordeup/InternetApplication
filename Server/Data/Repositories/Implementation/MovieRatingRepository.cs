@@ -72,7 +72,7 @@ namespace Server.Data.Repositories.Implementation
 
             if (entity == null)
             {
-                throw new InvalidDataException("Movie rating not created");
+                throw new InvalidDataException("Рейтинг фильма не создан");
             }
 
             return entity;

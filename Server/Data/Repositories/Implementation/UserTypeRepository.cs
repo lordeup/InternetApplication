@@ -39,7 +39,7 @@ namespace Server.Data.Repositories.Implementation
 
             if (entity == null)
             {
-                throw new InvalidDataException("User type not created");
+                throw new InvalidDataException("Тип пользователя не создан");
             }
 
             return entity;

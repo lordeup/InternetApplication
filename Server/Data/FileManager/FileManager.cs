@@ -22,7 +22,7 @@ namespace Server.Data.FileManager
 
             if (!IsFileExists(filePath))
             {
-                throw new FileNotFoundException();
+                throw new FileNotFoundException("Файл не найден");
             }
 
             var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -53,7 +53,7 @@ namespace Server.Data.FileManager
 
             if (!IsFileExists(filePath))
             {
-                throw new FileNotFoundException();
+                throw new FileNotFoundException("Файл не найден");
             }
 
             File.Delete(filePath);

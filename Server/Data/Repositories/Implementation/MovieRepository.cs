@@ -52,7 +52,7 @@ namespace Server.Data.Repositories.Implementation
 
             if (entity == null)
             {
-                throw new InvalidDataException("Movie not created");
+                throw new InvalidDataException("Фильм не создан");
             }
 
             return entity;

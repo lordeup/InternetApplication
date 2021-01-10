@@ -5,7 +5,7 @@ namespace Server.Data.Exceptions
     public class MovieNotFoundException : Exception
     {
         public MovieNotFoundException()
-            : base("Movie not found")
+            : base("Фильм не найден")
         {
         }
     }

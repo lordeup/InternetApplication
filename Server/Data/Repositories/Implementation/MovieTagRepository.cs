@@ -39,7 +39,7 @@ namespace Server.Data.Repositories.Implementation
 
             if (entity == null)
             {
-                throw new InvalidDataException("Movie tag not created");
+                throw new InvalidDataException("Жанр фильма не создан");
             }
 
             return entity;
